@@ -1,6 +1,6 @@
 const {verify} = require('./tokens');
 
-const GENERIC = {ok: true, message: 'If this email has a ClearFrame Pro purchase, a sign-in link is on its way.'};
+const GENERIC = {ok: true, message: 'If this email has a ClearFrame Pro subscription, a sign-in link is on its way.'};
 const WAIT = {ok: false, message: 'Please wait a few minutes and try again.'};
 const EMAIL_ERROR = {ok: false, message: 'Enter an email address.'};
 const LINK_ERROR = 'That sign-in link is invalid or expired.';

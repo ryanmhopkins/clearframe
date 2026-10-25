@@ -1,6 +1,8 @@
 const form = document.querySelector('#signin');
 const status = document.querySelector('#signinStatus');
-if (new URLSearchParams(location.search).get('error')) status.textContent = 'That sign-in link is invalid or expired.';
+const params = new URLSearchParams(location.search);
+if (params.get('error')) status.textContent = 'That sign-in link is invalid or expired.';
+if (params.get('subscribed') === '1') document.querySelector('#subscribedNote')?.removeAttribute('hidden');
 form?.addEventListener('submit', async event => {
   event.preventDefault();
   status.textContent = 'Checking…';

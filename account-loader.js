@@ -2,7 +2,7 @@
   const status = document.querySelector('#proStatus');
   const email = document.querySelector('#proEmail');
   if (new URLSearchParams(location.search).get('portal')) {
-    status.textContent = 'The receipt page could not be opened. Try again in a moment.';
+    status.textContent = 'Manage subscription could not be opened. Try again in a moment.';
   }
   document.querySelector('#signOut')?.addEventListener('click', async () => {
     await fetch('/api/auth/logout', {method: 'POST'});

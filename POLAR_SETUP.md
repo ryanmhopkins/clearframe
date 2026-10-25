@@ -12,7 +12,7 @@ This integration uses the live Polar organization `clearframe` and `https://getc
 ## Files
 
 - `server-lib/polar-client.js` holds the shared SDK client.
-- `api/checkout.js` creates a hosted checkout and `vercel.json` maps `/checkout` to it.
+- `api/checkout.js` creates a hosted checkout and `vercel.json` maps `/checkout` to it. When `SITE_URL` is an absolute http(s) origin, the create call sets `success_url` to `{SITE_URL}/signin?subscribed=1`. Polar’s `CheckoutCreate.success_url` is optional. The `{CHECKOUT_ID}` placeholder is also optional (`checkout_id={CHECKOUT_ID}`), and this route does not send it.
 - `api/webhook/polar.js` verifies the raw signed request and has explicit TODOs for paid-order and customer-state reconciliation.
 - `tests/polar-routes.test.js` checks checkout validation and webhook verification behavior. Existing subscription and function-count tests were updated.
 - `package.json`, `package-lock.json`, `.env.example`, and `README.md` record the dependency and configuration.
@@ -34,3 +34,7 @@ Production Vercel now has `POLAR_ACCESS_TOKEN`, `POLAR_WEBHOOK_SECRET`, `POLAR_S
 - [ ] Complete a no-charge checkout with the single-use test discount and verify sign-in and Pro access. The discount ID is `d7ee1235-4857-4f42-901b-46f024efebba`; its code is stored only in the ignored local `.env` as `POLAR_TEST_DISCOUNT_CODE`. It expires on 2026-11-01 and discounts the subscription forever, so cancel the test subscription when finished.
 
 For local routing, use `npx vercel dev`; a static file server does not run the API functions. The live checkout route is `https://getclearframe.app/checkout?products=be456dd9-4508-4b3a-a517-60fae3c9747b`. To test without a charge, enter the single-use discount code on the Polar checkout page. A plain checkout link cannot pre-apply it.
+
+## Product id in the HTML links
+
+`api/checkout.js` accepts only `POLAR_PRODUCT_ID`. That same id is hard-coded in the upgrade links in `index.html`, `signin.html`, and `account.html`, and again in the dialog checkout link in `index.html` and `account.html`. There is no build step. Changing `POLAR_PRODUCT_ID` without updating those five `href`s makes the links return 400.

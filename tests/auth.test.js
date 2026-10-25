@@ -138,7 +138,7 @@ test('a magic link sets a session once, and Pro code is gated on that session', 
   assert.equal(https.headers['set-cookie'].every(row => row.includes('Secure')), true);
 });
 
-test('a stale session is checked again and a refund removes Pro access', async () => {
+test('a stale session is checked again and subscription status gates Pro access', async () => {
   const old = sign({typ: 'session', email: 'pro@example.com', customerId: 'cus_1', iat: 10, ent: 10, exp: Math.floor(Date.now() / 1000) + 3600}, secret);
   const revoked = mockRes();
   let calls = 0;
@@ -170,9 +170,10 @@ test('a stale session is checked again and a refund removes Pro access', async (
 });
 
 test('legal pages do not advertise the payment checkout, and the free page does not load Pro code', () => {
-  for (const file of ['terms.html', 'how-privacy-works.html', 'contact.html']) {
+  for (const file of ['how-privacy-works.html', 'contact.html']) {
     assert.doesNotMatch(fs.readFileSync(file, 'utf8'), /Polar|Vercel|Google Fonts|buy\.polar|license key/i, file);
   }
+  assert.doesNotMatch(fs.readFileSync('terms.html', 'utf8'), /\/checkout|buy\.polar|Vercel|Google Fonts|license key/i);
   const privacy = fs.readFileSync('privacy.html', 'utf8');
   assert.match(privacy, /Payments are handled separately by Polar/);
   assert.doesNotMatch(privacy, /Vercel|Google Fonts|buy\.polar|license key/i);

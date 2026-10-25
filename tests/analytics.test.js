@@ -93,6 +93,30 @@ test('sanitizer keeps only allowlisted events and coarse values',()=>{
   assert.equal(analytics.EVENTS.$pageview.path.includes('/pro'),false);
 });
 
+test('pro_dialog_opened keeps source header or raw_error and drops anything else',()=>{
+  const state={optedOut:false,dnt:false};
+  for(const source of ['header','raw_error']){
+    const kept=analytics.sanitizeEvent({event:'pro_dialog_opened',properties:baseProps({
+      source,email:'person@example.com',discount_shown:'launch9',file:'vacation.jpg',note:'x'
+    })},state);
+    assert.equal(kept.event,'pro_dialog_opened');
+    assert.equal(kept.properties.source,source);
+    assert.equal(kept.properties.project,'clearframe');
+    assert.equal(kept.properties.email,undefined);
+    assert.equal(kept.properties.discount_shown,undefined);
+    assert.equal(kept.properties.file,undefined);
+    assert.equal(kept.properties.note,undefined);
+    const keys=allowedKeys('pro_dialog_opened');
+    for(const key of Object.keys(kept.properties)) assert.ok(keys.has(key),key);
+  }
+  const bad=analytics.sanitizeEvent({event:'pro_dialog_opened',properties:baseProps({source:'pricing',placement:'header',email:'person@example.com'})},state);
+  assert.equal(bad.properties.source,undefined);
+  assert.equal(bad.properties.placement,undefined);
+  assert.equal(bad.properties.email,undefined);
+  assert.equal(Object.prototype.hasOwnProperty.call(bad.properties,'source'),false);
+  assert.equal(analytics.EVENTS.pro_dialog_opened.source.join(','),'header,raw_error');
+});
+
 test('person profiles stay off, ids must be UUIDs, and unknown events are dropped',()=>{
   const kept=analytics.sanitizeEvent({event:'$pageview',properties:baseProps({
     $process_person_profile:false,
@@ -493,7 +517,9 @@ test('checkout uses the beacon path and sign-in does not report a paid-or-sent g
   const events=await eventsOf(requests);
   const checkout=events.find(event=>event.event==='checkout_started');
   assert.equal(checkout.properties.placement,'header');
-  assert.equal(checkout.properties.discount_shown,'none');
+  assert.equal(checkout.properties.discount_shown,undefined);
+  assert.equal(Object.prototype.hasOwnProperty.call(analytics.EVENTS.checkout_started,'discount_shown'),false);
+  assert.equal(JSON.stringify(analytics.EVENTS).includes('launch9'),false);
   assert.equal(events.some(event=>event.event==='upgrade_click'),false);
   w.ClearFrameAnalytics.signinRequested('accepted');
   w.ClearFrameAnalytics.signinRequested('error');

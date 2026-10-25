@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /checkout
+Disallow: /api/checkout
 
 Sitemap: https://getclearframe.app/sitemap.xml
