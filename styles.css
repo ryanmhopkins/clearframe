@@ -217,6 +217,32 @@ body.has-results .hero { padding: 27px 0 30px; }body.has-results .hero-kicker { 
 .legal li { margin: 0 0 6px; }
 .legal a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
 .legal .dated { color: var(--quiet); font-size: 13px; }
+/* One visual language for the public cleaner and the Pro workspace. */
+.topbar { border-bottom: 1px solid #222725; }
+.top-links { min-height: 36px; }
+.member-badge { display: inline-flex; align-items: center; gap: 7px; padding: 6px 10px; border: 1px solid #365241; border-radius: 99px; background: #17271d; color: #b9e6c5; font-size: 11px; font-weight: 650; white-space: nowrap; }
+.member-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #7dc99a; box-shadow: 0 0 0 3px #7dc99a22; }
+.top-links .account-link { color: var(--text); font-weight: 600; }
+.nav-signout { border: 0; background: none; color: var(--muted); font-size: 12px; padding: 6px 0; }
+.nav-signout:hover { color: var(--text); }
+.account-hero { padding: 55px 0 38px; }
+.account-intro { display: grid; grid-template-columns: minmax(0, 1fr) 270px; gap: 36px; align-items: end; }
+.hero-kicker { display: flex; align-items: center; gap: 10px; margin: 0 0 18px; color: #9aada1; font: 10px/1.4 var(--mono); letter-spacing: .09em; }
+.kicker-line { width: 20px; height: 1px; background: #59705f; }
+.account-hero h1 { margin: 0 0 16px; font-size: clamp(38px, 5vw, 60px); line-height: 1.06; letter-spacing: -.055em; }
+.account-hero h1 span { color: var(--accent); }
+.account-hero .account-intro > div > p:last-child { max-width: 590px; margin: 0; color: #b6bdb8; font-size: 14px; line-height: 1.7; }
+.member-card { display: flex; flex-direction: column; gap: 8px; padding: 20px; border: 1px solid #35433c; border-radius: 12px; background: radial-gradient(circle at 100% 0%, #244132, #1a221e 60%, #171c19); box-shadow: inset 0 1px #ffffff12; }
+.member-card-label { color: #a3b8a9; font: 10px var(--mono); letter-spacing: .09em; }
+.member-card strong { color: #e3f4e7; font-size: 19px; font-weight: 600; letter-spacing: -.03em; }
+.member-email { color: #b3c5ba; font-size: 12px; overflow-wrap: anywhere; }
+.member-card a { display: flex; justify-content: space-between; margin-top: 13px; padding-top: 13px; border-top: 1px solid #ffffff24; color: #e4f1e7; font-size: 12px; }
+.member-card a:hover { color: #fff; }
+.help-heading { padding: 58px 0 20px; border-top: 1px solid var(--line); }
+.help-heading .hero-kicker { margin-bottom: 8px; }
+.help-heading h2 { margin: 0 0 6px; font-size: 27px; font-weight: 550; letter-spacing: -.04em; }
+.help-heading > p:last-child { margin: 0; color: var(--muted); font-size: 13px; }
+@media (max-width: 760px) { .account-intro { grid-template-columns: 1fr; gap: 26px; }.member-card { max-width: none; }.account-hero { padding-top: 36px; }.top-links { gap: 6px 10px; }.top-links .account-link, .nav-signout { font-size: 11px; } }
 @media (max-width: 680px) {
   footer { align-items: flex-start; }
   .footer-nav { justify-content: flex-start; }

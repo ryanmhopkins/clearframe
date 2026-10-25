@@ -17,6 +17,7 @@
     const data = await response.json();
     status.textContent = 'Pro is active.';
     email.textContent = data.email || '';
+    document.body.classList.add('account-ready');
     const script = document.createElement('script');
     script.src = '/api/pro/module?name=pro.js';
     script.onerror = () => { status.textContent = 'Pro tools could not be loaded. Sign in again.'; };
