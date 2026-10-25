@@ -77,6 +77,6 @@ test('pages and styles do not load third-party scripts, fonts, or connections',(
     }
   })('api');
   assert.ok(functions.length<=12, functions.join('\n'));
-  assert.equal(functions.length, 6);
+  assert.equal(functions.length, 8);
   assert.equal(fs.existsSync('api/lib'), false);
 });

@@ -81,7 +81,7 @@ test('sign-in returns the same message for customers and everyone else', async (
   assert.match(logs[0], /magic link for pro@example.com: http:\/\/127\.0\.0\.1:8765\/api\/auth\/verify\?token=/);
   assert.match(paid.calls[0].url, /\/v1\/customers\/\?/);
   assert.match(paid.calls[0].url, /email=pro%40example\.com/);
-  assert.match(paid.calls[1].url, /\/v1\/orders\/\?/);
+  assert.match(paid.calls[1].url, /\/v1\/subscriptions\/\?/);
   assert.match(paid.calls[1].url, /customer_id=cus_1/);
   assert.match(paid.calls[1].url, new RegExp(env.POLAR_PRODUCT_ID));
   assert.equal(paid.calls.some(call => call.url.includes('api.resend.com')), false);
@@ -156,7 +156,7 @@ test('a stale session is checked again and a refund removes Pro access', async (
   await sessionHandler({method: 'GET', url: '/api/auth/session', headers: {cookie: `cf_session=${encodeURIComponent(old)}`}}, kept, {env, now: Date.now(), fetchImpl: paid.impl});
   assert.equal(kept.statusCode, 200);
   assert.equal(JSON.parse(kept.body).pro, true);
-  assert.match(paid.calls.map(call => call.url).join('\n'), /\/v1\/orders\//);
+  assert.match(paid.calls.map(call => call.url).join('\n'), /\/v1\/subscriptions\//);
 
   const portal = mockRes();
   const session = cookie(kept.headers['set-cookie'], 'cf_session');

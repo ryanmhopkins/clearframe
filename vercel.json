@@ -1,6 +1,7 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
+  "rewrites": [{"source": "/checkout", "destination": "/api/checkout"}],
   "functions": {
     "api/**/*.js": {
       "includeFiles": "{server-lib/**,api/pro/files/**}"

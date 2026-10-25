@@ -362,7 +362,7 @@ test('shipped client pins the SDK, blocks third-party script hosts, and wires ev
       else if(!entry.name.startsWith('_')) functions.push(full);
     }
   })('api');
-  assert.equal(functions.length,6);
+  assert.equal(functions.length,8);
 });
 
 test('payloads stay on the allowlist, and a same-origin host never leaves the page origin',async()=>{
