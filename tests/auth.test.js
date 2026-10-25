@@ -182,9 +182,11 @@ test('legal pages do not advertise the payment checkout, and the free page does 
   assert.match(fs.readFileSync('privacy.html', 'utf8'), /at most once a day/);
 });
 
-test('the Pro subscription terms are a marked draft and privacy names the dialog count', () => {
+test('the Pro subscription terms state the refund windows and privacy names the dialog count', () => {
   const terms = fs.readFileSync('terms.html', 'utf8');
-  assert.match(terms, /<h2>Pro subscription \(DRAFT\)<\/h2>/);
+  const visible = terms.replace(/<!--[\s\S]*?-->/g, '');
+  const refund = 'Refunds. If you are not satisfied with ClearFrame Pro, email support@getclearframe.app within 14 days of your first purchase and we will refund the full amount. For renewals, you may request a refund within 7 days of the renewal charge. After those windows, payments are not refundable, but you can cancel any time and keep Pro until the end of the period you already paid for. Refunds are returned to your original payment method through our payment processor, Polar, and usually appear within 5 to 10 business days. When a refund is issued, your Pro access ends right away. If a renewal payment fails, you keep Pro for 24 hours while the payment is retried. Cancelling stops future charges and does not by itself trigger a refund.';
+  assert.match(terms, /<h2>Pro subscription<\/h2>/);
   assert.match(terms, /This section is a draft for review/);
   assert.match(terms, /Last updated 25 October 2026/);
   assert.match(terms, /ClearFrame Pro is \$29 USD per year\./);
@@ -192,8 +194,14 @@ test('the Pro subscription terms are a marked draft and privacy names the dialog
   assert.match(terms, /cancel any time from the account page via Manage subscription, which opens the Polar customer portal\./);
   assert.match(terms, /You keep access until the end of the paid period\./);
   assert.match(terms, /Payments and tax are handled by Polar as merchant of record\./);
-  assert.match(terms, /\[RYAN TO DECIDE: refund policy\]/);
+  assert.ok(terms.includes(refund));
+  assert.match(terms, /14 days of your first purchase/);
+  assert.match(terms, /7 days of the renewal charge/);
+  assert.match(terms, /Pro access ends right away/);
+  assert.match(terms, /keep Pro for 24 hours/);
+  assert.match(terms, /does not by itself trigger a refund/);
   assert.equal((terms.match(/<!-- LEGAL REVIEW -->/g) || []).length, 6);
+  assert.doesNotMatch(visible, /\[RYAN TO DECIDE|\(DRAFT\)/);
   assert.doesNotMatch(terms, /\/checkout|buy\.polar/);
   const privacy = fs.readFileSync('privacy.html', 'utf8');
   assert.match(privacy, /Manage subscription opens the payment provider’s own page/);
