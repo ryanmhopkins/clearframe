@@ -169,10 +169,13 @@ test('a stale session is checked again and a refund removes Pro access', async (
   assert.match(create.options.body, /cus_1/);
 });
 
-test('legal pages do not name the payment provider, and the free page does not load Pro code', () => {
-  for (const file of ['privacy.html', 'terms.html', 'how-privacy-works.html', 'contact.html']) {
+test('legal pages do not advertise the payment checkout, and the free page does not load Pro code', () => {
+  for (const file of ['terms.html', 'how-privacy-works.html', 'contact.html']) {
     assert.doesNotMatch(fs.readFileSync(file, 'utf8'), /Polar|Vercel|Google Fonts|buy\.polar|license key/i, file);
   }
+  const privacy = fs.readFileSync('privacy.html', 'utf8');
+  assert.match(privacy, /Payments are handled separately by Polar/);
+  assert.doesNotMatch(privacy, /Vercel|Google Fonts|buy\.polar|license key/i);
   assert.doesNotMatch(fs.readFileSync('index.html', 'utf8'), /\/api\/|webkitdirectory/);
   assert.match(fs.readFileSync('privacy.html', 'utf8'), /Free use does not ask for your name or email/);
   assert.match(fs.readFileSync('privacy.html', 'utf8'), /at most once a day/);
