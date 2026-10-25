@@ -1,5 +1,5 @@
-const {redeemLink} = require('../lib/session');
-const {send, siteUrl, clearCookie, secureCookie} = require('../lib/http');
+const {redeemLink} = require('../../server-lib/session');
+const {send, siteUrl, clearCookie, secureCookie} = require('../../server-lib/http');
 
 async function handler(req, res, deps = {}) {
   const env = {...process.env, ...(deps.env || {})};

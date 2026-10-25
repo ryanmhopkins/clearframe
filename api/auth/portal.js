@@ -1,6 +1,6 @@
-const {resolveSession} = require('../lib/session');
-const {portalUrl} = require('../lib/polar');
-const {send, siteUrl} = require('../lib/http');
+const {resolveSession} = require('../../server-lib/session');
+const {portalUrl} = require('../../server-lib/polar');
+const {send, siteUrl} = require('../../server-lib/http');
 
 async function handler(req, res, deps = {}) {
   const env = {...process.env, ...(deps.env || {})};

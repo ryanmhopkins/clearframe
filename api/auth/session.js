@@ -1,5 +1,5 @@
-const {resolveSession, sessionHeaders} = require('../lib/session');
-const {send, clearCookie, secureCookie} = require('../lib/http');
+const {resolveSession, sessionHeaders} = require('../../server-lib/session');
+const {send, clearCookie, secureCookie} = require('../../server-lib/http');
 
 async function handler(req, res, deps = {}) {
   const env = {...process.env, ...(deps.env || {})};
