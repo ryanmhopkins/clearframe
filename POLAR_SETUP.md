@@ -12,7 +12,7 @@ This integration uses the live Polar organization `clearframe` and `https://getc
 ## Files
 
 - `server-lib/polar-client.js` holds the shared SDK client.
-- `api/checkout.js` creates a hosted checkout and `vercel.json` maps `/checkout` to it.
+- `api/checkout.js` creates a hosted checkout and `vercel.json` maps `/checkout` to it. When `SITE_URL` is an absolute http(s) origin, the create call sets `success_url` to `{SITE_URL}/signin?subscribed=1`. Polar’s `CheckoutCreate.success_url` is optional. The `{CHECKOUT_ID}` placeholder is also optional (`checkout_id={CHECKOUT_ID}`), and this route does not send it.
 - `api/webhook/polar.js` verifies the raw signed request and has explicit TODOs for paid-order and customer-state reconciliation.
 - `tests/polar-routes.test.js` checks checkout validation and webhook verification behavior. Existing subscription and function-count tests were updated.
 - `package.json`, `package-lock.json`, `.env.example`, and `README.md` record the dependency and configuration.
@@ -44,3 +44,7 @@ Pro access is decided in `server-lib/polar.js` when someone asks for a sign-in l
 - Every other status, including `canceled`, `unpaid`, `paused`, `incomplete`, and a literal `revoked` value, denies access. Polar's revoke event leaves the subscription `canceled`; there is no separate revoked status.
 - A refund removes access even when Polar leaves the subscription active. The check lists orders for the customer and product. The current payment is the newest settled order on that subscription, skipping `draft`, `pending`, and `void`. Access is denied when that order's status is `refunded` or `partially_refunded`, or when `refunded_amount` or `refunded_tax_amount` is greater than 0. A refund of an older order does not remove access after a later settled order is paid and not refunded. No settled order is not treated as a refund. The refunds list is not called.
 - Pro files are checked on every request, but the check trusts the signed cookie until it is due again. The cookie is trusted for 24 hours after a successful check (`ent`). A `past_due` grant also stores `until`, the grace deadline in unix seconds, inside that same signed cookie. The next request at or after `until` checks Polar again, so the cookie cannot keep access past the grace end. A refund, a cancellation, or a period ending has no earlier deadline stored, so each is noticed on the next check, at most 24 hours later. A new sign-in checks immediately; a failed sign-in does not clear a cookie that is still inside its trust window. The cookie's `Max-Age` of 30 days rolls forward on each successful check and does not by itself extend a failed check. If Polar returns an error, including an order list that cannot be finished, that request is denied and the cookie is left in place.
+
+## Product id in the HTML links
+
+`api/checkout.js` accepts only `POLAR_PRODUCT_ID`. That same id is hard-coded in the upgrade links in `index.html`, `signin.html`, and `account.html`, and again in the dialog checkout link in `index.html` and `account.html`. There is no build step. Changing `POLAR_PRODUCT_ID` without updating those five `href`s makes the links return 400.

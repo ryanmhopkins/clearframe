@@ -30,11 +30,15 @@
     <symbol id="icon-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
     <symbol id="icon-image" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8" cy="8" r="1.5"/><path d="m3 17 5-5 4 4 4-6 5 7"/></symbol>
     <symbol id="icon-sliders" viewBox="0 0 24 24"><path d="M4 7h7m4 0h5M4 17h3m4 0h9"/><circle cx="13" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></symbol>
+    <symbol id="icon-folder" viewBox="0 0 24 24"><path d="M3 7.5A2.5 2.5 0 0 1 5.5 5H9l2 2.5h7.5A2.5 2.5 0 0 1 21 10v7.5a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 17.5Z"/></symbol>
+    <symbol id="icon-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+    <symbol id="icon-shield" viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.5 3 8.3 7 10 4-1.7 7-5.5 7-10V6Z"/><path d="m9 12 2 2 4-4"/></symbol>
   </defs></svg>
+  <div id="app">
   <a class="skip-link" href="#scanner">Skip to scanner</a>
   <header class="topbar">
     <a class="brand" href="index.html" aria-label="ClearFrame home"><svg class="icon brand-mark"><use href="#icon-frame"/></svg>clearframe<span class="brand-period">.</span></a>
-    <nav class="top-links" aria-label="Account"><a href="signin.html">Sign in</a><a class="upgrade-link" href="/checkout?products=be456dd9-4508-4b3a-a517-60fae3c9747b">Upgrade to Pro · $29/year</a></nav>
+    <nav class="top-links" aria-label="Account"><a href="signin.html">Sign in</a><a class="upgrade-link" href="/checkout?products=be456dd9-4508-4b3a-a517-60fae3c9747b" rel="nofollow">Upgrade to Pro · $29/year</a></nav>
   </header>
 
   <main>
@@ -43,7 +47,7 @@
       <div class="pro-status">
         <p id="proStatus" role="status">Checking Pro status…</p>
         <p><span id="proEmail"></span></p>
-        <a href="/api/auth/portal">Receipts</a>
+        <a href="/api/auth/portal">Manage subscription</a>
         <button id="signOut" class="text-button" type="button">Sign out</button>
       </div>
       <p>Folder cleaning, presets, and RAW run in this browser. Photos are not uploaded.</p>
@@ -100,12 +104,46 @@
       </main>
   <footer><a class="brand footer-brand" href="index.html"><svg class="icon"><use href="#icon-frame"/></svg>clearframe.</a><nav class="footer-nav" aria-label="Site"><a href="how-privacy-works.html">How privacy works</a><a href="privacy.html">Privacy policy</a><a href="terms.html">Terms of use</a><a href="contact.html">Contact</a></nav></footer>
   <div id="toast" class="toast t-toast" role="status"></div>
+  </div>
+  <div id="proBackdrop" class="pro-backdrop" hidden>
+    <div id="proDialog" class="pro-dialog" role="dialog" aria-modal="true" aria-labelledby="proTitle" aria-describedby="proDesc" tabindex="-1">
+      <button id="proClose" class="pro-close" type="button" aria-label="Close"><svg class="icon" aria-hidden="true"><use href="#icon-close"/></svg></button>
+      <div class="pro-head">
+        <span class="pro-eyebrow"><svg class="icon" aria-hidden="true"><use href="#icon-frame"/></svg>CLEARFRAME PRO</span>
+        <h2 id="proTitle">Unlock RAW, folders, and presets</h2>
+        <p id="proDesc">Pro adds RAW cleaning, folder cleaning, and presets to the free cleaner. Photos still stay on your device.</p>
+      </div>
+      <ul class="pro-features" aria-label="What Pro unlocks">
+        <li><span class="pro-tile" aria-hidden="true"><svg class="icon"><use href="#icon-image"/></svg></span>
+          <div><h3>RAW cleaning</h3><p>Remove details such as GPS, captions, author names, and dates. Camera calibration is kept.</p>
+            <div class="chips" aria-label="RAW formats"><span class="chip">DNG</span><span class="chip">CR2</span><span class="chip">NEF</span><span class="chip">ARW</span></div></div></li>
+        <li><span class="pro-tile" aria-hidden="true"><svg class="icon"><use href="#icon-folder"/></svg></span>
+          <div><h3>Folder cleaning</h3><p>Choose a whole folder instead of picking photos one by one.</p></div></li>
+        <li><span class="pro-tile" aria-hidden="true"><svg class="icon"><use href="#icon-sliders"/></svg></span>
+          <div><h3>Presets</h3><p>Save your selections once, then apply a preset to every photo.</p></div></li>
+      </ul>
+      <div class="pro-compare" role="group" aria-label="Free and Pro compared">
+        <div><b>FREE · NO ACCOUNT</b><p>JPEG, PNG, WebP, GIF, HEIC/HEIF, AVIF, TIFF. Batches and ZIP export.</p></div>
+        <div><b>PRO</b><p><strong>Everything in Free</strong>, plus RAW, folders, and presets.</p></div>
+      </div>
+      <div class="pro-buy">
+        <div class="pro-price"><span class="amount" id="proPrice">$29<small>/year</small></span><span class="terms" id="proTerms">Renews yearly. Cancel anytime from Manage subscription.</span></div>
+        <a id="proCheckout" class="primary-button pro-cta" href="/checkout?products=be456dd9-4508-4b3a-a517-60fae3c9747b" rel="nofollow">Get ClearFrame Pro<svg class="icon" aria-hidden="true"><use href="#icon-arrow"/></svg></a>
+      </div>
+      <p class="pro-alt">Already subscribed? <a href="signin.html">Sign in with your email</a></p>
+      <div class="pro-foot">
+        <span><svg class="icon" aria-hidden="true"><use href="#icon-lock"/></svg>Secure checkout by Polar</span>
+        <span><svg class="icon" aria-hidden="true"><use href="#icon-shield"/></svg>Photos stay on your device</span>
+      </div>
+    </div>
+  </div>
   <script src="vendor/jszip/jszip-3.10.1.min.js"></script>
   <script src="vendor/exifr.js"></script>
   <script src="metadata.js"></script>
   <script src="motion.js"></script>
   <script src="extended-client.js"></script>
   <script src="app.js"></script>
+  <script src="pro-dialog.js"></script>
   <script src="account-loader.js"></script>
   <script src="vendor/posthog/posthog-js-1.438.21.no-external.js"></script>
   <script src="analytics.js"></script>

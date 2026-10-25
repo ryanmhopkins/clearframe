@@ -104,6 +104,7 @@ async function loadFiles(files,current){
  }
  if(valid.length!==files.length)errors.push(`${files.length-valid.length} unsupported files were skipped.`);
  $('#fileErrors').textContent=errors.join('\n');$('#fileErrors').hidden=!errors.length;
+ if(errors.some(line=>line.endsWith('RAW cleaning is part of ClearFrame Pro.'))){const active=document.activeElement;const returnFocus=active&&active!==document.body&&active.id!=='fileInput'?active:$('#dropzone');globalThis.ClearFrameProDialog?.open({source:'raw_error',returnFocus});}
  if(!fresh.length)return;
  batch.push(...fresh);activeId=fresh[0].id;results.hidden=false;$('.workspace').hidden=true;document.body.classList.add('has-results');showReview('clean');renderBatch();select(activeId);results.scrollIntoView({behavior:'smooth',block:'start'});
  trackScan(fresh);

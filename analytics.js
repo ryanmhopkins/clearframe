@@ -33,8 +33,10 @@
       metadata_found: ['none', 'some']
     },
     checkout_started: {
-      placement: ['header', 'hero', 'raw_gate', 'folder_gate', 'pricing'],
-      discount_shown: ['launch9', 'none']
+      placement: ['header', 'hero', 'raw_gate', 'folder_gate', 'pricing']
+    },
+    pro_dialog_opened: {
+      source: ['header', 'raw_error']
     },
     upgrade_click: {
       placement: ['header', 'hero', 'raw_gate', 'folder_gate', 'pricing']
@@ -304,13 +306,28 @@
     } catch { /* ignore */ }
   }
 
+  function proDialogOpened(source) {
+    try {
+      if (source !== 'header' && source !== 'raw_error') return;
+      capture('pro_dialog_opened', {source});
+    } catch { /* ignore */ }
+  }
+
   function bindCheckout(doc) {
     doc.addEventListener('click', event => {
-      const target = event.target && event.target.closest ? event.target.closest('a.upgrade-link') : null;
+      const target = event.target && event.target.closest ? event.target.closest('a') : null;
       if (!target) return;
-      const header = target.closest && (target.closest('header') || target.closest('.top-links'));
-      const props = {discount_shown: 'none'};
-      if (header) props.placement = 'header';
+      const href = target.getAttribute('href') || '';
+      const checkoutLink = target.classList.contains('upgrade-link') || href.indexOf('/checkout') === 0;
+      if (!checkoutLink) return;
+      // The header opener keeps the checkout URL for no-JS. With the dialog
+      // on the page, that click opens the dialog and is not a checkout start.
+      if (target.hasAttribute('data-pro-dialog') && doc.getElementById('proDialog')) return;
+      const props = {};
+      const dialog = doc.getElementById('proDialog');
+      const fromRaw = dialog && dialog.getAttribute('data-source') === 'raw_error' && target.closest('#proDialog');
+      if (fromRaw) props.placement = 'raw_gate';
+      else if (target.closest('header') || target.closest('.top-links') || target.closest('#proDialog')) props.placement = 'header';
       capture('checkout_started', props, {transport: 'sendBeacon', send_instantly: true});
     });
   }
@@ -390,7 +407,7 @@
   const api = {
     POSTHOG_KEY, API_HOST, UI_HOST, DEFAULTS, APP_VERSION, OPT_OUT_KEY, EVENTS,
     sanitizeEvent, coarsePath, fileCountBucket, formatGroup, environment,
-    optedOut, setOptOut, dnt, start, capture, cleanCompleted, scanCompleted, signinRequested
+    optedOut, setOptOut, dnt, start, capture, cleanCompleted, scanCompleted, signinRequested, proDialogOpened
   };
   root.ClearFrameAnalytics = api;
   if (typeof module !== 'undefined' && module.exports) module.exports = api;

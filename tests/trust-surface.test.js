@@ -4,7 +4,7 @@ const fs=require('node:fs');
 
 const pages=['index.html','how-privacy-works.html','privacy.html','terms.html','contact.html','signin.html','account.html'];
 const owner=/ryanmhopkins|rmhopkins|Ryan Hopkins|Created by Ryan|x\.com\/rm/i;
-const codeFiles=['styles.css','fonts/fonts.css','motion.css','app.js','motion.js','extended-client.js','metadata.js','metadata-worker.mjs','extended-metadata.mjs'];
+const codeFiles=['styles.css','fonts/fonts.css','motion.css','app.js','pro-dialog.js','motion.js','extended-client.js','metadata.js','metadata-worker.mjs','extended-metadata.mjs'];
 const blocked=/fonts\.googleapis|fonts\.gstatic|cdn\.jsdelivr|cdnjs\.cloudflare|unpkg\.com|googletagmanager|google-analytics|plausible\.io/i;
 
 test('pages and styles do not load third-party scripts, fonts, or connections',()=>{
@@ -48,7 +48,10 @@ test('pages and styles do not load third-party scripts, fonts, or connections',(
   for(const key of ['X-Content-Type-Options','Referrer-Policy','Permissions-Policy','X-Frame-Options']){
     assert.ok(headers.headers.some(r=>r.headers.some(h=>h.key===key)), key);
   }
-  assert.match(fs.readFileSync('robots.txt','utf8'),/Sitemap: https:\/\/getclearframe\.app\/sitemap\.xml/);
+  const robots=fs.readFileSync('robots.txt','utf8');
+  assert.match(robots,/Sitemap: https:\/\/getclearframe\.app\/sitemap\.xml/);
+  assert.match(robots,/Disallow: \/checkout\b/);
+  assert.match(robots,/Disallow: \/api\/checkout\b/);
   assert.match(fs.readFileSync('sitemap.xml','utf8'),/https:\/\/getclearframe\.app\/privacy/);
   assert.match(fs.readFileSync('sitemap.xml','utf8'),/https:\/\/getclearframe\.app\/how-privacy-works/);
   assert.doesNotMatch(fs.readFileSync('sitemap.xml','utf8'), owner);
