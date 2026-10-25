@@ -42,16 +42,20 @@ function magicToken({email, secret, now = Date.now()}) {
   }, secret);
 }
 
-function sessionToken({email, customerId, secret, now = Date.now(), checkedAt}) {
+function sessionToken({email, customerId, secret, now = Date.now(), checkedAt, until}) {
   const iat = Math.floor(now / 1000);
-  return sign({
+  const payload = {
     typ: 'session',
     email,
     customerId,
     iat,
     ent: checkedAt == null ? iat : checkedAt,
     exp: Math.floor((now + SESSION_TTL_MS) / 1000)
-  }, secret);
+  };
+  // until is the past_due grace deadline in unix seconds. It is a timestamp in the
+  // existing signed session, not a new cookie or identifier.
+  if (Number.isFinite(until)) payload.until = until;
+  return sign(payload, secret);
 }
 
 module.exports = {sign, verify, magicToken, sessionToken, MAGIC_TTL_MS, SESSION_TTL_MS};
