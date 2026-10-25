@@ -8,19 +8,29 @@ const DAY = 24 * 60 * 60;
 const WINDOW = 15 * 60 * 1000;
 const LIMIT = 5;
 
-async function issueSession(email, customerId, deps, now) {
-  return sessionToken({email, customerId, secret: deps.env.SESSION_SECRET, now, checkedAt: Math.floor(now / 1000)});
+async function issueSession(email, customerId, deps, now, recheckAt) {
+  const until = Number.isFinite(recheckAt) ? Math.floor(recheckAt / 1000) : undefined;
+  return sessionToken({email, customerId, secret: deps.env.SESSION_SECRET, now, checkedAt: Math.floor(now / 1000), until});
+}
+
+function grantIsFresh(payload, now) {
+  // ent is the last successful check. A grant is reused for 24 hours, except a
+  // past_due grant: until is its grace deadline, and the cookie is not trusted
+  // at or after that instant. Active and trialing grants have no until.
+  if (now / 1000 - Number(payload.ent || 0) >= DAY) return false;
+  const until = Number(payload.until);
+  return !Number.isFinite(until) || now / 1000 < until;
 }
 
 async function resolveSession(req, deps, now = Date.now()) {
   const token = cookies(req).cf_session;
   const payload = verify(token, deps.env.SESSION_SECRET);
   if (!payload || payload.typ !== 'session' || !payload.email) return {ok: false};
-  if (now / 1000 - Number(payload.ent || 0) < DAY) return {ok: true, payload};
+  if (grantIsFresh(payload, now)) return {ok: true, payload};
   try {
-    const result = await entitlement(payload.email, deps);
+    const result = await entitlement(payload.email, {...deps, now});
     if (!result.paid) return {ok: false, clear: true};
-    const refreshed = await issueSession(payload.email, result.customerId, deps, now);
+    const refreshed = await issueSession(payload.email, result.customerId, deps, now, result.recheckAt);
     return {ok: true, payload: verify(refreshed, deps.env.SESSION_SECRET), refreshed};
   } catch {
     return {ok: false};
@@ -67,7 +77,7 @@ async function redeemLink(req, deps) {
   try { result = await entitlement(payload.email, deps); }
   catch { return fail('lookup'); }
   if (!result.paid) return fail('unpaid');
-  const session = await issueSession(payload.email, result.customerId, deps, now);
+  const session = await issueSession(payload.email, result.customerId, deps, now, result.recheckAt);
   const usedToken = sign({typ: 'used', nonces: [...used, payload.nonce].slice(-20), exp: Math.floor((now + MAGIC_TTL_MS) / 1000)}, secret);
   return {
     status: 302,
