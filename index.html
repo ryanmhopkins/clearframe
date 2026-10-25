@@ -4,8 +4,18 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#101010" />
-  <meta name="description" content="View and remove photo metadata, including location, camera settings, and dates." />
+  <meta name="description" content="Scan and remove photo metadata in your browser. Photos stay on your device. Supports JPEG, PNG, WebP, GIF, HEIC, AVIF, TIFF, and RAW." />
   <title>ClearFrame — Photo metadata cleaner</title>
+  <link rel="canonical" href="https://clear-frame-app.vercel.app/" />
+  <meta name="robots" content="index, follow" />
+  <meta property="og:site_name" content="ClearFrame" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="ClearFrame — Photo metadata cleaner" />
+  <meta property="og:description" content="Scan and remove photo metadata in your browser. Photos stay on your device. Supports JPEG, PNG, WebP, GIF, HEIC, AVIF, TIFF, and RAW." />
+  <meta property="og:url" content="https://clear-frame-app.vercel.app/" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="ClearFrame — Photo metadata cleaner" />
+  <meta name="twitter:description" content="Scan and remove photo metadata in your browser. Photos stay on your device. Supports JPEG, PNG, WebP, GIF, HEIC, AVIF, TIFF, and RAW." />
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23ededeb'/%3E%3Cpath d='M9 13V9h4M19 9h4v4M23 19v4h-4M13 23H9v-4' fill='none' stroke='%23101010' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E" />
   <link rel="stylesheet" href="motion.css" />
   <link rel="stylesheet" href="styles.css" />
@@ -88,6 +98,29 @@
         <article><span class="note-number">03 <span></span></span><h3>Download</h3><p>Save each photo separately or download them all in a ZIP.</p></article>
       </div>
     </section>
+    <section id="how-your-privacy-works" class="privacy-section" aria-labelledby="privacy-title">
+      <div class="section-heading"><h2 id="privacy-title">How your privacy works</h2></div>
+      <div class="privacy-copy">
+        <p>Your photos are read and cleaned in this browser. Choosing a photo does not upload it. There is no account, and this page does not send your photos to a server.</p>
+        <h3>What gets downloaded</h3>
+        <p>This website does download its own page, scripts, styles, and fonts. That is how the tool reaches you. Those files are served by this site. They are not loaded from Google Fonts, a public script CDN, or another company’s servers.</p>
+        <p>JPEG, PNG, WebP, and GIF are cleaned with the scripts that load with the page. HEIC, HEIF, AVIF, TIFF, and RAW (DNG, CR2, NEF, and ARW) also need a photo engine of about 25&nbsp;MB. The first time you add one of those files, the browser downloads <code>vendor/exiftool/zeroperl-mqcadjqm.wasm</code> from this same website. That download is the engine, not your photo. ZIP files are packed in the browser by a copy of JSZip that also ships with this site. Your browser then saves the download. Nothing is uploaded to create it.</p>
+        <h3>What this page does not do</h3>
+        <p>It does not run analytics or ads. Its own scripts do not set cookies. It does not embed third-party scripts, fonts, or images. The “Created by Ryan” link in the footer is only a link to an X profile. The contact page also links to ryanmhopkins.com, where the email address is published. Following either link is a visit you choose, and that visit does not include your photos.</p>
+        <h3>What the host can still see</h3>
+        <p>Opening this site connects to the host that serves it (currently Vercel, at this site’s own address). Like other websites, that connection can include your IP address and the page address you requested. Your photos are not part of those requests. This page cannot turn host logs off. Those settings live outside this project’s files.</p>
+        <h3>How to check</h3>
+        <ol>
+          <li>Open your browser’s developer tools and choose the Network tab.</li>
+          <li>Reload this page. The requests should go only to this site’s address. You should not see fonts.googleapis.com, fonts.gstatic.com, cdn.jsdelivr.net, or other sites.</li>
+          <li>Add a photo and download a cleaned copy. You should not see an upload of the photo. For HEIC, HEIF, AVIF, TIFF, or RAW, the first use can download the photo engine named above from this site. Your photo is not in that request.</li>
+          <li>This site does not install a service worker. After the page is open, cleaning uses what has already loaded. Reloading while offline will fail, because the browser has to fetch the page again. Working offline is not a feature of this version.</li>
+        </ol>
+        <h3>Limits</h3>
+        <p>Cleaning removes metadata this scanner can find and that you select. It does not remove what is visible in the picture, watermarks, or data hidden in pixels. RAW files keep camera maker notes and rendering data, which can still identify a camera. File names and your device’s file dates are separate from metadata inside the photo. Scanning a cleaned copy shows what this tool can still read. It is not proof that every hidden detail is gone.</p>
+        <p>The <a href="privacy.html">privacy policy</a> restates this for the site as a whole. Questions go to the <a href="contact.html">contact page</a>.</p>
+      </div>
+    </section>
     <section class="faq" aria-label="A few useful details">
       <details><summary>What is photo metadata?</summary><p>It’s extra information saved inside an image, like the camera used, when it was taken, editing software, or sometimes a GPS location. EXIF is one common type. These details can be useful in your library, but you may want to remove them before sharing a photo.</p></details>
       <details><summary>Which files and details can I clean?</summary><p>ClearFrame supports JPEG, PNG, WebP, GIF, HEIC, HEIF, AVIF, TIFF, and RAW files in DNG, CR2, NEF, and ARW formats. Available cleaning options depend on the format. Documents and videos aren’t supported.</p></details>
@@ -97,14 +130,14 @@
       <details><summary>Can I clean several photos at once?</summary><p>Yes. Add multiple photos, review the choices for each, then save them individually or together in a ZIP. Each photo can be up to 256 MB. Large batches can use a lot of browser memory. If things slow down, try fewer files at a time.</p></details>
       <details><summary>How does RAW cleaning work?</summary><p>RAW photos need camera settings and calibration data to display correctly. ClearFrame keeps those, along with maker notes and embedded previews, while letting you remove listed details such as GPS, captions, author names, and dates. Kept data may still contain identifying information. Select all selects the available cleaning options; it doesn’t strip every piece of data from a RAW file.</p></details>
       <details><summary>Why might a photo have no preview?</summary><p>Your browser may not display HEIC, TIFF, or RAW images. You can still review and clean a supported file without a preview. The downloaded copy keeps its original format, so open it in an app that supports that format.</p></details>
-      <details><summary>Are my photos uploaded?</summary><p>No. Scanning and cleaning happen in your browser. Your photos aren’t uploaded or stored on a server.</p></details>
+      <details><summary>Are my photos uploaded?</summary><p>No. Scanning and cleaning happen in your browser. Your photos aren’t uploaded or stored on a server. <a href="#how-your-privacy-works">How your privacy works</a> explains what this site does download, what the host can still see, and how to check the network tab.</p></details>
       <details><summary>What about AI tags and Content Credentials?</summary><p>AI tools sometimes save prompts or software details in text, EXIF, or XMP blocks. ClearFrame can remove those blocks when it finds them. It also identifies some Content Credentials (C2PA) data, but doesn’t verify its authenticity. Removing it loses that provenance, and other edits can invalidate its signature. Visible watermarks and data hidden in pixels aren’t removed.</p></details>
       <details><summary>How can I check the cleaned photo?</summary><p>Add the downloaded copy to ClearFrame to scan it again and see which blocks remain. This checks what the scanner can detect; it isn’t a guarantee that every proprietary tag or hidden piece of information is gone. Your filename and file dates are separate from embedded metadata and may still appear on your device.</p></details>
     </section>
   </main>
-  <footer><a class="brand footer-brand" href="#"><svg class="icon"><use href="#icon-frame"/></svg>clearframe.</a><a class="creator-link" href="https://x.com/rmhopkins" target="_blank" rel="noopener noreferrer" aria-label="Created by Ryan — @rmhopkins on X (opens in a new tab)">Created by Ryan<svg class="x-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.64 7.584H.47l8.6-9.835L0 1.153h7.594l5.243 6.932zm-1.29 19.49h2.039L6.487 3.24H4.3z"/></svg></a></footer>
+  <footer><a class="brand footer-brand" href="#"><svg class="icon"><use href="#icon-frame"/></svg>clearframe.</a><nav class="footer-nav" aria-label="Site"><a href="#how-your-privacy-works">How privacy works</a><a href="privacy.html">Privacy policy</a><a href="terms.html">Terms of use</a><a href="contact.html">Contact</a></nav><a class="creator-link" href="https://x.com/rmhopkins" target="_blank" rel="noopener noreferrer" aria-label="Created by Ryan — @rmhopkins on X (opens in a new tab)">Created by Ryan<svg class="x-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.64 7.584H.47l8.6-9.835L0 1.153h7.594l5.243 6.932zm-1.29 19.49h2.039L6.487 3.24H4.3z"/></svg></a></footer>
   <div id="toast" class="toast t-toast" role="status"></div>
-  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+  <script src="vendor/jszip/jszip-3.10.1.min.js"></script>
   <script src="vendor/exifr.js"></script>
   <script src="metadata.js"></script>
   <script src="motion.js"></script>
