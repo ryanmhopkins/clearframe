@@ -7,9 +7,15 @@
   const APP_VERSION = '1.1.0';
   const OPT_OUT_KEY = 'cf_analytics_off';
   const COOKIELESS_ID = '$posthog_cookieless';
-  // Single transport host. A path stays on this origin. The transport commit
-  // sets a direct host if a rewrite proxy cannot be shown to be safe.
-  const API_HOST = '/cf-signal';
+  // Direct ingest, not a same-origin rewrite.
+  // server-lib/http.js setCookie uses Path=/ and no Domain attribute, so
+  // cf_session and cf_used are host-only and are sent on every path of this
+  // site. A Vercel external rewrite forwards the request, including Cookie
+  // and Authorization. Route transforms that delete headers were not proven
+  // against this cookie without a deploy, and the cookie attributes must
+  // not change. A cross-origin request to the host below does not attach
+  // that host-only session cookie.
+  const API_HOST = 'https://us.i.posthog.com';
 
   const PAGE_PATHS = ['/', '/pro', '/signin', '/how-privacy-works', '/privacy', '/terms', '/contact', 'other'];
   const EVENTS = {
