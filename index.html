@@ -36,7 +36,7 @@
   </defs></svg>
   <div id="app">
   <a class="skip-link" href="#scanner">Skip to scanner</a>
-  <div class="upgrade-banner"><span>Clean more, all in your browser. Unlock folders, presets, and RAW.</span><a class="upgrade-banner-action" href="/checkout?products=be456dd9-4508-4b3a-a517-60fae3c9747b" rel="nofollow" data-pro-dialog="header" aria-haspopup="dialog" aria-controls="proDialog">Get Pro · $29/year <span aria-hidden="true">↗</span></a></div>
+  <div class="upgrade-banner"><span>10 free downloads a day. Go unlimited with Pro—plus folders, presets, and RAW.</span><a class="upgrade-banner-action" href="/checkout?products=be456dd9-4508-4b3a-a517-60fae3c9747b" rel="nofollow" data-pro-dialog="header" aria-haspopup="dialog" aria-controls="proDialog">Get Pro · $29/year <span aria-hidden="true">↗</span></a></div>
   <header class="topbar">
     <a class="brand" href="#" aria-label="ClearFrame home"><svg class="icon brand-mark"><use href="#icon-frame"/></svg>clearframe<span class="brand-period">.</span></a>
     <nav class="top-links" aria-label="Account"><a href="signin.html">Sign in</a></nav>
@@ -49,7 +49,7 @@
     </section>
 
     <section id="scanner" class="tool-shell" aria-label="Image metadata scanner" tabindex="-1">
-      <div class="tool-bar"><div><svg class="icon"><use href="#icon-frame"/></svg>Photo cleaner</div><span class="format-label">PHOTOS</span></div>
+      <div class="tool-bar"><div><svg class="icon"><use href="#icon-frame"/></svg>Photo cleaner</div><div class="tool-bar-meta"><span id="dailyLimitNote" class="daily-limit-note" aria-live="polite"></span><span class="format-label">PHOTOS</span></div></div>
       <input id="fileInput" type="file" multiple accept="image/jpeg,image/png,image/webp,image/gif,image/heic,image/heif,image/avif,image/tiff,.jpg,.jpeg,.png,.webp,.gif,.heic,.heif,.avif,.tif,.tiff" hidden />
     <p id="scanStatus" class="processing-note" role="status" hidden></p>
     <p id="fileErrors" class="processing-note file-errors" role="alert" hidden></p>
@@ -111,6 +111,7 @@
       <details><summary>Can I choose what to keep?</summary><p>Yes. Select the blocks you want removed and leave the rest unchecked, or use the Select all switch. Your choices are saved separately for each photo. JPEG, PNG, WebP, and GIF cleaning works by block. The other formats offer selected metadata groups and individual standard fields.</p></details>
       <details><summary>Will my photo look the same?</summary><p>ClearFrame doesn’t resize or recompress your image, and your original stays untouched. Removing an orientation tag or color profile can change how the downloaded copy displays. Color and display blocks are kept by default; check the details before removing EXIF, which can include orientation.</p></details>
       <details><summary>Can I clean several photos at once?</summary><p>Yes. Add multiple photos, review the choices for each, then save them individually or together in a ZIP. Each photo can be up to 256 MB. Large batches can use a lot of browser memory. If things slow down, try fewer files at a time. ClearFrame Pro also lets you choose a folder and apply a saved preset to every photo.</p></details>
+      <details><summary>How does the free daily limit work?</summary><p>You can download up to 10 cleaned photos per day in the free cleaner. Each photo in a ZIP counts as one download. The count resets at midnight in your device’s local time. It is saved in this browser, so it may differ across browsers or devices. ClearFrame Pro has no daily download limit.</p></details>
       <details><summary>How does RAW cleaning work?</summary><p>RAW cleaning is part of ClearFrame Pro. RAW photos need camera settings and calibration data to display correctly. ClearFrame keeps those, along with maker notes and embedded previews, while letting you remove listed details such as GPS, captions, author names, and dates. Kept data may still contain identifying information. Select all selects the available cleaning options; it doesn’t strip every piece of data from a RAW file.</p></details>
       <details><summary>Why might a photo have no preview?</summary><p>Your browser may not display HEIC, TIFF, or RAW images. You can still review and clean a supported file without a preview. The downloaded copy keeps its original format, so open it in an app that supports that format.</p></details>
       <details><summary>Are my photos uploaded?</summary><p>No. Scanning and cleaning happen in your browser. Your photos aren’t uploaded or stored on a server. <a href="how-privacy-works.html">How your privacy works</a> explains what this site does download, what the host can still see, and how to check the network tab.</p></details>
@@ -139,8 +140,8 @@
           <div><h3>Presets</h3><p>Save your selections once, then apply a preset to every photo.</p></div></li>
       </ul>
       <div class="pro-compare" role="group" aria-label="Free and Pro compared">
-        <div><b>FREE · NO ACCOUNT</b><p>JPEG, PNG, WebP, GIF, HEIC/HEIF, AVIF, TIFF. Batches and ZIP export.</p></div>
-        <div><b>PRO</b><p><strong>Everything in Free</strong>, plus RAW, folders, and presets.</p></div>
+        <div><b>FREE · NO ACCOUNT</b><p>10 cleaned photo downloads per day. JPEG, PNG, WebP, GIF, HEIC/HEIF, AVIF, and TIFF.</p></div>
+        <div><b>PRO</b><p><strong>Unlimited downloads</strong>, plus RAW, folders, and presets.</p></div>
       </div>
       <div class="pro-buy">
         <div class="pro-price"><span class="amount" id="proPrice">$29<small>/year</small></span><span class="terms" id="proTerms">Renews yearly. Cancel anytime from Manage subscription.</span></div>
@@ -158,6 +159,7 @@
   <script src="metadata.js"></script>
   <script src="motion.js"></script>
   <script src="extended-client.js"></script>
+  <script src="daily-limit.js"></script>
   <script src="app.js"></script>
   <script src="pro-dialog.js"></script>
   <script src="vendor/posthog/posthog-js-1.438.21.no-external.js"></script>

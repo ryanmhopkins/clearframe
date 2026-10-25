@@ -6,6 +6,8 @@
     if (!response.ok) return;
     const session = await response.json();
     if (!session.signedIn || !session.pro) return;
+    globalThis.ClearFrameMember = true;
+    globalThis.ClearFrameUpdateLimitNote?.();
     document.querySelector('.upgrade-banner')?.remove();
     nav.replaceChildren();
     const badge = document.createElement('span');
