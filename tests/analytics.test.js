@@ -8,7 +8,7 @@ const SDK=fs.readFileSync('vendor/posthog/posthog-js-1.438.21.no-external.js','u
 const CLIENT=fs.readFileSync('analytics.js','utf8');
 const FILE_VALUE=/\.(?:jpe?g|png|gif|webp|hei[cf]|avif|tiff?|dng|cr2|nef|arw|raw|rw2|orf|raf|bmp|svg)\b/i;
 const EXIF_KEYS=['Make','Model','LensModel','DateTimeOriginal','ExposureTime','FNumber','ISO','GPSLatitude','GPSLongitude','Artist','Copyright','Software','Orientation','UserComment','ImageUniqueID','BodySerialNumber','Exif'];
-const COMMON=['token','distinct_id','$cookieless_mode','$process_person_profile','$session_id','$window_id','$lib','$lib_version','project','app_version','environment','$current_url','$pathname','$host','$referring_domain','utm_source','utm_medium','utm_campaign'];
+const COMMON=['token','distinct_id','$cookieless_mode','$process_person_profile','$session_id','$window_id','$lib','$lib_version','$raw_user_agent','project','app_version','environment','$current_url','$pathname','$host','$referring_domain','utm_source','utm_medium','utm_campaign'];
 const PROBES=new Set(['__mplssupport__','__support__','test','__cf_ls_probe__']);
 
 function allowedKeys(name){
@@ -124,6 +124,84 @@ test('person profiles stay off, ids must be UUIDs, and unknown events are droppe
   assert.equal(analytics.sanitizeEvent({event:'$set',properties:baseProps({$process_person_profile:false})},{optedOut:false,dnt:false}),null);
 });
 
+test('cookieless hash keeps a bounded user agent and drops every other extra property',()=>{
+  const ua='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36';
+  const state={optedOut:false,dnt:false};
+  const kept=analytics.sanitizeEvent({event:'$pageview',properties:baseProps({
+    $current_url:'https://getclearframe.app/privacy',
+    $pathname:'/privacy',
+    $host:'getclearframe.app',
+    $raw_user_agent:ua,
+    $timezone:'America/New_York',
+    $timezone_offset:-240,
+    $lib:'web',
+    $lib_version:'1.438.21',
+    $session_id:'01a17127-a2bf-7006-a0a8-064f41bb6ab0',
+    $window_id:'01a17127-a2bf-7006-a0a8-064f41bb6ab1',
+    $device_id:'01a17127-a2bf-7006-a0a8-064f41bb6ab2',
+    $process_person_profile:false,
+    $browser:'Chrome',
+    $browser_version:'131',
+    $os:'Windows',
+    $device_type:'Desktop',
+    $screen_height:1080,
+    $screen_width:1920,
+    $viewport_height:900,
+    $viewport_width:1400,
+    $ip:'203.0.113.8',
+    $insert_id:'abc123xyz',
+    $time:1792901133.831,
+    $pageview_id:'01a17127-a2bf-7006-a0a8-064f41bb6ab3',
+    title:'Privacy policy',
+    email:'person@example.com'
+  })},state);
+  assert.equal(kept.event,'$pageview');
+  assert.equal(kept.properties.$raw_user_agent,ua);
+  assert.equal(kept.properties.$host,'getclearframe.app');
+  assert.equal(kept.properties.$pathname,'/privacy');
+  assert.equal(kept.properties.$current_url,'https://getclearframe.app/privacy');
+  assert.equal(kept.properties.$lib,'web');
+  assert.equal(kept.properties.$lib_version,'1.438.21');
+  assert.equal(kept.properties.$session_id,'01a17127-a2bf-7006-a0a8-064f41bb6ab0');
+  assert.equal(kept.properties.$window_id,'01a17127-a2bf-7006-a0a8-064f41bb6ab1');
+  assert.equal(kept.properties.$process_person_profile,false);
+  for(const key of ['$timezone','$timezone_offset','$device_id','$browser','$browser_version','$os','$device_type','$screen_height','$screen_width','$viewport_height','$viewport_width','$ip','$insert_id','$time','$pageview_id','title','email']){
+    assert.equal(Object.prototype.hasOwnProperty.call(kept.properties,key),false,key);
+  }
+  const atLimit='Mozilla/5.0 '+ 'A'.repeat(500);
+  assert.equal(atLimit.length,512);
+  const boundary=analytics.sanitizeEvent({event:'$pageview',properties:baseProps({$raw_user_agent:atLimit,$current_url:'https://www.getclearframe.app/'})},state);
+  assert.equal(boundary.properties.$raw_user_agent,atLimit);
+  assert.equal(boundary.properties.$host,'www.getclearframe.app');
+  const tooLong=atLimit+'B';
+  const over=analytics.sanitizeEvent({event:'$pageview',properties:baseProps({$raw_user_agent:tooLong,$current_url:'https://getclearframe.app/'})},state);
+  assert.equal(over.properties.$raw_user_agent,undefined);
+  assert.equal(over.event,'$pageview');
+  for(const bad of [
+    'Mozilla/5.0 (person@example.com)',
+    'Mozilla/5.0 https://example.com/track',
+    'Mozilla/5.0 www.example.com',
+    'Mozilla/5.0 (vacation.jpg)',
+    'Mozilla/5.0\nChrome',
+    'Mozilla/5.0 café',
+    'Mozilla/5.0 ?session=1',
+    131,
+    ''
+  ]){
+    const rejected=analytics.sanitizeEvent({event:'$pageview',properties:baseProps({$raw_user_agent:bad,$current_url:'https://getclearframe.app/'})},state);
+    assert.equal(rejected.properties.$raw_user_agent,undefined,String(bad));
+  }
+  const foreign=analytics.sanitizeEvent({event:'$pageview',properties:baseProps({
+    $current_url:'https://evil.example/privacy',
+    $host:'evil.example',
+    $raw_user_agent:ua
+  })},state);
+  assert.equal(foreign.properties.$host,undefined);
+  assert.equal(foreign.properties.$raw_user_agent,ua);
+  assert.equal(analytics.sanitizeEvent({event:'$identify',properties:baseProps({$raw_user_agent:ua,$process_person_profile:false})},state),null);
+  assert.equal(analytics.sanitizeEvent({event:'file_uploaded',properties:baseProps({$raw_user_agent:ua})},state),null);
+});
+
 function boot(options={}){
   const dom=new JSDOM(options.html||`<!doctype html><html><head><title>Privacy</title></head><body>
     <header><a class="upgrade-link" href="https://buy.polar.sh/example">Upgrade to Pro</a><span class="code-hint">Code LAUNCH9</span></header>
@@ -225,6 +303,12 @@ function assertClean(events,requests){
       assert.equal(value.includes('#'),false,key);
       if(key==='$session_id'||key==='$window_id'){
         assert.match(value,/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i);
+        continue;
+      }
+      if(key==='$raw_user_agent'){
+        assert.match(value,/^[\x20-\x7E]{1,512}$/);
+        assert.equal(value.includes('://'),false);
+        assert.doesNotMatch(value,/www\./i);
         continue;
       }
       if(key!=='token'&&key!=='$current_url') assert.ok(value.length<=32,key);
