@@ -54,8 +54,10 @@ test('pages and styles do not load third-party scripts, fonts, or connections',(
   assert.doesNotMatch(fs.readFileSync('sitemap.xml','utf8'), owner);
   assert.doesNotMatch(fs.readFileSync('README.md','utf8'), owner);
   const contact=fs.readFileSync('contact.html','utf8');
-  assert.match(contact,/mailto:contact@YOUR-DOMAIN-HERE/);
+  assert.match(contact,/mailto:rmhxai@gmail\.com/);
+  assert.match(contact,/>rmhxai@gmail\.com</);
+  assert.doesNotMatch(contact,/YOUR-DOMAIN-HERE|will not receive mail|placeholder/i);
   for(const file of ['index.html','how-privacy-works.html','privacy.html','terms.html','README.md','sitemap.xml','robots.txt']){
-    assert.doesNotMatch(fs.readFileSync(file,'utf8'), /contact@YOUR-DOMAIN-HERE/, file);
+    assert.doesNotMatch(fs.readFileSync(file,'utf8'), /rmhxai@gmail\.com|YOUR-DOMAIN-HERE/, file);
   }
 });

@@ -22,7 +22,7 @@ The scanner does not promise to decode every proprietary tag or detect data hidd
 
 Scanning and cleaning run in the browser. Photo bytes are not uploaded. Scripts, fonts, JSZip 3.10.1, exifr 7.1.3, and the ExifTool photo engine are served by this site. The page does not load Google Fonts or a public CDN. The photo engine (`vendor/exiftool/zeroperl-mqcadjqm.wasm`, about 25 MB) is already self-hosted. The browser downloads it from this origin only when a HEIC, HEIF, AVIF, TIFF, or RAW file is added.
 
-Opening the site still contacts the host that serves these files. `how-privacy-works.html` states the limits and how to check them in the browser network tab. Plain-language drafts of the privacy policy, terms of use, and contact page are `privacy.html`, `terms.html`, and `contact.html`. The contact address is a single placeholder on the contact page.
+Opening the site still contacts the host that serves these files. `how-privacy-works.html` states the limits and how to check them in the browser network tab. Plain-language drafts of the privacy policy, terms of use, and contact page are `privacy.html`, `terms.html`, and `contact.html`. The contact address appears only on the contact page.
 
 ## Run locally
 
