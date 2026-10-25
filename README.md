@@ -1,6 +1,6 @@
 # ClearFrame
 
-A local-first metadata scanner and selective cleaner for JPEG, PNG, WebP, GIF, HEIC, HEIF, AVIF, TIFF, and RAW (DNG, CR2, NEF, and ARW) photos.
+A local-first metadata scanner and selective cleaner for JPEG, PNG, WebP, GIF, HEIC, HEIF, AVIF, and TIFF photos. ClearFrame Pro adds RAW (DNG, CR2, NEF, and ARW), folder cleaning, and presets.
 
 ## Interface
 
@@ -23,6 +23,24 @@ The scanner does not promise to decode every proprietary tag or detect data hidd
 Scanning and cleaning run in the browser. Photo bytes are not uploaded. Scripts, fonts, JSZip 3.10.1, exifr 7.1.3, and the ExifTool photo engine are served by this site. The page does not load Google Fonts or a public CDN. The photo engine (`vendor/exiftool/zeroperl-mqcadjqm.wasm`, about 25 MB) is already self-hosted. The browser downloads it from this origin only when a HEIC, HEIF, AVIF, TIFF, or RAW file is added.
 
 Opening the site still contacts the host that serves these files. `how-privacy-works.html` states the limits and how to check them in the browser network tab. Plain-language drafts of the privacy policy, terms of use, and contact page are `privacy.html`, `terms.html`, and `contact.html`. The contact address appears only on the contact page.
+
+The free home page does not call `/api` and does not ask anyone to sign in. JPEG, PNG, WebP, GIF, HEIC, HEIF, AVIF, and TIFF cleaning stays in that page. ClearFrame Pro (folder selection, presets with apply-to-all, and RAW) is loaded only after passwordless email sign-in, from `GET /api/pro/module`, which checks the session cookie. Photos and metadata are still not uploaded.
+
+## Pro sign-in
+
+Paid customers sign in at `/signin`. The server checks a paid order with the payment provider, then emails one sign-in link. The browser only talks to this site (`connect-src 'self'`). Copy `.env.example` to `.env` and set:
+
+| Variable | Purpose |
+| --- | --- |
+| `SESSION_SECRET` | Signs the 15-minute link and the 30-day session cookie |
+| `POLAR_ACCESS_TOKEN` | Organization access token (`customers:read`, `orders:read`, `customer_sessions:write`) |
+| `POLAR_ORG_ID` | Organization id |
+| `POLAR_PRODUCT_ID` | ClearFrame Pro product id |
+| `SITE_URL` | Public origin used in the sign-in link, such as `https://getclearframe.app` |
+| `EMAIL_API_KEY` | Bearer token for a Resend-compatible `POST /emails` API |
+| `EMAIL_FROM` | From address the email API accepts |
+
+When `EMAIL_API_KEY` is unset, the sign-in link is printed in the server log instead of being sent. There is no license-key field. Checkout is the public payment link on the home page; the code `LAUNCH9` is entered there.
 
 ## Run locally
 

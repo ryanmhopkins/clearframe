@@ -4,18 +4,18 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#101010" />
-  <meta name="description" content="Scan and remove photo metadata in your browser. Photos stay on your device. Supports JPEG, PNG, WebP, GIF, HEIC, AVIF, TIFF, and RAW." />
+  <meta name="description" content="Scan and remove photo metadata in your browser. Photos stay on your device. Supports JPEG, PNG, WebP, GIF, HEIC, AVIF, and TIFF. RAW is part of ClearFrame Pro." />
   <title>ClearFrame — Photo metadata cleaner</title>
   <link rel="canonical" href="https://getclearframe.app/" />
   <meta name="robots" content="index, follow" />
   <meta property="og:site_name" content="ClearFrame" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="ClearFrame — Photo metadata cleaner" />
-  <meta property="og:description" content="Scan and remove photo metadata in your browser. Photos stay on your device. Supports JPEG, PNG, WebP, GIF, HEIC, AVIF, TIFF, and RAW." />
+  <meta property="og:description" content="Scan and remove photo metadata in your browser. Photos stay on your device. Supports JPEG, PNG, WebP, GIF, HEIC, AVIF, and TIFF. RAW is part of ClearFrame Pro." />
   <meta property="og:url" content="https://getclearframe.app/" />
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="ClearFrame — Photo metadata cleaner" />
-  <meta name="twitter:description" content="Scan and remove photo metadata in your browser. Photos stay on your device. Supports JPEG, PNG, WebP, GIF, HEIC, AVIF, TIFF, and RAW." />
+  <meta name="twitter:description" content="Scan and remove photo metadata in your browser. Photos stay on your device. Supports JPEG, PNG, WebP, GIF, HEIC, AVIF, and TIFF. RAW is part of ClearFrame Pro." />
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23ededeb'/%3E%3Cpath d='M9 13V9h4M19 9h4v4M23 19v4h-4M13 23H9v-4' fill='none' stroke='%23101010' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E" />
   <link rel="stylesheet" href="motion.css" />
   <link rel="stylesheet" href="styles.css" />
@@ -34,6 +34,7 @@
   <a class="skip-link" href="#scanner">Skip to scanner</a>
   <header class="topbar">
     <a class="brand" href="#" aria-label="ClearFrame home"><svg class="icon brand-mark"><use href="#icon-frame"/></svg>clearframe<span class="brand-period">.</span></a>
+    <nav class="top-links" aria-label="Account"><a href="signin.html">Sign in</a><a class="upgrade-link" href="https://buy.polar.sh/polar_cl_8g3tIWcOKS1n2BWioAr4zSSswiy35r0b8OU5c2oQ0tl">Upgrade to Pro</a><span class="code-hint">Code LAUNCH9</span></nav>
   </header>
 
   <main>
@@ -43,8 +44,8 @@
     </section>
 
     <section id="scanner" class="tool-shell" aria-label="Image metadata scanner" tabindex="-1">
-      <div class="tool-bar"><div><svg class="icon"><use href="#icon-frame"/></svg>Photo cleaner</div><span class="format-label">PHOTOS <i>·</i> RAW</span></div>
-      <input id="fileInput" type="file" multiple accept="image/jpeg,image/png,image/webp,image/gif,image/heic,image/heif,image/avif,image/tiff,.jpg,.jpeg,.png,.webp,.gif,.heic,.heif,.avif,.tif,.tiff,.dng,.cr2,.nef,.arw" hidden />
+      <div class="tool-bar"><div><svg class="icon"><use href="#icon-frame"/></svg>Photo cleaner</div><span class="format-label">PHOTOS</span></div>
+      <input id="fileInput" type="file" multiple accept="image/jpeg,image/png,image/webp,image/gif,image/heic,image/heif,image/avif,image/tiff,.jpg,.jpeg,.png,.webp,.gif,.heic,.heif,.avif,.tif,.tiff" hidden />
     <p id="scanStatus" class="processing-note" role="status" hidden></p>
     <p id="fileErrors" class="processing-note file-errors" role="alert" hidden></p>
       <div class="workspace">
@@ -93,19 +94,19 @@
     <section id="how-it-works" class="how-section" aria-labelledby="how-title">
       <div class="section-heading"><h2 id="how-title">How it works</h2></div>
       <div class="plain-notes">
-        <article><span class="note-number">01 <span></span></span><h3>Add photos</h3><p>Choose your photos to see what metadata they contain, including supported RAW files.</p></article>
+        <article><span class="note-number">01 <span></span></span><h3>Add photos</h3><p>Choose your photos to see what metadata they contain.</p></article>
         <article><span class="note-number">02 <span></span></span><h3>Review the details</h3><p>Select the metadata you want removed. Leave anything you want to keep unchecked.</p></article>
         <article><span class="note-number">03 <span></span></span><h3>Download</h3><p>Save each photo separately or download them all in a ZIP.</p></article>
       </div>
     </section>
     <section class="faq" aria-label="A few useful details">
       <details><summary>What is photo metadata?</summary><p>It’s extra information saved inside an image, like the camera used, when it was taken, editing software, or sometimes a GPS location. EXIF is one common type. These details can be useful in your library, but you may want to remove them before sharing a photo.</p></details>
-      <details><summary>Which files and details can I clean?</summary><p>ClearFrame supports JPEG, PNG, WebP, GIF, HEIC, HEIF, AVIF, TIFF, and RAW files in DNG, CR2, NEF, and ARW formats. Available cleaning options depend on the format. Documents and videos aren’t supported.</p></details>
+      <details><summary>Which files and details can I clean?</summary><p>The free cleaner supports JPEG, PNG, WebP, GIF, HEIC, HEIF, AVIF, and TIFF. ClearFrame Pro adds RAW files in DNG, CR2, NEF, and ARW formats, plus folder cleaning and presets. Available cleaning options depend on the format. Documents and videos aren’t supported.</p></details>
       <details><summary>Can I remove the location from a photo?</summary><p>Yes, when the location is stored in a removable metadata block. GPS coordinates are often part of EXIF, so removing that block also removes its other details, such as camera settings and dates. Check the listed blocks for other location information too. Cleaning metadata won’t hide landmarks, addresses, or anything visible in the photo.</p></details>
       <details><summary>Can I choose what to keep?</summary><p>Yes. Select the blocks you want removed and leave the rest unchecked, or use the Select all switch. Your choices are saved separately for each photo. JPEG, PNG, WebP, and GIF cleaning works by block. The other formats offer selected metadata groups and individual standard fields.</p></details>
       <details><summary>Will my photo look the same?</summary><p>ClearFrame doesn’t resize or recompress your image, and your original stays untouched. Removing an orientation tag or color profile can change how the downloaded copy displays. Color and display blocks are kept by default; check the details before removing EXIF, which can include orientation.</p></details>
-      <details><summary>Can I clean several photos at once?</summary><p>Yes. Add multiple photos, review the choices for each, then save them individually or together in a ZIP. Each photo can be up to 256 MB. Large batches can use a lot of browser memory. If things slow down, try fewer files at a time.</p></details>
-      <details><summary>How does RAW cleaning work?</summary><p>RAW photos need camera settings and calibration data to display correctly. ClearFrame keeps those, along with maker notes and embedded previews, while letting you remove listed details such as GPS, captions, author names, and dates. Kept data may still contain identifying information. Select all selects the available cleaning options; it doesn’t strip every piece of data from a RAW file.</p></details>
+      <details><summary>Can I clean several photos at once?</summary><p>Yes. Add multiple photos, review the choices for each, then save them individually or together in a ZIP. Each photo can be up to 256 MB. Large batches can use a lot of browser memory. If things slow down, try fewer files at a time. ClearFrame Pro also lets you choose a folder and apply a saved preset to every photo.</p></details>
+      <details><summary>How does RAW cleaning work?</summary><p>RAW cleaning is part of ClearFrame Pro. RAW photos need camera settings and calibration data to display correctly. ClearFrame keeps those, along with maker notes and embedded previews, while letting you remove listed details such as GPS, captions, author names, and dates. Kept data may still contain identifying information. Select all selects the available cleaning options; it doesn’t strip every piece of data from a RAW file.</p></details>
       <details><summary>Why might a photo have no preview?</summary><p>Your browser may not display HEIC, TIFF, or RAW images. You can still review and clean a supported file without a preview. The downloaded copy keeps its original format, so open it in an app that supports that format.</p></details>
       <details><summary>Are my photos uploaded?</summary><p>No. Scanning and cleaning happen in your browser. Your photos aren’t uploaded or stored on a server. <a href="how-privacy-works.html">How your privacy works</a> explains what this site does download, what the host can still see, and how to check the network tab.</p></details>
       <details><summary>What about AI tags and Content Credentials?</summary><p>AI tools sometimes save prompts or software details in text, EXIF, or XMP blocks. ClearFrame can remove those blocks when it finds them. It also identifies some Content Credentials (C2PA) data, but doesn’t verify its authenticity. Removing it loses that provenance, and other edits can invalidate its signature. Visible watermarks and data hidden in pixels aren’t removed.</p></details>
