@@ -15,7 +15,7 @@ const env = {
   SESSION_SECRET: secret,
   POLAR_ACCESS_TOKEN: 'polar-test',
   POLAR_ORG_ID: '451754ed-9a0e-4fcb-be7f-5e15db2a9b9b',
-  POLAR_PRODUCT_ID: 'f89c5925-7362-40aa-9ce3-e69ff81005b5',
+  POLAR_PRODUCT_ID: 'be456dd9-4508-4b3a-a517-60fae3c9747b',
   SITE_URL: 'http://127.0.0.1:8765',
   EMAIL_FROM: 'ClearFrame <pro@example.com>'
 };
@@ -31,8 +31,8 @@ function polarFetch(paid) {
     if (String(url).includes('/v1/customers/')) {
       return json(paid ? {items: [{id: 'cus_1', email: 'pro@example.com'}]} : {items: []});
     }
-    if (String(url).includes('/v1/orders/')) {
-      return json({items: paid ? [{status: 'paid', paid: true}] : []});
+    if (String(url).includes('/v1/subscriptions/')) {
+      return json({items: paid ? [{status: 'active', customer_id: 'cus_1', product_id: env.POLAR_PRODUCT_ID, current_period_end: '2099-01-01T00:00:00Z'}] : []});
     }
     if (String(url).includes('/v1/customer-sessions/')) {
       return json({customer_portal_url: 'https://polar.sh/portal/example'});
@@ -81,8 +81,8 @@ test('sign-in returns the same message for customers and everyone else', async (
   assert.match(logs[0], /magic link for pro@example.com: http:\/\/127\.0\.0\.1:8765\/api\/auth\/verify\?token=/);
   assert.match(paid.calls[0].url, /\/v1\/customers\/\?/);
   assert.match(paid.calls[0].url, /email=pro%40example\.com/);
-  assert.match(paid.calls[1].url, /\/v1\/orders\/\?/);
-  assert.match(paid.calls[1].url, /status=paid/);
+  assert.match(paid.calls[1].url, /\/v1\/subscriptions\/\?/);
+  assert.match(paid.calls[1].url, /customer_id=cus_1/);
   assert.match(paid.calls[1].url, new RegExp(env.POLAR_PRODUCT_ID));
   assert.equal(paid.calls.some(call => call.url.includes('api.resend.com')), false);
 });
@@ -156,7 +156,7 @@ test('a stale session is checked again and a refund removes Pro access', async (
   await sessionHandler({method: 'GET', url: '/api/auth/session', headers: {cookie: `cf_session=${encodeURIComponent(old)}`}}, kept, {env, now: Date.now(), fetchImpl: paid.impl});
   assert.equal(kept.statusCode, 200);
   assert.equal(JSON.parse(kept.body).pro, true);
-  assert.match(paid.calls.map(call => call.url).join('\n'), /\/v1\/orders\//);
+  assert.match(paid.calls.map(call => call.url).join('\n'), /\/v1\/subscriptions\//);
 
   const portal = mockRes();
   const session = cookie(kept.headers['set-cookie'], 'cf_session');
@@ -179,4 +179,15 @@ test('legal pages do not advertise the payment checkout, and the free page does 
   assert.doesNotMatch(fs.readFileSync('index.html', 'utf8'), /\/api\/|webkitdirectory/);
   assert.match(fs.readFileSync('privacy.html', 'utf8'), /Free use does not ask for your name or email/);
   assert.match(fs.readFileSync('privacy.html', 'utf8'), /at most once a day/);
+});
+
+
+test('expired annual subscription never unlocks Pro, even with a historical paid order', async () => {
+  const {entitlement} = require('../server-lib/polar');
+  const fetchImpl = async url => {
+    if (String(url).includes('/v1/customers/')) return json({items: [{id: 'cus_1', email: 'pro@example.com'}]});
+    if (String(url).includes('/v1/subscriptions/')) return json({items: [{customer_id: 'cus_1', product_id: env.POLAR_PRODUCT_ID, status: 'active', current_period_end: '2020-01-01T00:00:00Z'}]});
+    throw new Error('Unexpected endpoint');
+  };
+  assert.equal((await entitlement('pro@example.com', {env, fetchImpl})).paid, false);
 });

@@ -30,19 +30,21 @@ When analytics is on, the browser also sends anonymous counts directly to `https
 
 ## Pro sign-in
 
-Paid customers sign in at `/signin`. The server checks a paid order with the payment provider, then emails one sign-in link. The browser talks to this site and, when analytics is on, to `https://us.i.posthog.com` (`connect-src 'self' https://us.i.posthog.com`). Copy `.env.example` to `.env` and set:
+Paid customers sign in at `/signin`. The server checks for an active Polar subscription, then emails one sign-in link. The browser talks to this site and, when analytics is on, to `https://us.i.posthog.com` (`connect-src 'self' https://us.i.posthog.com`). Copy `.env.example` to `.env` and set:
 
 | Variable | Purpose |
 | --- | --- |
 | `SESSION_SECRET` | Signs the 15-minute link and the 30-day session cookie |
-| `POLAR_ACCESS_TOKEN` | Organization access token (`customers:read`, `orders:read`, `customer_sessions:write`) |
+| `POLAR_ACCESS_TOKEN` | Production organization access token for customers, subscriptions, checkouts, and customer sessions |
+| `POLAR_WEBHOOK_SECRET` | Secret for the verified Polar webhook endpoint |
+| `POLAR_SERVER` | Polar SDK environment (`production` for the live site) |
 | `POLAR_ORG_ID` | Organization id |
 | `POLAR_PRODUCT_ID` | ClearFrame Pro product id |
 | `SITE_URL` | Public origin used in the sign-in link, such as `https://getclearframe.app` |
 | `EMAIL_API_KEY` | Bearer token for a Resend-compatible `POST /emails` API |
 | `EMAIL_FROM` | From address the email API accepts |
 
-When `EMAIL_API_KEY` is unset, the sign-in link is printed in the server log instead of being sent. There is no license-key field. Checkout is the public payment link on the home page; the code `LAUNCH9` is entered there.
+When `EMAIL_API_KEY` is unset, the sign-in link is printed in the server log instead of being sent. There is no license-key field. Pro is $29 per year through Polar. The upgrade links open `/checkout`, which creates a hosted checkout for the annual product. Polar hosts billing management. See `POLAR_SETUP.md` for deployment steps.
 
 ## Run locally
 

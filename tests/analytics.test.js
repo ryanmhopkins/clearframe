@@ -204,7 +204,7 @@ test('cookieless hash keeps a bounded user agent and drops every other extra pro
 
 function boot(options={}){
   const dom=new JSDOM(options.html||`<!doctype html><html><head><title>Privacy</title></head><body>
-    <header><a class="upgrade-link" href="https://buy.polar.sh/example">Upgrade to Pro</a><span class="code-hint">Code LAUNCH9</span></header>
+    <header><a class="upgrade-link" href="/checkout?products=be456dd9-4508-4b3a-a517-60fae3c9747b">Upgrade to Pro</a></header>
     <button id="analyticsToggle" type="button">Turn off analytics</button>
   </body></html>`,{
     url:options.url||'https://getclearframe.app/privacy?token=magictokenvalue&file=vacation.jpg&utm_source=Newsletter&utm_medium=email&utm_campaign=launch_9#photo.png',
@@ -362,7 +362,7 @@ test('shipped client pins the SDK, blocks third-party script hosts, and wires ev
       else if(!entry.name.startsWith('_')) functions.push(full);
     }
   })('api');
-  assert.equal(functions.length,6);
+  assert.equal(functions.length,8);
 });
 
 test('payloads stay on the allowlist, and a same-origin host never leaves the page origin',async()=>{
@@ -493,7 +493,7 @@ test('checkout uses the beacon path and sign-in does not report a paid-or-sent g
   const events=await eventsOf(requests);
   const checkout=events.find(event=>event.event==='checkout_started');
   assert.equal(checkout.properties.placement,'header');
-  assert.equal(checkout.properties.discount_shown,'launch9');
+  assert.equal(checkout.properties.discount_shown,'none');
   assert.equal(events.some(event=>event.event==='upgrade_click'),false);
   w.ClearFrameAnalytics.signinRequested('accepted');
   w.ClearFrameAnalytics.signinRequested('error');
