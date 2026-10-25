@@ -2,7 +2,7 @@ const {test}=require('node:test');
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
 
-const pages=['index.html','how-privacy-works.html','privacy.html','terms.html','contact.html'];
+const pages=['index.html','how-privacy-works.html','privacy.html','terms.html','contact.html','signin.html','account.html'];
 const owner=/ryanmhopkins|rmhopkins|Ryan Hopkins|Created by Ryan|x\.com\/rm/i;
 const codeFiles=['styles.css','fonts/fonts.css','motion.css','app.js','motion.js','extended-client.js','metadata.js','metadata-worker.mjs','extended-metadata.mjs'];
 const blocked=/fonts\.googleapis|fonts\.gstatic|cdn\.jsdelivr|cdnjs\.cloudflare|unpkg\.com|googletagmanager|google-analytics|plausible\.io/i;
@@ -57,7 +57,13 @@ test('pages and styles do not load third-party scripts, fonts, or connections',(
   assert.match(contact,/mailto:rmhxai@gmail\.com/);
   assert.match(contact,/>rmhxai@gmail\.com</);
   assert.doesNotMatch(contact,/YOUR-DOMAIN-HERE|will not receive mail|placeholder/i);
-  for(const file of ['index.html','how-privacy-works.html','privacy.html','terms.html','README.md','sitemap.xml','robots.txt']){
+  for(const file of ['index.html','how-privacy-works.html','privacy.html','terms.html','signin.html','account.html','README.md','sitemap.xml','robots.txt']){
     assert.doesNotMatch(fs.readFileSync(file,'utf8'), /rmhxai@gmail\.com|YOUR-DOMAIN-HERE/, file);
   }
+  const freeBundle=['index.html','app.js','extended-client.js','metadata.js','metadata-worker.mjs','signin.js'];
+  for(const file of freeBundle){
+    assert.doesNotMatch(fs.readFileSync(file,'utf8'), /webkitdirectory|preset-bar|pro-worker/, file);
+  }
+  assert.doesNotMatch(fs.readFileSync('index.html','utf8'), /\/api\//);
+  assert.match(fs.readFileSync('api/pro/files/pro.js','utf8'), /webkitdirectory/);
 });

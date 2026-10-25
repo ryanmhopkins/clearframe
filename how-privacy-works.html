@@ -27,24 +27,25 @@
   <a class="skip-link" href="#content">Skip to content</a>
   <header class="topbar">
     <a class="brand" href="index.html" aria-label="ClearFrame home"><svg class="icon brand-mark"><use href="#icon-frame"/></svg>clearframe<span class="brand-period">.</span></a>
+    <nav class="top-links" aria-label="Account"><a href="signin.html">Sign in</a></nav>
   </header>
   <main id="content" class="legal">
     <p class="dated">ClearFrame</p>
     <h1 id="privacy-title">How your privacy works</h1>
     <div class="privacy-copy">
-      <p>Your photos are read and cleaned in this browser. Choosing a photo does not upload it. There is no account, and ClearFrame does not send your photos to a server.</p>
+      <p>Your photos are read and cleaned in this browser. Choosing a photo does not upload it. Free use does not ask you to sign in. ClearFrame does not send your photos to a server, in the free cleaner or in ClearFrame Pro.</p>
       <h2>What gets downloaded</h2>
-      <p>This website does download its own page, scripts, styles, and fonts. That is how the tool reaches you. Those files are served by this site. They are not loaded from Google Fonts, a public script CDN, or another company’s servers.</p>
-      <p>JPEG, PNG, WebP, and GIF are cleaned with the scripts that load with the page. HEIC, HEIF, AVIF, TIFF, and RAW (DNG, CR2, NEF, and ARW) also need a photo engine of about 25&nbsp;MB. The first time you add one of those files, the browser downloads <code>vendor/exiftool/zeroperl-mqcadjqm.wasm</code> from this same website. That download is the engine, not your photo. ZIP files are packed in the browser by a copy of JSZip that also ships with this site. Your browser then saves the download. Nothing is uploaded to create it.</p>
+      <p>This website does download its own page, scripts, styles, and fonts. That is how the tool reaches you. Those files are served by this site. They are not loaded from a third-party font host, a public script CDN, or another company’s servers.</p>
+      <p>JPEG, PNG, WebP, and GIF are cleaned with the scripts that load with the page. HEIC, HEIF, AVIF, and TIFF also need a photo engine of about 25&nbsp;MB. ClearFrame Pro uses that same engine for RAW (DNG, CR2, NEF, and ARW). The first time you add one of those files, the browser downloads <code>vendor/exiftool/zeroperl-mqcadjqm.wasm</code> from this same website. That download is the engine, not your photo. ZIP files are packed in the browser by a copy of JSZip that also ships with this site. Your browser then saves the download. Nothing is uploaded to create it.</p>
       <h2>What this page does not do</h2>
-      <p>It does not run analytics or ads. Its own scripts do not set cookies. It does not embed third-party scripts, fonts, or images.</p>
+      <p>It does not run analytics or ads. The free cleaner’s scripts do not set cookies. Pro sign-in, which you start yourself, stores one sign-in cookie. This site does not embed third-party scripts, fonts, or images. The <a href="privacy.html">privacy policy</a> says what the sign-in cookie contains.</p>
       <h2>What the host can still see</h2>
-      <p>Opening this site connects to the host that serves it (currently Vercel, at this site’s own address). Like other websites, that connection can include your IP address and the page address you requested. Your photos are not part of those requests. This page cannot turn host logs off. Those settings live outside this project’s files.</p>
+      <p>Opening this site connects to the host that serves it, at this site’s own address. Like other websites, that connection can include your IP address and the page address you requested. Your photos are not part of those requests. Signing in to Pro also sends the email address you type, so this site can check a paid purchase and mail you a sign-in link. This page cannot turn host logs off. Those settings live outside this project’s files.</p>
       <h2>How to check</h2>
       <ol>
         <li>Open your browser’s developer tools and choose the Network tab.</li>
         <li>Reload this page. The requests should go only to this site’s address. You should not see fonts.googleapis.com, fonts.gstatic.com, cdn.jsdelivr.net, or other sites.</li>
-        <li>Add a photo on the home page and download a cleaned copy. You should not see an upload of the photo. For HEIC, HEIF, AVIF, TIFF, or RAW, the first use can download the photo engine named above from this site. Your photo is not in that request.</li>
+        <li>Add a photo on the home page and download a cleaned copy. You should not see an upload of the photo. For HEIC, HEIF, AVIF, TIFF, or a Pro RAW file, the first use can download the photo engine named above from this site. Your photo is not in that request. The free home page does not call the sign-in API.</li>
         <li>This site does not install a service worker. After a page is open, cleaning uses what has already loaded. Reloading while offline will fail, because the browser has to fetch the page again. Working offline is not a feature of this version.</li>
       </ol>
       <h2>Limits</h2>

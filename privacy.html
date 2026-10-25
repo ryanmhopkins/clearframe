@@ -27,6 +27,7 @@
   <a class="skip-link" href="#content">Skip to content</a>
   <header class="topbar">
     <a class="brand" href="index.html" aria-label="ClearFrame home"><svg class="icon brand-mark"><use href="#icon-frame"/></svg>clearframe<span class="brand-period">.</span></a>
+    <nav class="top-links" aria-label="Account"><a href="signin.html">Sign in</a></nav>
   </header>
   <main id="content" class="legal">
     <p class="dated">Last updated 25 October 2026</p>
@@ -38,19 +39,24 @@
 
     <h2>Photos you choose</h2>
     <p>Scanning and cleaning happen in your browser. The photo files you select are not uploaded to this site or to any other server by this page. Cleaned copies and ZIP downloads are created in the browser and saved by your browser.</p>
-    <p>ClearFrame does not have accounts, and it does not ask for your name, email, or payment details to use the tool.</p>
+    <p>Free use does not ask for your name or email, does not set a sign-in cookie, and does not take payment details. Photos and their metadata are not sent anywhere in the free cleaner or in ClearFrame Pro.</p>
 
     <h2>What this site downloads</h2>
-    <p>Loading ClearFrame downloads the page, its scripts, its styles, and its fonts from this website. HEIC, HEIF, AVIF, TIFF, and RAW photos also cause the browser to download a photo engine of about 25 MB from this same website the first time you need it. That file is the engine, not your photo. JPEG, PNG, WebP, and GIF cleaning does not download that engine.</p>
-    <p>Scripts, fonts, and the photo engine are part of this site. The page does not load them from Google Fonts, a public script CDN, or another company’s servers.</p>
+    <p>Loading ClearFrame downloads the page, its scripts, its styles, and its fonts from this website. HEIC, HEIF, AVIF, and TIFF photos also cause the browser to download a photo engine of about 25 MB from this same website the first time you need it. ClearFrame Pro does the same for RAW photos. That file is the engine, not your photo. JPEG, PNG, WebP, and GIF cleaning does not download that engine.</p>
+    <p>Scripts, fonts, and the photo engine are part of this site. The page does not load them from a third-party font host, a public script CDN, or another company’s servers.</p>
     <p><a href="how-privacy-works.html">How your privacy works</a> explains how to confirm this in your browser’s network tab.</p>
 
     <h2>What the host can see</h2>
-    <p>Opening this website connects to the host that serves it. The site is currently hosted on Vercel at getclearframe.app. Like other websites, that connection can include your IP address, the time, your browser’s user agent, and the address of the page you requested. Your photos are not part of those requests.</p>
+    <p>Opening this website connects to the host that serves it at getclearframe.app. Like other websites, that connection can include your IP address, the time, your browser’s user agent, and the address of the page you requested. Your photos are not part of those requests.</p>
     <p>This project’s files do not configure or read those host logs, and this page cannot turn them off. How long the host keeps them is the host’s setting, not something stated here because this repository does not control it.</p>
 
+    <h2>ClearFrame Pro</h2>
+    <p>Pro is optional. Signing in sends the email address you type to this website. The site asks the payment provider whether that email has a paid ClearFrame Pro purchase, then emails a sign-in link if it does. The page shows the same confirmation either way. The link expires after 15 minutes.</p>
+    <p>Opening the link stores one sign-in cookie for 30 days. The cookie holds a signed copy of that email and the time the purchase was last checked. Page scripts cannot read it. Purchase status is checked when you sign in and again at most once a day. If the payment provider no longer reports a paid purchase, Pro access stops at the next check. Signing out deletes the cookie.</p>
+    <p>The site does not receive your photos, photo metadata, or analytics about those photos. Presets you save in Pro stay in your browser. Managing a receipt opens the payment provider’s own page. Card numbers are not entered on this website.</p>
+
     <h2>Cookies, analytics, and ads</h2>
-    <p>The scripts in this project do not set cookies, and the pages do not include analytics or advertising. There is no third-party tracker in these files.</p>
+    <p>The free cleaner’s scripts do not set cookies. The only cookie this site sets is the Pro sign-in cookie described above, and only after a successful sign-in. The pages do not include analytics or advertising. There is no third-party tracker in these files.</p>
 
     <h2>Children</h2>
     <p>ClearFrame is a general photo tool. It is not directed at children, and it does not offer accounts or a place to send personal details. It also does not receive the photos you open.</p>

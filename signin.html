@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#101010" />
+  <meta name="description" content="Sign in to ClearFrame Pro with an email link." />
+  <title>Sign in — ClearFrame</title>
+  <link rel="canonical" href="https://getclearframe.app/signin" />
+  <meta name="robots" content="noindex" />
+  <meta property="og:site_name" content="ClearFrame" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Sign in — ClearFrame" />
+  <meta property="og:description" content="Sign in to ClearFrame Pro with an email link." />
+  <meta property="og:url" content="https://getclearframe.app/signin" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Sign in — ClearFrame" />
+  <meta name="twitter:description" content="Sign in to ClearFrame Pro with an email link." />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23ededeb'/%3E%3Cpath d='M9 13V9h4M19 9h4v4M23 19v4h-4M13 23H9v-4' fill='none' stroke='%23101010' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="motion.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
+    <symbol id="icon-frame" viewBox="0 0 24 24"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m8 0h5v-5"/><rect x="8" y="8" width="8" height="8" rx="2"/></symbol>
+  </defs></svg>
+  <a class="skip-link" href="#content">Skip to content</a>
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="ClearFrame home"><svg class="icon brand-mark"><use href="#icon-frame"/></svg>clearframe<span class="brand-period">.</span></a>
+    <nav class="top-links" aria-label="Account"><a href="signin.html" aria-current="page">Sign in</a><a class="upgrade-link" href="https://buy.polar.sh/polar_cl_8g3tIWcOKS1n2BWioAr4zSSswiy35r0b8OU5c2oQ0tl">Upgrade to Pro</a><span class="code-hint">Code LAUNCH9</span></nav>
+  </header>
+  <main id="content" class="legal">
+    <p class="dated">ClearFrame Pro</p>
+    <h1>Sign in</h1>
+    <p>Free cleaning does not need an account. Pro sign-in emails a link if this address has a paid ClearFrame Pro purchase. The same message is shown either way.</p>
+    <form id="signin" class="signin-form">
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" autocomplete="email" required maxlength="254" />
+      <button class="primary-button" type="submit">Email me a sign-in link</button>
+      <p id="signinStatus" role="status"></p>
+    </form>
+  </main>
+  <footer><a class="brand footer-brand" href="index.html"><svg class="icon"><use href="#icon-frame"/></svg>clearframe.</a><nav class="footer-nav" aria-label="Site"><a href="how-privacy-works.html">How privacy works</a><a href="privacy.html">Privacy policy</a><a href="terms.html">Terms of use</a><a href="contact.html">Contact</a></nav></footer>
+  <script src="signin.js"></script>
+</body>
+</html>

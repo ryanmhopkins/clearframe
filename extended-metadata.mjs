@@ -50,7 +50,7 @@ export async function inspect(file, engineFetch=defaultFetch) {
   const found=inventory(tags), protectedData=protectedTags(tags,found);
   const sizes=Object.entries(tags).filter(([k,v])=>/:(ExifImageWidth|ImageWidth)$/.test(k) && Number(v)>0).map(([k,w])=>({width:Number(w),height:Number(tags[k.replace(/Width$/,'Height')])})).filter(s=>s.height>0).sort((a,b)=>b.width*b.height-a.width*a.height);
   const dimensions=RAW.has(format)||format==='TIFF'?sizes[0]:null;
-  const report={format,width:dimensions?.width||value(tags,'ImageWidth'),height:dimensions?.height||value(tags,'ImageHeight'),mime:tags['File:MIMEType'],found,
+  const report={format,tier:RAW.has(format)?'pro':'free',width:dimensions?.width||value(tags,'ImageWidth'),height:dimensions?.height||value(tags,'ImageHeight'),mime:tags['File:MIMEType'],found,
     structure:[{type:'Encoded image data and required rendering settings',detail:'Preserved'}],
     decoded:{details:tags,warnings:[RAW.has(format)?'RAW cleaning removes the selected standard metadata. Camera maker notes, previews and rendering settings are kept and may contain other identifying details.':'Only the listed fields can be removed. Other container and rendering information is kept.']}};
   return {report,async clean(selected) {

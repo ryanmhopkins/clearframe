@@ -92,6 +92,7 @@ async function loadFiles(files,current){
   if(current!==generation)return;
   $('#scanStatus').textContent=`Reading photo ${index+1} of ${valid.length}…`;
   try{
+   if(!globalThis.ClearFramePro && /\.(dng|cr2|nef|arw)$/i.test(file.name))throw new Error('RAW cleaning is part of ClearFrame Pro.');
    if(file.size>256*1024*1024)throw new Error('This photo exceeds the 256 MB browser processing limit.');
    const b=new Uint8Array(await file.arrayBuffer()),id=crypto.randomUUID?crypto.randomUUID():`${Date.now()}-${Math.random()}`;
    const native=(b[0]===255&&b[1]===216)||(b[0]===137&&b[1]===80)||(b[0]===82&&b[1]===73)||(b[0]===71&&b[1]===73);
@@ -139,3 +140,5 @@ for(const id of ['clean','details']){
   $('#'+id+'Tab').onclick=()=>showReview(id);
   $('#'+id+'Tab').onkeydown=e=>{if(['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){e.preventDefault();const target=e.key==='Home'?'clean':e.key==='End'?'details':id==='clean'?'details':'clean';showReview(target);$('#'+target+'Tab').focus()}};
 }
+function ClearFrameCurrentIds(){return [...(getActive()?.selected||[])]}
+function ClearFrameApplyToAll(ids){const wanted=new Set(ids||[]);for(const entry of batch){entry.selected=new Set(entry.report.found.filter(x=>x.removable&&wanted.has(x.id)).map(x=>x.id));}if(getActive())select(activeId);else renderBatch();}
