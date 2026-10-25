@@ -117,6 +117,20 @@ test('dialog traps focus, closes, and returns focus to the opener', () => {
   }
 });
 
+test('quota prompt explains the reset and restores the normal Pro copy', () => {
+  const {dom, w} = page('index.html');
+  try {
+    w.eval(fs.readFileSync('pro-dialog.js', 'utf8'));
+    const original = w.document.querySelector('#proTitle').textContent;
+    w.ClearFrameProDialog.open({source: 'quota', message: 'Your allowance resets at local midnight.'});
+    assert.match(w.document.querySelector('#proTitle').textContent, /daily free allowance/);
+    assert.equal(w.document.querySelector('#proDesc').textContent, 'Your allowance resets at local midnight.');
+    w.document.querySelector('#proClose').click();
+    w.ClearFrameProDialog.open({source: 'header'});
+    assert.equal(w.document.querySelector('#proTitle').textContent, original);
+  } finally { dom.window.close(); }
+});
+
 test('a RAW cleaning error keeps its message and opens the dialog', async () => {
   const {dom, w} = page('index.html');
   try {

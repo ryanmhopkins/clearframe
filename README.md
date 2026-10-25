@@ -26,6 +26,8 @@ Opening the site still contacts the host that serves these files. `how-privacy-w
 
 The free home page does not call `/api` and does not ask anyone to sign in. JPEG, PNG, WebP, GIF, HEIC, HEIF, AVIF, and TIFF cleaning stays in that page. ClearFrame Pro (folder selection, presets with apply-to-all, and RAW) is loaded only after passwordless email sign-in, from `GET /api/pro/module`, which checks the session cookie. Photos and metadata are still not uploaded.
 
+The free cleaner allows 10 photo downloads per local calendar day. A ZIP counts each photo inside it. The date and count stay in browser local storage; this is a soft limit, not an identity-based or tamper-resistant quota. Pro sessions have no daily limit. When a free export exceeds the remaining allowance, the existing Pro dialog explains the reset and upgrade option.
+
 When analytics is on, the browser also sends anonymous counts directly to `https://us.i.posthog.com`. Analytics data is processed in the United States. That request does not include photos, file names, or metadata, and it does not call `/api`. Cleaning a photo still does not upload it. Turning analytics off, or sending Do Not Track, stops the counts, and cleaning then makes no analytics request. While analytics is on, it stores nothing except brief test writes that the library deletes right away. The choice to turn analytics off is stored only after that choice.
 
 ## Pro sign-in
