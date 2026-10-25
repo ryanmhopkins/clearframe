@@ -242,7 +242,7 @@ test('legal pages do not advertise the payment checkout, and the free page does 
 test('the Pro subscription terms state the refund windows and privacy names the dialog count', () => {
   const terms = fs.readFileSync('terms.html', 'utf8');
   const visible = terms.replace(/<!--[\s\S]*?-->/g, '');
-  const refund = 'Refunds. If you are not satisfied with ClearFrame Pro, email support@getclearframe.app within 14 days of your first purchase and we will refund the full amount. For renewals, you may request a refund within 7 days of the renewal charge. After those windows, payments are not refundable, but you can cancel any time and keep Pro until the end of the period you already paid for. Refunds are returned to your original payment method through our payment processor, Polar, and usually appear within 5 to 10 business days. When a refund is issued, your Pro access ends right away. If a renewal payment fails, you keep Pro for 24 hours while the payment is retried. Cancelling stops future charges and does not by itself trigger a refund.';
+  const refund = 'Refunds. If you are not satisfied with ClearFrame Pro, email support@getclearframe.app within 14 days of your first purchase and we will refund the full amount. For renewals, you may request a refund within 7 days of the renewal charge. After those windows, payments are not refundable, but you can cancel any time and keep Pro until the end of the period you already paid for. Refunds are returned to your original payment method through our payment processor, Polar, and usually appear within 5 to 10 business days. When a refund is issued, your Pro access ends within a day. If a renewal payment fails, you keep Pro for 24 hours while the payment is retried, and your access is re-checked within a day of that deadline. Cancelling stops future charges and does not by itself trigger a refund.';
   assert.match(terms, /<h2>Pro subscription<\/h2>/);
   assert.match(terms, /This section is a draft for review/);
   assert.match(terms, /Last updated 25 October 2026/);
@@ -254,8 +254,9 @@ test('the Pro subscription terms state the refund windows and privacy names the 
   assert.ok(terms.includes(refund));
   assert.match(terms, /14 days of your first purchase/);
   assert.match(terms, /7 days of the renewal charge/);
-  assert.match(terms, /Pro access ends right away/);
-  assert.match(terms, /keep Pro for 24 hours/);
+  assert.match(terms, /your Pro access ends within a day/);
+  assert.doesNotMatch(terms, /ends right away/);
+  assert.match(terms, /you keep Pro for 24 hours while the payment is retried, and your access is re-checked within a day of that deadline/);
   assert.match(terms, /does not by itself trigger a refund/);
   assert.equal((terms.match(/<!-- LEGAL REVIEW -->/g) || []).length, 6);
   assert.doesNotMatch(visible, /\[RYAN TO DECIDE|\(DRAFT\)/);
