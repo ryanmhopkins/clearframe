@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#101010" />
+  <meta name="description" content="How ClearFrame handles photos. Scanning and cleaning stay in your browser. This page says what is downloaded and how to check the network tab." />
+  <title>How your privacy works — ClearFrame</title>
+  <link rel="canonical" href="https://clear-frame-app.vercel.app/how-privacy-works" />
+  <meta name="robots" content="index, follow" />
+  <meta property="og:site_name" content="ClearFrame" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="How your privacy works — ClearFrame" />
+  <meta property="og:description" content="How ClearFrame handles photos. Scanning and cleaning stay in your browser. This page says what is downloaded and how to check the network tab." />
+  <meta property="og:url" content="https://clear-frame-app.vercel.app/how-privacy-works" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="How your privacy works — ClearFrame" />
+  <meta name="twitter:description" content="How ClearFrame handles photos. Scanning and cleaning stay in your browser." />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23ededeb'/%3E%3Cpath d='M9 13V9h4M19 9h4v4M23 19v4h-4M13 23H9v-4' fill='none' stroke='%23101010' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="motion.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
+    <symbol id="icon-frame" viewBox="0 0 24 24"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m8 0h5v-5"/><rect x="8" y="8" width="8" height="8" rx="2"/></symbol>
+  </defs></svg>
+  <a class="skip-link" href="#content">Skip to content</a>
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="ClearFrame home"><svg class="icon brand-mark"><use href="#icon-frame"/></svg>clearframe<span class="brand-period">.</span></a>
+  </header>
+  <main id="content" class="legal">
+    <p class="dated">ClearFrame</p>
+    <h1 id="privacy-title">How your privacy works</h1>
+    <div class="privacy-copy">
+      <p>Your photos are read and cleaned in this browser. Choosing a photo does not upload it. There is no account, and ClearFrame does not send your photos to a server.</p>
+      <h2>What gets downloaded</h2>
+      <p>This website does download its own page, scripts, styles, and fonts. That is how the tool reaches you. Those files are served by this site. They are not loaded from Google Fonts, a public script CDN, or another company’s servers.</p>
+      <p>JPEG, PNG, WebP, and GIF are cleaned with the scripts that load with the page. HEIC, HEIF, AVIF, TIFF, and RAW (DNG, CR2, NEF, and ARW) also need a photo engine of about 25&nbsp;MB. The first time you add one of those files, the browser downloads <code>vendor/exiftool/zeroperl-mqcadjqm.wasm</code> from this same website. That download is the engine, not your photo. ZIP files are packed in the browser by a copy of JSZip that also ships with this site. Your browser then saves the download. Nothing is uploaded to create it.</p>
+      <h2>What this page does not do</h2>
+      <p>It does not run analytics or ads. Its own scripts do not set cookies. It does not embed third-party scripts, fonts, or images.</p>
+      <h2>What the host can still see</h2>
+      <p>Opening this site connects to the host that serves it (currently Vercel, at this site’s own address). Like other websites, that connection can include your IP address and the page address you requested. Your photos are not part of those requests. This page cannot turn host logs off. Those settings live outside this project’s files.</p>
+      <h2>How to check</h2>
+      <ol>
+        <li>Open your browser’s developer tools and choose the Network tab.</li>
+        <li>Reload this page. The requests should go only to this site’s address. You should not see fonts.googleapis.com, fonts.gstatic.com, cdn.jsdelivr.net, or other sites.</li>
+        <li>Add a photo on the home page and download a cleaned copy. You should not see an upload of the photo. For HEIC, HEIF, AVIF, TIFF, or RAW, the first use can download the photo engine named above from this site. Your photo is not in that request.</li>
+        <li>This site does not install a service worker. After a page is open, cleaning uses what has already loaded. Reloading while offline will fail, because the browser has to fetch the page again. Working offline is not a feature of this version.</li>
+      </ol>
+      <h2>Limits</h2>
+      <p>Cleaning removes metadata this scanner can find and that you select. It does not remove what is visible in the picture, watermarks, or data hidden in pixels. RAW files keep camera maker notes and rendering data, which can still identify a camera. File names and your device’s file dates are separate from metadata inside the photo. Scanning a cleaned copy shows what this tool can still read. It is not proof that every hidden detail is gone.</p>
+      <p>The <a href="privacy.html">privacy policy</a> restates this for the site as a whole. Questions go to the <a href="contact.html">contact page</a>.</p>
+    </div>
+  </main>
+  <footer><a class="brand footer-brand" href="index.html"><svg class="icon"><use href="#icon-frame"/></svg>clearframe.</a><nav class="footer-nav" aria-label="Site"><a href="how-privacy-works.html">How privacy works</a><a href="privacy.html">Privacy policy</a><a href="terms.html">Terms of use</a><a href="contact.html">Contact</a></nav></footer>
+</body>
+</html>

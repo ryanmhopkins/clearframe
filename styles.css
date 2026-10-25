@@ -142,9 +142,6 @@ body.has-results .hero { padding: 27px 0 30px; }body.has-results .hero-kicker { 
 @media (forced-colors: active) { .metadata-choice .check-control input { opacity: 1; } .t-check { display: none; } }
 .hero h1 span { color: var(--accent); }
 
-footer .creator-link { display: inline-flex; align-items: center; gap: 9px; min-height: 32px; color: var(--muted); transition: color var(--check-box) var(--check-ease); }
-footer .creator-link:hover, footer .creator-link:focus-visible { color: var(--accent); }
-.creator-link .x-icon { width: 12px; height: 12px; flex-shrink: 0; }
 
 /* Bulk selection: transitions.dev toggle with a visible partial-selection state. */
 .bulk-selection { gap: 12px; }
@@ -182,7 +179,6 @@ footer .creator-link:hover, footer .creator-link:focus-visible { color: var(--ac
 .format-note {font-size:13px;line-height:1.7;color:#b5b5b0;margin:10px 0;}
 .processing-note {padding:0 20px;}
 
-.privacy-section { padding: 8px 0 36px; scroll-margin-top: 24px; }
 .privacy-copy { max-width: 720px; }
 .privacy-copy h3 { font-size: 15px; font-weight: 600; letter-spacing: -.02em; margin: 22px 0 8px; }
 .privacy-copy p, .privacy-copy li { color: #b5b5b0; font-size: 14px; line-height: 1.8; }
@@ -192,7 +188,10 @@ footer .creator-link:hover, footer .creator-link:focus-visible { color: var(--ac
 .privacy-copy a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
 .privacy-copy code { font: 12px/1.6 var(--mono); color: #d5d5ce; overflow-wrap: anywhere; }
 .faq a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
-.footer-nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 16px; }
+.footer-nav { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px 16px; }
+.contact-address { margin: 6px 0 18px; padding: 14px 16px; max-width: 680px; border: 1px solid var(--line); border-radius: 8px; background: #171717; }
+.contact-address a { font: 16px/1.5 var(--mono); color: var(--text); text-decoration: none; overflow-wrap: anywhere; }
+.contact-address a:hover, .contact-address a:focus-visible { color: var(--accent); }
 .footer-nav a { color: var(--muted); font-size: 12px; }
 .footer-nav a:hover, .footer-nav a:focus-visible { color: var(--text); }
 .legal { padding: 8px 0 72px; }

@@ -2,7 +2,8 @@ const {test}=require('node:test');
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
 
-const pages=['index.html','privacy.html','terms.html','contact.html'];
+const pages=['index.html','how-privacy-works.html','privacy.html','terms.html','contact.html'];
+const owner=/ryanmhopkins|rmhopkins|Ryan Hopkins|Created by Ryan|x\.com\/rm/i;
 const codeFiles=['styles.css','fonts/fonts.css','motion.css','app.js','motion.js','extended-client.js','metadata.js','metadata-worker.mjs','extended-metadata.mjs'];
 const blocked=/fonts\.googleapis|fonts\.gstatic|cdn\.jsdelivr|cdnjs\.cloudflare|unpkg\.com|googletagmanager|google-analytics|plausible\.io/i;
 
@@ -19,13 +20,16 @@ test('pages and styles do not load third-party scripts, fonts, or connections',(
       assert.ok(href, tag);
       assert.doesNotMatch(href,/^https?:/i, `${file} loads ${href}`);
     }
+    assert.match(text,/how-privacy-works\.html/);
     assert.match(text,/privacy\.html/);
     assert.match(text,/terms\.html/);
     assert.match(text,/contact\.html/);
     assert.match(text,/rel="canonical" href="https:\/\/clear-frame-app\.vercel\.app/);
+    assert.doesNotMatch(text, owner, file);
   }
   assert.match(fs.readFileSync('index.html','utf8'),/vendor\/jszip\/jszip-3\.10\.1\.min\.js/);
-  assert.match(fs.readFileSync('index.html','utf8'),/id="how-your-privacy-works"/);
+  assert.doesNotMatch(fs.readFileSync('index.html','utf8'),/id="how-your-privacy-works"/);
+  assert.match(fs.readFileSync('how-privacy-works.html','utf8'),/id="privacy-title"/);
   assert.match(fs.readFileSync('styles.css','utf8'),/@import url\('fonts\/fonts\.css'\)/);
   assert.equal(fs.existsSync('vendor/jszip/jszip-3.10.1.min.js'),true);
   assert.equal(fs.existsSync('vendor/jszip/LICENSE.markdown'),true);
@@ -46,5 +50,12 @@ test('pages and styles do not load third-party scripts, fonts, or connections',(
   }
   assert.match(fs.readFileSync('robots.txt','utf8'),/Sitemap: https:\/\/clear-frame-app\.vercel\.app\/sitemap\.xml/);
   assert.match(fs.readFileSync('sitemap.xml','utf8'),/https:\/\/clear-frame-app\.vercel\.app\/privacy/);
-  assert.match(fs.readFileSync('contact.html','utf8'),/ryan@ryanmhopkins\.com/);
+  assert.match(fs.readFileSync('sitemap.xml','utf8'),/https:\/\/clear-frame-app\.vercel\.app\/how-privacy-works/);
+  assert.doesNotMatch(fs.readFileSync('sitemap.xml','utf8'), owner);
+  assert.doesNotMatch(fs.readFileSync('README.md','utf8'), owner);
+  const contact=fs.readFileSync('contact.html','utf8');
+  assert.match(contact,/mailto:contact@YOUR-DOMAIN-HERE/);
+  for(const file of ['index.html','how-privacy-works.html','privacy.html','terms.html','README.md','sitemap.xml','robots.txt']){
+    assert.doesNotMatch(fs.readFileSync(file,'utf8'), /contact@YOUR-DOMAIN-HERE/, file);
+  }
 });
