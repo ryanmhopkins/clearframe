@@ -42,15 +42,30 @@ async function entitlement(email, deps) {
   requireConfig(deps.env);
   const customer = await customerForEmail(email, deps);
   if (!customer) return {paid: false};
+  // A historical paid order is not proof of an active annual subscription.
   const params = new URLSearchParams({
     organization_id: deps.env.POLAR_ORG_ID,
     product_id: deps.env.POLAR_PRODUCT_ID,
-    customer_id: customer.id,
-    status: 'paid'
+    customer_id: customer.id
   });
-  const data = await polar(`/v1/orders/?${params}`, deps);
-  const paid = (data.items || []).some(order => order.status === 'paid' && order.paid !== false);
-  return paid ? {paid: true, customerId: customer.id} : {paid: false, customerId: customer.id};
+  const now = deps.now || Date.now();
+  let page = 1;
+  while (page <= 10) {
+    params.set('page', String(page));
+    params.set('limit', '100');
+    const data = await polar(`/v1/subscriptions/?${params}`, deps);
+    const subscriptions = data.items || [];
+    const valid = subscriptions.find(sub => {
+      if (sub.customer_id !== customer.id || sub.product_id !== deps.env.POLAR_PRODUCT_ID) return false;
+      if (sub.status !== 'active' && sub.status !== 'trialing') return false;
+      const until = Date.parse(sub.current_period_end || '');
+      return Number.isFinite(until) && until > now;
+    });
+    if (valid) return {paid: true, customerId: customer.id, renewsAt: valid.current_period_end, cancelAtPeriodEnd: !!valid.cancel_at_period_end};
+    if (subscriptions.length < 100 || (data.pagination && data.pagination.max_page <= page)) break;
+    page++;
+  }
+  return {paid: false, customerId: customer.id};
 }
 
 async function portalUrl(customerId, deps) {
