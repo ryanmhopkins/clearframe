@@ -24,7 +24,7 @@ test('pages and styles do not load third-party scripts, fonts, or connections',(
     assert.match(text,/privacy\.html/);
     assert.match(text,/terms\.html/);
     assert.match(text,/contact\.html/);
-    assert.match(text,/rel="canonical" href="https:\/\/clear-frame-app\.vercel\.app/);
+    assert.match(text,/rel="canonical" href="https:\/\/getclearframe\.app/);
     assert.doesNotMatch(text, owner, file);
   }
   assert.match(fs.readFileSync('index.html','utf8'),/vendor\/jszip\/jszip-3\.10\.1\.min\.js/);
@@ -48,9 +48,9 @@ test('pages and styles do not load third-party scripts, fonts, or connections',(
   for(const key of ['X-Content-Type-Options','Referrer-Policy','Permissions-Policy','X-Frame-Options']){
     assert.ok(headers.headers.some(r=>r.headers.some(h=>h.key===key)), key);
   }
-  assert.match(fs.readFileSync('robots.txt','utf8'),/Sitemap: https:\/\/clear-frame-app\.vercel\.app\/sitemap\.xml/);
-  assert.match(fs.readFileSync('sitemap.xml','utf8'),/https:\/\/clear-frame-app\.vercel\.app\/privacy/);
-  assert.match(fs.readFileSync('sitemap.xml','utf8'),/https:\/\/clear-frame-app\.vercel\.app\/how-privacy-works/);
+  assert.match(fs.readFileSync('robots.txt','utf8'),/Sitemap: https:\/\/getclearframe\.app\/sitemap\.xml/);
+  assert.match(fs.readFileSync('sitemap.xml','utf8'),/https:\/\/getclearframe\.app\/privacy/);
+  assert.match(fs.readFileSync('sitemap.xml','utf8'),/https:\/\/getclearframe\.app\/how-privacy-works/);
   assert.doesNotMatch(fs.readFileSync('sitemap.xml','utf8'), owner);
   assert.doesNotMatch(fs.readFileSync('README.md','utf8'), owner);
   const contact=fs.readFileSync('contact.html','utf8');
