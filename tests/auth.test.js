@@ -182,6 +182,28 @@ test('legal pages do not advertise the payment checkout, and the free page does 
   assert.match(fs.readFileSync('privacy.html', 'utf8'), /at most once a day/);
 });
 
+test('the Pro subscription terms are a marked draft and privacy names the dialog count', () => {
+  const terms = fs.readFileSync('terms.html', 'utf8');
+  assert.match(terms, /<h2>Pro subscription \(DRAFT\)<\/h2>/);
+  assert.match(terms, /This section is a draft for review/);
+  assert.match(terms, /Last updated 25 October 2026/);
+  assert.match(terms, /ClearFrame Pro is \$29 USD per year\./);
+  assert.match(terms, /renews automatically each year until it is cancelled\./);
+  assert.match(terms, /cancel any time from the account page via Manage subscription, which opens the Polar customer portal\./);
+  assert.match(terms, /You keep access until the end of the paid period\./);
+  assert.match(terms, /Payments and tax are handled by Polar as merchant of record\./);
+  assert.match(terms, /\[RYAN TO DECIDE: refund policy\]/);
+  assert.equal((terms.match(/<!-- LEGAL REVIEW -->/g) || []).length, 6);
+  assert.doesNotMatch(terms, /\/checkout|buy\.polar/);
+  const privacy = fs.readFileSync('privacy.html', 'utf8');
+  assert.match(privacy, /Manage subscription opens the payment provider’s own page/);
+  assert.doesNotMatch(privacy, /Managing a receipt/);
+  assert.match(privacy, /Opening the Pro upgrade dialog is counted separately/);
+  assert.match(privacy, /one field, source, and the only values are header and raw error/);
+  assert.match(privacy, /Last updated 25 October 2026/);
+  assert.match(privacy, /This page does not say either setting is already on/);
+});
+
 
 test('expired annual subscription never unlocks Pro, even with a historical paid order', async () => {
   const {entitlement} = require('../server-lib/polar');
