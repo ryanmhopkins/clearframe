@@ -48,6 +48,8 @@
   const UUID_VALUE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
   const LIB_VALUE = /^[a-z]{1,8}$/;
   const LIB_VERSION_VALUE = /^\d{1,4}\.\d{1,4}\.\d{1,4}$/;
+  const USER_AGENT_VALUE = /^[\x20-\x7E]{1,512}$/;
+  const SITE_HOSTS = ['getclearframe.app', 'www.getclearframe.app', 'localhost', '127.0.0.1', '0.0.0.0'];
   const FILE_VALUE = /\.(?:jpe?g|png|gif|webp|hei[cf]|avif|tiff?|dng|cr2|nef|arw|raw|rw2|orf|raf|bmp|svg)\b/i;
   const FORMAT_GROUPS = {
     jpeg: 'jpeg', jpg: 'jpeg', png: 'png', webp: 'webp', gif: 'gif',
@@ -174,6 +176,20 @@
     return typeof value === 'string' && value.length <= 32 && pattern.test(value) && !FILE_VALUE.test(value) && value.indexOf('@') < 0;
   }
 
+  // PostHog's cookieless hash reads this string on the event. It is not a
+  // 32-character token: browser user agents are longer, and the check below
+  // is the whole allowlist for this one property.
+  function keepRawUserAgent(value) {
+    return typeof value === 'string'
+      && USER_AGENT_VALUE.test(value)
+      && value.indexOf('@') < 0
+      && value.indexOf('?') < 0
+      && value.indexOf('#') < 0
+      && value.indexOf('://') < 0
+      && !/www\./i.test(value)
+      && !FILE_VALUE.test(value);
+  }
+
   function sanitizeEvent(event, state) {
     if (!event || typeof event.event !== 'string' || !EVENTS[event.event]) return null;
     const blocked = state ? !!(state.optedOut || state.dnt) : (optedOut() || dnt());
@@ -191,6 +207,11 @@
     if (typeof src.$window_id === 'string' && UUID_VALUE.test(src.$window_id)) out.$window_id = src.$window_id;
     if (typeof src.$lib === 'string' && LIB_VALUE.test(src.$lib)) out.$lib = src.$lib;
     if (typeof src.$lib_version === 'string' && LIB_VERSION_VALUE.test(src.$lib_version)) out.$lib_version = src.$lib_version;
+    // Enable cookieless tracking hashes team, daily salt, IP, user agent, and
+    // host. IP is the connection address PostHog sees, not an event property.
+    // $timezone is not hashed. PostHog uses it only to choose the salt's
+    // calendar day, and still hashes the event when it is missing. It is not kept.
+    if (keepRawUserAgent(src.$raw_user_agent)) out.$raw_user_agent = src.$raw_user_agent;
     if (src.project === 'clearframe') out.project = src.project;
     if (src.environment === 'production' || src.environment === 'preview' || src.environment === 'development') out.environment = src.environment;
     if (keepString(src.app_version, VERSION_VALUE)) out.app_version = src.app_version;
@@ -201,7 +222,7 @@
     if (parts.origin && parts.origin.indexOf('@') < 0 && parts.origin.indexOf('?') < 0 && parts.origin.indexOf('#') < 0) {
       out.$current_url = parts.path === 'other' || parts.path === '/' ? parts.origin + '/' : parts.origin + parts.path;
     }
-    if (parts.host && keepString(parts.host, DOMAIN_VALUE)) out.$host = parts.host;
+    if (parts.host && SITE_HOSTS.indexOf(parts.host) >= 0) out.$host = parts.host;
     if (typeof src.$referring_domain === 'string' && keepString(src.$referring_domain.toLowerCase(), DOMAIN_VALUE)) {
       out.$referring_domain = src.$referring_domain.toLowerCase();
     }
@@ -222,6 +243,10 @@
     for (const key of Object.keys(out)) {
       const value = out[key];
       if (typeof value !== 'string') continue;
+      if (key === '$raw_user_agent') {
+        if (!keepRawUserAgent(value)) delete out[key];
+        continue;
+      }
       if (key === 'token' || key === '$current_url' || key === '$session_id' || key === '$window_id') continue;
       if (value.length > 32 || value.indexOf('@') >= 0 || value.indexOf('?') >= 0 || value.indexOf('#') >= 0 || FILE_VALUE.test(value)) delete out[key];
     }
