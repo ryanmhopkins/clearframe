@@ -23,9 +23,20 @@
 <body>
   <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
     <symbol id="icon-frame" viewBox="0 0 24 24"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m8 0h5v-5"/><rect x="8" y="8" width="8" height="8" rx="2"/></symbol>
+    <symbol id="icon-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="icon-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-5-5 5 5-5 5"/></symbol>
+    <symbol id="icon-download" viewBox="0 0 24 24"><path d="M12 3v12m-4-4 4 4 4-4M5 16v4h14v-4"/></symbol>
+    <symbol id="icon-lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3m-4 4v3"/></symbol>
+    <symbol id="icon-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="icon-image" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8" cy="8" r="1.5"/><path d="m3 17 5-5 4 4 4-6 5 7"/></symbol>
+    <symbol id="icon-sliders" viewBox="0 0 24 24"><path d="M4 7h7m4 0h5M4 17h3m4 0h9"/><circle cx="13" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></symbol>
+    <symbol id="icon-folder" viewBox="0 0 24 24"><path d="M3 7.5A2.5 2.5 0 0 1 5.5 5H9l2 2.5h7.5A2.5 2.5 0 0 1 21 10v7.5a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 17.5Z"/></symbol>
+    <symbol id="icon-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+    <symbol id="icon-shield" viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.5 3 8.3 7 10 4-1.7 7-5.5 7-10V6Z"/><path d="m9 12 2 2 4-4"/></symbol>
   </defs></svg>
+  <div id="app">
   <a class="skip-link" href="#content">Skip to content</a>
-  <div class="upgrade-banner"><span>10 free downloads a day. Go unlimited with Pro—plus folders, presets, and RAW.</span><a class="upgrade-banner-action" href="/checkout?products=be456dd9-4508-4b3a-a517-60fae3c9747b" rel="nofollow">Get Pro · $29/year <span aria-hidden="true">↗</span></a></div>
+  <div class="upgrade-banner"><span>10 free downloads a day. Go unlimited with Pro—plus folders, presets, and RAW.</span><a class="upgrade-banner-action" href="/checkout?products=be456dd9-4508-4b3a-a517-60fae3c9747b" rel="nofollow" data-pro-dialog="header" aria-haspopup="dialog" aria-controls="proDialog">Get Pro · $29/year <span aria-hidden="true">↗</span></a></div>
   <header class="topbar">
     <a class="brand" href="index.html" aria-label="ClearFrame home"><svg class="icon brand-mark"><use href="#icon-frame"/></svg>clearframe<span class="brand-period">.</span></a>
     <nav class="top-links" aria-label="Account"><a href="signin.html" aria-current="page">Sign in</a></nav>
@@ -43,6 +54,29 @@
     </form>
   </main>
   <footer><a class="brand footer-brand" href="index.html"><svg class="icon"><use href="#icon-frame"/></svg>clearframe.</a><nav class="footer-nav" aria-label="Site"><a href="how-privacy-works.html">How privacy works</a><a href="privacy.html">Privacy policy</a><a href="terms.html">Terms of use</a><a href="contact.html">Contact</a></nav></footer>
+  </div>
+  <div id="proBackdrop" class="pro-backdrop" hidden>
+    <div id="proDialog" class="pro-dialog" role="dialog" aria-modal="true" aria-labelledby="proTitle" aria-describedby="proDesc" tabindex="-1">
+      <button id="proClose" class="pro-close" type="button" aria-label="Close"><svg class="icon" aria-hidden="true"><use href="#icon-close"/></svg></button>
+      <div class="pro-head">
+        <span class="pro-eyebrow"><svg class="icon" aria-hidden="true"><use href="#icon-frame"/></svg>CLEARFRAME PRO</span>
+        <h2 id="proTitle">More room for every photo.</h2>
+        <p id="proDesc">Everything you like about ClearFrame, with fewer limits and a faster workflow. Your photos still stay on your device.</p>
+      </div>
+      <ul class="pro-features" aria-label="What Pro unlocks">
+        <li><span class="pro-tile" aria-hidden="true"><svg class="icon"><use href="#icon-download"/></svg></span><div><h3>Unlimited downloads</h3><p>Clean as many photos as you need, without the free daily limit.</p></div></li>
+        <li><span class="pro-tile" aria-hidden="true"><svg class="icon"><use href="#icon-image"/></svg></span><div><h3>RAW photo support</h3><p>Work with DNG, CR2, NEF, and ARW while keeping essential camera data.</p></div></li>
+        <li><span class="pro-tile" aria-hidden="true"><svg class="icon"><use href="#icon-folder"/></svg></span><div><h3>Whole-folder cleaning</h3><p>Bring in a folder at once and review your photos together.</p></div></li>
+        <li><span class="pro-tile" aria-hidden="true"><svg class="icon"><use href="#icon-sliders"/></svg></span><div><h3>Saved presets</h3><p>Reuse your preferred choices across every photo in a batch.</p></div></li>
+      </ul>
+      <div class="pro-buy">
+        <div class="pro-price"><span class="pro-price-label">ONE SIMPLE PLAN</span><span class="amount" id="proPrice">$29<small>/year</small></span><span class="terms" id="proTerms">Renews yearly. Cancel anytime from Manage subscription.</span></div>
+        <div class="pro-buy-action"><a id="proCheckout" class="primary-button pro-cta" href="/checkout?products=be456dd9-4508-4b3a-a517-60fae3c9747b" rel="nofollow">Upgrade to Pro<svg class="icon" aria-hidden="true"><use href="#icon-arrow"/></svg></a><span>Secure checkout by Polar</span></div>
+      </div>
+      <div class="pro-foot"><span><svg class="icon" aria-hidden="true"><use href="#icon-shield"/></svg>Photos stay on your device</span><p>Already subscribed? <a href="signin.html">Sign in with your email</a></p></div>
+    </div>
+  </div>
+  <script src="pro-dialog.js"></script>
   <script src="signin.js"></script>
   <script src="vendor/posthog/posthog-js-1.438.21.no-external.js"></script>
   <script src="analytics.js"></script>
