@@ -40,9 +40,7 @@ test('upgrade dialog markup is present and the no-JS link still goes to checkout
   assert.doesNotMatch(opener, /\bonclick=/);
   assert.equal(links(signin).some(tag => tag.includes('data-pro-dialog')), false);
   assert.doesNotMatch(signin, /id="proDialog"/);
-  const accountOpener = links(account).find(tag => tag.includes('upgrade-link'));
-  assert.match(accountOpener, /rel="nofollow"/);
-  assert.doesNotMatch(accountOpener, /data-pro-dialog/);
+  assert.equal(links(account).some(tag => tag.includes('upgrade-link')), false);
   assert.match(account, />Manage subscription</);
   assert.doesNotMatch(account, />Receipts</);
   assert.match(fs.readFileSync('account-loader.js', 'utf8'), /Manage subscription could not be opened/);
