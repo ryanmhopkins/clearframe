@@ -54,11 +54,13 @@ test('pages and styles do not load third-party scripts, fonts, or connections',(
   assert.doesNotMatch(fs.readFileSync('sitemap.xml','utf8'), owner);
   assert.doesNotMatch(fs.readFileSync('README.md','utf8'), owner);
   const contact=fs.readFileSync('contact.html','utf8');
-  assert.match(contact,/mailto:rmhxai@gmail\.com/);
-  assert.match(contact,/>rmhxai@gmail\.com</);
+  assert.match(contact,/mailto:support@getclearframe\.app/);
+  assert.match(contact,/>support@getclearframe\.app</);
+  assert.doesNotMatch(contact,/@gmail\.com/i);
+  assert.doesNotMatch(contact,owner);
   assert.doesNotMatch(contact,/YOUR-DOMAIN-HERE|will not receive mail|placeholder/i);
   for(const file of ['index.html','how-privacy-works.html','privacy.html','terms.html','signin.html','account.html','README.md','sitemap.xml','robots.txt']){
-    assert.doesNotMatch(fs.readFileSync(file,'utf8'), /rmhxai@gmail\.com|YOUR-DOMAIN-HERE/, file);
+    assert.doesNotMatch(fs.readFileSync(file,'utf8'), /@gmail\.com|rmhxai|YOUR-DOMAIN-HERE/i, file);
   }
   const freeBundle=['index.html','app.js','extended-client.js','metadata.js','metadata-worker.mjs','signin.js'];
   for(const file of freeBundle){
