@@ -309,8 +309,7 @@
       const target = event.target && event.target.closest ? event.target.closest('a.upgrade-link') : null;
       if (!target) return;
       const header = target.closest && (target.closest('header') || target.closest('.top-links'));
-      const hint = doc.querySelector('.code-hint');
-      const props = {discount_shown: hint && hint.textContent.trim() === 'Code LAUNCH9' ? 'launch9' : 'none'};
+      const props = {discount_shown: 'none'};
       if (header) props.placement = 'header';
       capture('checkout_started', props, {transport: 'sendBeacon', send_instantly: true});
     });

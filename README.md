@@ -44,7 +44,7 @@ Paid customers sign in at `/signin`. The server checks for an active Polar subsc
 | `EMAIL_API_KEY` | Bearer token for a Resend-compatible `POST /emails` API |
 | `EMAIL_FROM` | From address the email API accepts |
 
-When `EMAIL_API_KEY` is unset, the sign-in link is printed in the server log instead of being sent. There is no license-key field. See `POLAR_SETUP.md` before switching the public checkout link: the existing $15 product is currently a one-time purchase, while Pro access checks an active subscription.
+When `EMAIL_API_KEY` is unset, the sign-in link is printed in the server log instead of being sent. There is no license-key field. Pro is $29 per year through Polar. The upgrade links open `/checkout`, which creates a hosted checkout for the annual product. Polar hosts billing management. See `POLAR_SETUP.md` for deployment steps.
 
 ## Run locally
 

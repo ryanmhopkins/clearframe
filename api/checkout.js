@@ -13,7 +13,7 @@ async function handler(req, res, deps = {}) {
   try {
     const checkout = await (deps.polar || polarClient()).checkouts.create({products});
     const destination = new URL(checkout.url);
-    if (destination.protocol !== 'https:' || destination.hostname !== 'buy.polar.sh') throw new Error('Invalid checkout URL');
+    if (destination.protocol !== 'https:' || !['polar.sh', 'buy.polar.sh'].includes(destination.hostname)) throw new Error('Invalid checkout URL');
     send(res, 302, '', {Location: destination.toString()});
   } catch {
     send(res, 502, {ok: false, message: 'Checkout is temporarily unavailable.'});

@@ -15,7 +15,7 @@ const env = {
   SESSION_SECRET: secret,
   POLAR_ACCESS_TOKEN: 'polar-test',
   POLAR_ORG_ID: '451754ed-9a0e-4fcb-be7f-5e15db2a9b9b',
-  POLAR_PRODUCT_ID: 'f89c5925-7362-40aa-9ce3-e69ff81005b5',
+  POLAR_PRODUCT_ID: 'be456dd9-4508-4b3a-a517-60fae3c9747b',
   SITE_URL: 'http://127.0.0.1:8765',
   EMAIL_FROM: 'ClearFrame <pro@example.com>'
 };
