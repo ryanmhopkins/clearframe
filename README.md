@@ -26,9 +26,11 @@ Opening the site still contacts the host that serves these files. `how-privacy-w
 
 The free home page does not call `/api` and does not ask anyone to sign in. JPEG, PNG, WebP, GIF, HEIC, HEIF, AVIF, and TIFF cleaning stays in that page. ClearFrame Pro (folder selection, presets with apply-to-all, and RAW) is loaded only after passwordless email sign-in, from `GET /api/pro/module`, which checks the session cookie. Photos and metadata are still not uploaded.
 
+When analytics is on, the browser also sends anonymous counts directly to `https://us.i.posthog.com`. Analytics data is processed in the United States. That request does not include photos, file names, or metadata, and it does not call `/api`. Cleaning a photo still does not upload it. Turning analytics off, or sending Do Not Track, stops the counts, and cleaning then makes no analytics request. While analytics is on, it stores nothing except brief test writes that the library deletes right away. The choice to turn analytics off is stored only after that choice.
+
 ## Pro sign-in
 
-Paid customers sign in at `/signin`. The server checks a paid order with the payment provider, then emails one sign-in link. The browser only talks to this site (`connect-src 'self'`). Copy `.env.example` to `.env` and set:
+Paid customers sign in at `/signin`. The server checks a paid order with the payment provider, then emails one sign-in link. The browser talks to this site and, when analytics is on, to `https://us.i.posthog.com` (`connect-src 'self' https://us.i.posthog.com`). Copy `.env.example` to `.env` and set:
 
 | Variable | Purpose |
 | --- | --- |
