@@ -228,7 +228,14 @@ test('legal pages do not advertise the payment checkout, and the free page does 
   assert.doesNotMatch(privacy, /Vercel|Google Fonts|buy\.polar|license key/i);
   assert.doesNotMatch(fs.readFileSync('index.html', 'utf8'), /\/api\/|webkitdirectory/);
   assert.match(fs.readFileSync('privacy.html', 'utf8'), /Free use does not ask for your name or email/);
-  assert.match(fs.readFileSync('privacy.html', 'utf8'), /at most once a day/);
+  assert.match(fs.readFileSync('privacy.html', 'utf8'), /currently has ClearFrame Pro/);
+  assert.match(fs.readFileSync('privacy.html', 'utf8'), /payment provider’s customer id/);
+  assert.match(fs.readFileSync('privacy.html', 'utf8'), /time access was last checked/);
+  assert.match(fs.readFileSync('privacy.html', 'utf8'), /24-hour window/);
+  assert.match(fs.readFileSync('privacy.html', 'utf8'), /within a day/);
+  assert.match(fs.readFileSync('privacy.html', 'utf8'), /refund the payment provider reports/);
+  assert.doesNotMatch(fs.readFileSync('privacy.html', 'utf8'), /at most once a day/);
+  assert.doesNotMatch(fs.readFileSync('privacy.html', 'utf8'), /active ClearFrame Pro subscription/);
 });
 
 
