@@ -34,6 +34,8 @@ test('upgrade dialog markup is present and the no-JS link still goes to checkout
     assert.doesNotMatch(html, /<style[\s>]/i);
   }
   const opener = links(index).find(tag => tag.includes('data-pro-dialog'));
+  assert.match(index, /class="upgrade-banner"/);
+  assert.doesNotMatch(index.match(/<nav class="top-links"[^>]*>[\s\S]*?<\/nav>/)[0], /upgrade-link|data-pro-dialog/);
   assert.match(opener, new RegExp(`href="${CHECKOUT.replace('?', '\\?')}"`));
   assert.match(opener, /rel="nofollow"/);
   assert.match(opener, /aria-haspopup="dialog"/);

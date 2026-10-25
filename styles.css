@@ -37,6 +37,10 @@ button:disabled { opacity: .35; cursor: default; }
 .top-links a { color: var(--muted); font-size: 13px; }
 .top-links a:hover, .top-links a:focus-visible { color: var(--text); }
 .upgrade-link { color: var(--text); border: 1px solid var(--line); border-radius: 999px; padding: 6px 10px; }
+.upgrade-banner { min-height: 48px; padding: 8px 20px; display: flex; align-items: center; justify-content: center; gap: 20px; background: #4c83ed; color: #0e2348; text-align: center; font-size: 12px; font-weight: 600; line-height: 1.35; }
+.upgrade-banner-action { display: inline-flex; align-items: center; gap: 10px; flex-shrink: 0; padding: 7px 12px; border-radius: 5px; background: #14284b; color: #f0f5ff; font-size: 11px; font-weight: 650; white-space: nowrap; }
+.upgrade-banner-action:hover { background: #071a39; }
+@media (max-width: 600px) { .upgrade-banner { gap: 10px; padding: 8px 12px; font-size: 10px; }.upgrade-banner-action { padding: 7px 8px; gap: 5px; font-size: 10px; } }
 .code-hint { color: var(--quiet); font-size: 11px; letter-spacing: .04em; }
 .signin-form { display: grid; gap: 10px; max-width: 420px; margin-top: 8px; }
 .signin-form label { color: var(--muted); font-size: 13px; }

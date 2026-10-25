@@ -35,6 +35,7 @@ test('signed-in visitors see Pro navigation on the public page', async () => {
     assert.equal(nav.querySelector('a[href^="/checkout"]'), null);
     assert.equal(nav.querySelector('.member-badge').textContent, 'Pro active');
     assert.equal(nav.querySelector('.account-link').getAttribute('href'), 'account.html');
+    assert.equal(dom.window.document.querySelector('.upgrade-banner'), null);
   } finally {
     dom.window.close();
   }

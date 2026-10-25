@@ -6,6 +6,7 @@
     if (!response.ok) return;
     const session = await response.json();
     if (!session.signedIn || !session.pro) return;
+    document.querySelector('.upgrade-banner')?.remove();
     nav.replaceChildren();
     const badge = document.createElement('span');
     badge.className = 'member-badge';
