@@ -8,7 +8,7 @@ const SDK=fs.readFileSync('vendor/posthog/posthog-js-1.438.21.no-external.js','u
 const CLIENT=fs.readFileSync('analytics.js','utf8');
 const FILE_VALUE=/\.(?:jpe?g|png|gif|webp|hei[cf]|avif|tiff?|dng|cr2|nef|arw|raw|rw2|orf|raf|bmp|svg)\b/i;
 const EXIF_KEYS=['Make','Model','LensModel','DateTimeOriginal','ExposureTime','FNumber','ISO','GPSLatitude','GPSLongitude','Artist','Copyright','Software','Orientation','UserComment','ImageUniqueID','BodySerialNumber','Exif'];
-const COMMON=['token','distinct_id','$cookieless_mode','project','app_version','environment','$current_url','$pathname','$host','$referring_domain','utm_source','utm_medium','utm_campaign'];
+const COMMON=['token','distinct_id','$cookieless_mode','$process_person_profile','$session_id','$window_id','$lib','$lib_version','project','app_version','environment','$current_url','$pathname','$host','$referring_domain','utm_source','utm_medium','utm_campaign'];
 const PROBES=new Set(['__mplssupport__','__support__','test','__cf_ls_probe__']);
 
 function allowedKeys(name){
@@ -89,6 +89,39 @@ test('sanitizer keeps only allowlisted events and coarse values',()=>{
   assert.equal(analytics.formatGroup(['HEIF']),'heic');
   assert.equal(analytics.formatGroup(['DNG','CR2']),'raw');
   assert.equal(analytics.formatGroup(['JPEG','PNG']),'mixed');
+  assert.equal(analytics.coarsePath('/pro'),'other');
+  assert.equal(analytics.EVENTS.$pageview.path.includes('/pro'),false);
+});
+
+test('person profiles stay off, ids must be UUIDs, and unknown events are dropped',()=>{
+  const kept=analytics.sanitizeEvent({event:'$pageview',properties:baseProps({
+    $process_person_profile:false,
+    $session_id:'01a17127-a2bf-7006-a0a8-064f41bb6ab0',
+    $window_id:'01A17127-A2BF-7006-A0A8-064F41BB6AB1',
+    $lib:'web',
+    $lib_version:'1.438.21'
+  })},{optedOut:false,dnt:false});
+  assert.equal(kept.properties.$process_person_profile,false);
+  assert.equal(kept.properties.$session_id,'01a17127-a2bf-7006-a0a8-064f41bb6ab0');
+  assert.equal(kept.properties.$window_id,'01A17127-A2BF-7006-A0A8-064F41BB6AB1');
+  assert.equal(kept.properties.$lib,'web');
+  assert.equal(kept.properties.$lib_version,'1.438.21');
+  for(const value of [true,'false',0,1,null,'no']){
+    const dropped=analytics.sanitizeEvent({event:'$pageview',properties:baseProps({$process_person_profile:value})},{optedOut:false,dnt:false});
+    assert.equal(Object.prototype.hasOwnProperty.call(dropped.properties,'$process_person_profile'),false,String(value));
+  }
+  const bad=analytics.sanitizeEvent({event:'$pageview',properties:baseProps({
+    $session_id:'vacation.jpg',
+    $window_id:'person@example.com',
+    $lib:'web-sdk',
+    $lib_version:'1.438.21-person@example.com'
+  })},{optedOut:false,dnt:false});
+  assert.equal(bad.properties.$session_id,undefined);
+  assert.equal(bad.properties.$window_id,undefined);
+  assert.equal(bad.properties.$lib,undefined);
+  assert.equal(bad.properties.$lib_version,undefined);
+  assert.equal(analytics.sanitizeEvent({event:'not_a_real_event',properties:baseProps({$process_person_profile:false,$session_id:'01a17127-a2bf-7006-a0a8-064f41bb6ab0'})},{optedOut:false,dnt:false}),null);
+  assert.equal(analytics.sanitizeEvent({event:'$set',properties:baseProps({$process_person_profile:false})},{optedOut:false,dnt:false}),null);
 });
 
 function boot(options={}){
@@ -185,10 +218,15 @@ function assertClean(events,requests){
     if(props.distinct_id) assert.equal(props.distinct_id,'$posthog_cookieless');
     if(props.token) assert.equal(props.token,analytics.POSTHOG_KEY);
     for(const [key,value] of Object.entries(props)){
+      if(key==='$process_person_profile') assert.equal(value,false);
       if(typeof value!=='string') continue;
       assert.equal(value.includes('@'),false,key);
       assert.equal(value.includes('?'),false,key);
       assert.equal(value.includes('#'),false,key);
+      if(key==='$session_id'||key==='$window_id'){
+        assert.match(value,/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i);
+        continue;
+      }
       if(key!=='token'&&key!=='$current_url') assert.ok(value.length<=32,key);
     }
     for(const name of EXIF_KEYS){

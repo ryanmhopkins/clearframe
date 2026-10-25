@@ -17,7 +17,7 @@
   // that host-only session cookie.
   const API_HOST = 'https://us.i.posthog.com';
 
-  const PAGE_PATHS = ['/', '/pro', '/signin', '/how-privacy-works', '/privacy', '/terms', '/contact', 'other'];
+  const PAGE_PATHS = ['/', '/signin', '/how-privacy-works', '/privacy', '/terms', '/contact', 'other'];
   const EVENTS = {
     $pageview: {path: PAGE_PATHS},
     clean_completed: {
@@ -45,6 +45,9 @@
   const UTM_VALUE = /^[a-z0-9_-]{1,32}$/;
   const DOMAIN_VALUE = /^[a-z0-9.-]{1,32}$/;
   const VERSION_VALUE = /^(?:\d+\.\d+\.\d+|[0-9a-f]{7})$/;
+  const UUID_VALUE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  const LIB_VALUE = /^[a-z]{1,8}$/;
+  const LIB_VERSION_VALUE = /^\d{1,4}\.\d{1,4}\.\d{1,4}$/;
   const FILE_VALUE = /\.(?:jpe?g|png|gif|webp|hei[cf]|avif|tiff?|dng|cr2|nef|arw|raw|rw2|orf|raf|bmp|svg)\b/i;
   const FORMAT_GROUPS = {
     jpeg: 'jpeg', jpg: 'jpeg', png: 'png', webp: 'webp', gif: 'gif',
@@ -181,6 +184,13 @@
     out.token = POSTHOG_KEY;
     if (src.distinct_id === COOKIELESS_ID) out.distinct_id = COOKIELESS_ID;
     if (src.$cookieless_mode === true) out.$cookieless_mode = true;
+    // false tells PostHog not to create a person profile. Any other value is dropped.
+    if (src.$process_person_profile === false) out.$process_person_profile = false;
+    // Memory-only ids. Cookieless mode does not persist these. Kept only as UUIDs.
+    if (typeof src.$session_id === 'string' && UUID_VALUE.test(src.$session_id)) out.$session_id = src.$session_id;
+    if (typeof src.$window_id === 'string' && UUID_VALUE.test(src.$window_id)) out.$window_id = src.$window_id;
+    if (typeof src.$lib === 'string' && LIB_VALUE.test(src.$lib)) out.$lib = src.$lib;
+    if (typeof src.$lib_version === 'string' && LIB_VERSION_VALUE.test(src.$lib_version)) out.$lib_version = src.$lib_version;
     if (src.project === 'clearframe') out.project = src.project;
     if (src.environment === 'production' || src.environment === 'preview' || src.environment === 'development') out.environment = src.environment;
     if (keepString(src.app_version, VERSION_VALUE)) out.app_version = src.app_version;
@@ -212,7 +222,7 @@
     for (const key of Object.keys(out)) {
       const value = out[key];
       if (typeof value !== 'string') continue;
-      if (key === 'token' || key === '$current_url') continue;
+      if (key === 'token' || key === '$current_url' || key === '$session_id' || key === '$window_id') continue;
       if (value.length > 32 || value.indexOf('@') >= 0 || value.indexOf('?') >= 0 || value.indexOf('#') >= 0 || FILE_VALUE.test(value)) delete out[key];
     }
     if (out.$current_url && (out.$current_url.indexOf('?') >= 0 || out.$current_url.indexOf('#') >= 0 || out.$current_url.indexOf('@') >= 0)) delete out.$current_url;
