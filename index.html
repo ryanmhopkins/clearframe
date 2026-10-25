@@ -4,8 +4,18 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#101010" />
-  <meta name="description" content="View and remove photo metadata, including location, camera settings, and dates." />
+  <meta name="description" content="Scan and remove photo metadata in your browser. Photos stay on your device. Supports JPEG, PNG, WebP, GIF, HEIC, AVIF, TIFF, and RAW." />
   <title>ClearFrame — Photo metadata cleaner</title>
+  <link rel="canonical" href="https://getclearframe.app/" />
+  <meta name="robots" content="index, follow" />
+  <meta property="og:site_name" content="ClearFrame" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="ClearFrame — Photo metadata cleaner" />
+  <meta property="og:description" content="Scan and remove photo metadata in your browser. Photos stay on your device. Supports JPEG, PNG, WebP, GIF, HEIC, AVIF, TIFF, and RAW." />
+  <meta property="og:url" content="https://getclearframe.app/" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="ClearFrame — Photo metadata cleaner" />
+  <meta name="twitter:description" content="Scan and remove photo metadata in your browser. Photos stay on your device. Supports JPEG, PNG, WebP, GIF, HEIC, AVIF, TIFF, and RAW." />
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23ededeb'/%3E%3Cpath d='M9 13V9h4M19 9h4v4M23 19v4h-4M13 23H9v-4' fill='none' stroke='%23101010' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E" />
   <link rel="stylesheet" href="motion.css" />
   <link rel="stylesheet" href="styles.css" />
@@ -97,14 +107,14 @@
       <details><summary>Can I clean several photos at once?</summary><p>Yes. Add multiple photos, review the choices for each, then save them individually or together in a ZIP. Each photo can be up to 256 MB. Large batches can use a lot of browser memory. If things slow down, try fewer files at a time.</p></details>
       <details><summary>How does RAW cleaning work?</summary><p>RAW photos need camera settings and calibration data to display correctly. ClearFrame keeps those, along with maker notes and embedded previews, while letting you remove listed details such as GPS, captions, author names, and dates. Kept data may still contain identifying information. Select all selects the available cleaning options; it doesn’t strip every piece of data from a RAW file.</p></details>
       <details><summary>Why might a photo have no preview?</summary><p>Your browser may not display HEIC, TIFF, or RAW images. You can still review and clean a supported file without a preview. The downloaded copy keeps its original format, so open it in an app that supports that format.</p></details>
-      <details><summary>Are my photos uploaded?</summary><p>No. Scanning and cleaning happen in your browser. Your photos aren’t uploaded or stored on a server.</p></details>
+      <details><summary>Are my photos uploaded?</summary><p>No. Scanning and cleaning happen in your browser. Your photos aren’t uploaded or stored on a server. <a href="how-privacy-works.html">How your privacy works</a> explains what this site does download, what the host can still see, and how to check the network tab.</p></details>
       <details><summary>What about AI tags and Content Credentials?</summary><p>AI tools sometimes save prompts or software details in text, EXIF, or XMP blocks. ClearFrame can remove those blocks when it finds them. It also identifies some Content Credentials (C2PA) data, but doesn’t verify its authenticity. Removing it loses that provenance, and other edits can invalidate its signature. Visible watermarks and data hidden in pixels aren’t removed.</p></details>
       <details><summary>How can I check the cleaned photo?</summary><p>Add the downloaded copy to ClearFrame to scan it again and see which blocks remain. This checks what the scanner can detect; it isn’t a guarantee that every proprietary tag or hidden piece of information is gone. Your filename and file dates are separate from embedded metadata and may still appear on your device.</p></details>
     </section>
   </main>
-  <footer><a class="brand footer-brand" href="#"><svg class="icon"><use href="#icon-frame"/></svg>clearframe.</a><a class="creator-link" href="https://x.com/rmhopkins" target="_blank" rel="noopener noreferrer" aria-label="Created by Ryan — @rmhopkins on X (opens in a new tab)">Created by Ryan<svg class="x-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.64 7.584H.47l8.6-9.835L0 1.153h7.594l5.243 6.932zm-1.29 19.49h2.039L6.487 3.24H4.3z"/></svg></a></footer>
+  <footer><a class="brand footer-brand" href="#"><svg class="icon"><use href="#icon-frame"/></svg>clearframe.</a><nav class="footer-nav" aria-label="Site"><a href="how-privacy-works.html">How privacy works</a><a href="privacy.html">Privacy policy</a><a href="terms.html">Terms of use</a><a href="contact.html">Contact</a></nav></footer>
   <div id="toast" class="toast t-toast" role="status"></div>
-  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+  <script src="vendor/jszip/jszip-3.10.1.min.js"></script>
   <script src="vendor/exifr.js"></script>
   <script src="metadata.js"></script>
   <script src="motion.js"></script>

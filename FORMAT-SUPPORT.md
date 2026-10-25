@@ -4,7 +4,7 @@ ClearFrame cleans JPEG, PNG, WebP and GIF using byte-level container editing.
 HEIC/HEIF, AVIF, classic TIFF, DNG, CR2, NEF and ARW use vendored ExifTool 13.59
 in a lazily loaded browser worker. The engine download is approximately 25 MB,
 served by ClearFrame; image bytes are not uploaded. No runtime npm/CDN dependency
-is used for the extended engine. ZIP export still uses the existing JSZip dependency.
+is used for the extended engine. ZIP export uses JSZip 3.10.1 vendored at `vendor/jszip/`. Fonts are self-hosted in `fonts/`. No runtime CDN request is required.
 
 ## Removal boundaries
 

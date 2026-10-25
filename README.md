@@ -1,6 +1,6 @@
 # ClearFrame
 
-A local-first metadata scanner and selective cleaner for JPEG, PNG, and WebP images.
+A local-first metadata scanner and selective cleaner for JPEG, PNG, WebP, GIF, HEIC, HEIF, AVIF, TIFF, and RAW (DNG, CR2, NEF, and ARW) photos.
 
 ## Interface
 
@@ -14,13 +14,15 @@ A minimal charcoal interface with a single upload area, per-photo cleaning contr
 - Download one image or export the batch as a ZIP using each image's selections. Duplicate filenames receive numbered prefixes in ZIP exports.
 - Color/display metadata and detected credentials are kept by default. Essential image, transparency, animation, and JPEG Adobe color-transform data are preserved.
 
-Cleaning operates on whole blocks, not individual EXIF tags. Removing an EXIF block removes all its tags, including GPS, orientation, and embedded thumbnails. Removing orientation or color profiles can change display even though encoded pixels are not recompressed. Removing credentials discards provenance; any metadata edit may invalidate a signature. Credentials are not cryptographically verified.
+JPEG, PNG, WebP, and GIF cleaning operates on whole blocks, not individual EXIF tags. Removing an EXIF block removes all its tags, including GPS, orientation, and embedded thumbnails. Removing orientation or color profiles can change display even though encoded pixels are not recompressed. Removing credentials discards provenance; any metadata edit may invalidate a signature. Credentials are not cryptographically verified.
 
-The scanner does not promise to decode every proprietary tag or detect data hidden in image pixels. Dimensions, encoded image content, file-system dates, and visible content are not removable metadata. Formats beyond JPEG, PNG, and WebP are not supported.
+The scanner does not promise to decode every proprietary tag or detect data hidden in image pixels. Dimensions, encoded image content, file-system dates, and visible content are not removable metadata. JPEG, PNG, WebP, and GIF cleaning removes whole metadata blocks. HEIC, HEIF, AVIF, TIFF, and RAW cleaning removes listed groups and standard fields, and keeps maker notes, calibration, previews, and required rendering data. See [FORMAT-SUPPORT.md](FORMAT-SUPPORT.md).
 
 ## Privacy
 
-Files are processed entirely in the browser and are never uploaded. The pinned exifr 7.1.3 decoder is vendored locally with its license. JSZip and fonts are loaded externally; these requests do not contain selected image data.
+Scanning and cleaning run in the browser. Photo bytes are not uploaded. Scripts, fonts, JSZip 3.10.1, exifr 7.1.3, and the ExifTool photo engine are served by this site. The page does not load Google Fonts or a public CDN. The photo engine (`vendor/exiftool/zeroperl-mqcadjqm.wasm`, about 25 MB) is already self-hosted. The browser downloads it from this origin only when a HEIC, HEIF, AVIF, TIFF, or RAW file is added.
+
+Opening the site still contacts the host that serves these files. `how-privacy-works.html` states the limits and how to check them in the browser network tab. Plain-language drafts of the privacy policy, terms of use, and contact page are `privacy.html`, `terms.html`, and `contact.html`. The contact address appears only on the contact page.
 
 ## Run locally
 
