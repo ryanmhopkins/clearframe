@@ -267,7 +267,12 @@ test('the Pro subscription terms state the refund windows and privacy names the 
   assert.match(privacy, /Opening the Pro upgrade dialog is counted separately/);
   assert.match(privacy, /one field, source, and the only values are header and raw error/);
   assert.match(privacy, /Last updated 25 October 2026/);
-  assert.match(privacy, /This page does not say either setting is already on/);
+  assert.ok(privacy.includes('This website does not configure or read those host logs, and this page cannot turn them off. How long the host keeps them is the host’s setting. This page does not state how long they are kept, because ClearFrame does not control that setting.'));
+  assert.ok(privacy.includes('The browser’s user agent string and the visitor’s IP address (seen by PostHog from the request) are sent to PostHog in the United States. PostHog has its own server-side settings. This page does not say those settings are on.'));
+  assert.doesNotMatch(privacy, /cookieless/i);
+  assert.doesNotMatch(privacy, /Discard client IP/);
+  assert.doesNotMatch(privacy, /this repository does not control it/);
+  assert.doesNotMatch(privacy, /IP address(?:es)? (?:is|are) not stored|discarded/i);
 });
 
 
