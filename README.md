@@ -64,3 +64,7 @@ npm test
 The tests cover metadata inventories, selection persistence and exports, malformed containers, progressive JPEG scans, compressed PNG text, EXIF decoding, WebP sizes/flags, and safe rendering of embedded text. Test-only dependencies are not needed to run the app.
 
 Container references: [PNG specification](https://www.w3.org/TR/png-3/), [WebP specification](https://developers.google.com/speed/webp/docs/riff_container), [exifr](https://github.com/MikeKovarik/exifr).
+
+## Continuous integration
+
+GitHub Actions runs `npm test` on Node 22 for every pull request targeting `main` and every push to `main`. The workflow does not use secrets. It does not deploy, does not run a browser, and does not call Polar or PostHog. Vercel preview and production deploys are separate from this workflow.
