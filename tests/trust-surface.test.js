@@ -65,5 +65,16 @@ test('pages and styles do not load third-party scripts, fonts, or connections',(
     assert.doesNotMatch(fs.readFileSync(file,'utf8'), /webkitdirectory|preset-bar|pro-worker/, file);
   }
   assert.doesNotMatch(fs.readFileSync('index.html','utf8'), /\/api\//);
-  assert.match(fs.readFileSync('api/pro/files/pro.js','utf8'), /webkitdirectory/);
+  assert.match(fs.readFileSync('api/pro/files/_pro.js','utf8'), /webkitdirectory/);
+  const functions=[];
+  (function walk(dir){
+    for(const entry of fs.readdirSync(dir,{withFileTypes:true})){
+      const full=require('node:path').join(dir,entry.name);
+      if(entry.isDirectory()) walk(full);
+      else if(!entry.name.startsWith('_')) functions.push(full);
+    }
+  })('api');
+  assert.ok(functions.length<=12, functions.join('\n'));
+  assert.equal(functions.length, 6);
+  assert.equal(fs.existsSync('api/lib'), false);
 });

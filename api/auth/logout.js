@@ -1,5 +1,5 @@
-const {clearSession} = require('../lib/session');
-const {send} = require('../lib/http');
+const {clearSession} = require('../../server-lib/session');
+const {send} = require('../../server-lib/http');
 
 function handler(req, res, deps = {}) {
   if (req.method !== 'POST') return send(res, 405, {ok: false});

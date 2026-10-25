@@ -1,5 +1,5 @@
-const {requestLink} = require('../lib/session');
-const {readJson, send} = require('../lib/http');
+const {requestLink} = require('../../server-lib/session');
+const {readJson, send} = require('../../server-lib/http');
 
 async function handler(req, res, deps = {}) {
   if (req.method !== 'POST') return send(res, 405, {ok: false, message: 'Enter an email address.'});

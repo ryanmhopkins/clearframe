@@ -1,6 +1,11 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
+  "functions": {
+    "api/**/*.js": {
+      "includeFiles": "{server-lib/**,api/pro/files/**}"
+    }
+  },
   "headers": [
     {
       "source": "/(.*)",

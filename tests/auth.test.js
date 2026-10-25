@@ -1,9 +1,9 @@
 const {test} = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
-const {magicToken, sessionToken, verify, sign, MAGIC_TTL_MS} = require('../api/lib/tokens');
-const {resetRateLimit} = require('../api/lib/rate-limit');
-const {requestLink, redeemLink, GENERIC} = require('../api/lib/session');
+const {magicToken, sessionToken, verify, sign, MAGIC_TTL_MS} = require('../server-lib/tokens');
+const {resetRateLimit} = require('../server-lib/rate-limit');
+const {requestLink, redeemLink, GENERIC} = require('../server-lib/session');
 const requestHandler = require('../api/auth/request');
 const verifyHandler = require('../api/auth/verify');
 const sessionHandler = require('../api/auth/session');
