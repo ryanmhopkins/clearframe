@@ -3,6 +3,10 @@
   const dialog = document.getElementById('proDialog');
   const app = document.getElementById('app');
   const closeButton = document.getElementById('proClose');
+  const title = document.getElementById('proTitle');
+  const description = document.getElementById('proDesc');
+  const defaultTitle = title?.textContent;
+  const defaultDescription = description?.textContent;
   if (!backdrop || !dialog || !app || !closeButton) return;
 
   let lastFocus = null;
@@ -21,16 +25,18 @@
   function open(options) {
     options = options || {};
     if (!backdrop.hidden) return;
-    const source = options.source === 'raw_error' ? 'raw_error' : 'header';
+    const source = options.source === 'quota' ? 'quota' : options.source === 'raw_error' ? 'raw_error' : 'header';
     lastFocus = remember(options.returnFocus);
     dialog.setAttribute('data-source', source);
+    if (title) title.textContent = source === 'quota' ? 'Your daily free allowance' : defaultTitle;
+    if (description) description.textContent = source === 'quota' ? options.message || 'Your 10 free downloads reset at local midnight. Upgrade for unlimited cleaning.' : defaultDescription;
     backdrop.hidden = false;
     app.inert = true;
     app.setAttribute('aria-hidden', 'true');
     document.documentElement.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
     dialog.focus({preventScroll: true});
-    try { root.ClearFrameAnalytics?.proDialogOpened(source); }
+    try { if (source !== 'quota') root.ClearFrameAnalytics?.proDialogOpened(source); }
     catch { /* analytics must not break the dialog */ }
   }
 

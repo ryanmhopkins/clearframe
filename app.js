@@ -82,6 +82,22 @@ function select(id){
   renderPhotoData(entry);updateSelection();
 }
 let fileQueue=Promise.resolve(),generation=0,exporting=false,presetUsedForExport=false;
+function freeLimit(){return globalThis.ClearFrameMember || globalThis.ClearFramePro ? null : globalThis.ClearFrameDailyLimit;}
+function updateLimitNote(){const note=$('#dailyLimitNote');if(!note)return;const limit=freeLimit();note.hidden=!limit;if(limit){const left=limit.remaining();note.textContent=`${left} of ${limit.limit} free downloads left today`;}}
+globalThis.ClearFrameUpdateLimitNote=updateLimitNote;
+updateLimitNote();
+window.addEventListener('storage',updateLimitNote);
+window.addEventListener('focus',updateLimitNote);
+function updateAtMidnight(){const now=new Date(),next=new Date(now.getFullYear(),now.getMonth(),now.getDate()+1);setTimeout(()=>{updateLimitNote();updateAtMidnight()},next-now+100);}
+if($('#dailyLimitNote'))updateAtMidnight();
+function allowDownload(count){
+ const limit=freeLimit();if(!limit || limit.canUse(count))return true;
+ const left=limit.remaining();
+ const message=left===0?'You have used today’s 10 free downloads. Your allowance resets at local midnight. Upgrade for unlimited cleaning.':`This download includes ${count} photos, but you have ${left} free ${left===1?'download':'downloads'} left today. Choose fewer photos or upgrade for unlimited cleaning.`;
+ globalThis.ClearFrameProDialog?.open({source:'quota',message,returnFocus:document.activeElement});
+ updateLimitNote();return false;
+}
+function countDownload(count){const limit=freeLimit();if(limit)limit.record(count);updateLimitNote();}
 function handleFiles(files){const incoming=[...files],current=generation;fileQueue=fileQueue.then(()=>loadFiles(incoming,current)).catch(()=>toast('Could not load these photos. Please try again.'));return fileQueue;}
 async function loadFiles(files,current){
  const valid=files.filter(file=>Object.values(TYPES).includes(file.type)||/\.(jpe?g|png|webp|gif|heic|heif|avif|tiff?|dng|cr2|nef|arw)$/i.test(file.name));
@@ -113,18 +129,18 @@ async function loadFiles(files,current){
 function downloadBlob(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1500)}
 function exportBusy(busy){exporting=busy;$('#cleanBtn').disabled=busy;$('#cleanAllBtn').disabled=busy;$('#startOver').disabled=busy;}
 async function clean(){
- const entry=getActive();if(!entry||exporting)return;const selected=new Set(entry.selected);exportBusy(true);
- try{const cleaned=await entry.report.clean(selected);downloadBlob(new Blob([cleaned],{type:entry.report.mime||entry.file.type||'application/octet-stream'}),cleanName(entry.file));toast(`Copy ready · ${human(cleaned.length)}`);$('#fileErrors').hidden=true;trackClean(1,[entry.report.format],'single');}
+ const entry=getActive();if(!entry||exporting||!allowDownload(1))return;const selected=new Set(entry.selected);exportBusy(true);
+ try{const cleaned=await entry.report.clean(selected);if(!allowDownload(1))return;downloadBlob(new Blob([cleaned],{type:entry.report.mime||entry.file.type||'application/octet-stream'}),cleanName(entry.file));countDownload(1);toast(`Copy ready · ${human(cleaned.length)}`);$('#fileErrors').hidden=true;trackClean(1,[entry.report.format],'single');}
  catch(e){$('#fileErrors').textContent=e.message;$('#fileErrors').hidden=false;}
  finally{exportBusy(false);}
 }
 async function cleanAll(){
- if(!batch.length||exporting)return;if(!window.JSZip){toast('ZIP tools are still loading. Try again.');return;}
+ if(!batch.length||exporting||!allowDownload(batch.length))return;if(!window.JSZip){toast('ZIP tools are still loading. Try again.');return;}
  const entries=batch.map(entry=>({entry,selected:new Set(entry.selected)})),button=$('#cleanAllBtn');exportBusy(true);button.innerHTML='<span>Checking photos</span><b>···</b>';
  try{const zip=new JSZip();for(const [index,{entry,selected}] of entries.entries()){
   const output=await entry.report.clean(selected);zip.file(`${String(index+1).padStart(3,'0')}-${cleanName(entry.file)}`,output);button.querySelector('b').textContent=`${index+1}/${entries.length}`;
  }button.querySelector('span').textContent='Packaging';
- const blob=await zip.generateAsync({type:'blob',compression:'DEFLATE',compressionOptions:{level:6}},meta=>{button.querySelector('b').textContent=`${Math.round(meta.percent)}%`;});downloadBlob(blob,'clearframe-clean-images.zip');toast(`${entries.length} copies ready`);$('#fileErrors').hidden=true;trackClean(entries.length,entries.map(item=>item.entry.report.format),entries.some(item=>item.entry.file&&item.entry.file.webkitRelativePath)?'folder':'batch');
+ const blob=await zip.generateAsync({type:'blob',compression:'DEFLATE',compressionOptions:{level:6}},meta=>{button.querySelector('b').textContent=`${Math.round(meta.percent)}%`;});if(!allowDownload(entries.length))return;downloadBlob(blob,'clearframe-clean-images.zip');countDownload(entries.length);toast(`${entries.length} copies ready`);$('#fileErrors').hidden=true;trackClean(entries.length,entries.map(item=>item.entry.report.format),entries.some(item=>item.entry.file&&item.entry.file.webkitRelativePath)?'folder':'batch');
  }catch(e){$('#fileErrors').textContent=`No ZIP was downloaded. ${e.message}`;$('#fileErrors').hidden=false;}
  finally{exportBusy(false);button.innerHTML='<span>Download all</span><b>ZIP ↓</b>';}
 }
