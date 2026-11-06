@@ -245,7 +245,7 @@ test('the Pro subscription terms state the refund windows and privacy names the 
   const refund = 'Refunds. If you are not satisfied with ClearFrame Pro, email support@getclearframe.app within 14 days of your first purchase and we will refund the full amount. For renewals, you may request a refund within 7 days of the renewal charge. After those windows, payments are not refundable, but you can cancel any time and keep Pro until the end of the period you already paid for. Refunds are returned to your original payment method through our payment processor, Polar, and usually appear within 5 to 10 business days. When a refund is issued, your Pro access ends within a day. If a renewal payment fails, you keep Pro for 24 hours while the payment is retried, and your access is re-checked within a day of that deadline. Cancelling stops future charges and does not by itself trigger a refund.';
   assert.match(terms, /<h2>Pro subscription<\/h2>/);
   assert.doesNotMatch(terms, /draft for review|unfinished legal agreement/);
-  assert.match(terms, /Last updated 25 October 2026/);
+  assert.match(terms, /Last updated 6 November 2026/);
   assert.match(terms, /ClearFrame Pro is \$29 USD per year\./);
   assert.match(terms, /renews automatically each year until it is cancelled\./);
   assert.match(terms, /cancel any time from the account page via Manage subscription, which opens the Polar customer portal\./);
