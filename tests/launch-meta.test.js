@@ -9,7 +9,9 @@ const SHARE = [
   ['how-privacy-works.html', 'https://getclearframe.app/how-privacy-works', 'How your privacy works — ClearFrame'],
   ['privacy.html', 'https://getclearframe.app/privacy', 'Privacy policy — ClearFrame'],
   ['terms.html', 'https://getclearframe.app/terms', 'Terms of use — ClearFrame'],
-  ['contact.html', 'https://getclearframe.app/contact', 'Contact — ClearFrame']
+  ['contact.html', 'https://getclearframe.app/contact', 'Contact — ClearFrame'],
+  ['remove-iphone-photo-location.html', 'https://getclearframe.app/remove-iphone-photo-location', 'Remove location from iPhone and HEIC photos — ClearFrame'],
+  ['pricing.html', 'https://getclearframe.app/pricing', 'Pricing — ClearFrame']
 ];
 
 function meta(html, attr, key) {

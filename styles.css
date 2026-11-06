@@ -301,3 +301,6 @@ body.has-results .hero { padding: 27px 0 30px; }body.has-results .hero-kicker { 
   .pro-foot { margin: 14px 20px calc(20px + env(safe-area-inset-bottom)); justify-content: center; text-align: center; }
 }
 @media (forced-colors: active) { .pro-dialog { border: 1px solid CanvasText; } }
+
+.marketing-page .primary-button { color: #22231f; text-decoration: none; }
+.marketing-page ol { padding-left: 22px; max-width: 680px; }
