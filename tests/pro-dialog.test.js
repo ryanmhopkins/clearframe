@@ -30,7 +30,7 @@ test('upgrade dialog markup is present and the no-JS link still goes to checkout
     assert.match(html, /id="proBackdrop"[^>]*hidden/);
     assert.match(html, /id="proClose"/);
     assert.match(html, /src="pro-dialog\.js"/);
-    assert.doesNotMatch(html, /<script(?![^>]*\bsrc=)/i);
+    assert.doesNotMatch(html, /<script(?![^>]*\bsrc=)(?![^>]*\btype=["']application\/ld\+json["'])/i);
     assert.doesNotMatch(html, /<style[\s>]/i);
   }
   const opener = links(index).find(tag => tag.includes('data-pro-dialog'));

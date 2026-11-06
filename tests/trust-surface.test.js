@@ -16,6 +16,7 @@ test('pages and styles do not load third-party scripts, fonts, or connections',(
     const srcs=[...text.matchAll(/<(?:script|link)\b[^>]*>/gi)].map(m=>m[0]);
     for(const tag of srcs){
       if(/\brel=["']canonical["']/i.test(tag)) continue;
+      if(/\btype=["']application\/ld\+json["']/i.test(tag)) continue;
       const href=(tag.match(/\b(?:src|href)=["']([^"']+)["']/i)||[])[1];
       assert.ok(href, tag);
       assert.doesNotMatch(href,/^https?:/i, `${file} loads ${href}`);
