@@ -1,29 +1,82 @@
 import Foundation
+import Observation
 import StoreKit
 
-/// StoreKit 2 boundary. Configure the App Store Connect product ID before enabling purchases.
-@MainActor
-final class ProStore: ObservableObject {
-    @Published private(set) var product: Product?
-    @Published private(set) var hasPro = false
+@Observable @MainActor
+final class ProStore {
+    private let monthlyID = Bundle.main.object(forInfoDictionaryKey: "ClearFrameMonthlyProductID") as? String ?? ""
+    private let annualID = Bundle.main.object(forInfoDictionaryKey: "ClearFrameAnnualProductID") as? String ?? ""
+    var products: [Product] = []
+    var hasPro = false
+    var busy = false
+    var message: String?
+    @ObservationIgnored private var updateTask: Task<Void, Never>?
 
-    private let productID = Bundle.main.object(forInfoDictionaryKey: "ClearFrameProProductID") as? String ?? ""
+    var configured: Bool { !monthlyID.isEmpty && !annualID.isEmpty }
+    func isMonthly(_ product: Product) -> Bool { product.id == monthlyID }
 
-    func refresh() async throws {
-        guard !productID.isEmpty else { return }
-        product = try await Product.products(for: [productID]).first
-        hasPro = await Transaction.currentEntitlements.contains { result in
-            guard case .verified(let transaction) = result else { return false }
-            return transaction.productID == productID && transaction.revocationDate == nil
+    func start() {
+        updateTask?.cancel()
+        updateTask = Task {
+            for await result in Transaction.updates {
+                if case .verified(let transaction) = result { await transaction.finish() }
+                await refreshEntitlements()
+            }
         }
+        Task { await load() }
     }
 
-    func purchase() async throws {
-        guard let product else { return }
-        let result = try await product.purchase()
-        if case .success(let verification) = result, case .verified(let transaction) = verification {
-            await transaction.finish()
-            try await refresh()
+    func load() async {
+        guard configured else { return }
+        busy = true
+        defer { busy = false }
+        do {
+            products = try await Product.products(for: [monthlyID, annualID]).sorted {
+                $0.id == monthlyID && $1.id != monthlyID
+            }
+            await refreshEntitlements()
+        } catch { message = "App Store products are temporarily unavailable." }
+    }
+
+    func refreshEntitlements() async {
+        var active = false
+        for await result in Transaction.currentEntitlements {
+            guard case .verified(let transaction) = result else { continue }
+            if [monthlyID, annualID].contains(transaction.productID) && transaction.revocationDate == nil {
+                active = true
+            }
         }
+        hasPro = active
+    }
+
+    func purchase(_ product: Product) async {
+        busy = true
+        defer { busy = false }
+        do {
+            let result = try await product.purchase()
+            switch result {
+            case .success(let verification):
+                guard case .verified(let transaction) = verification else {
+                    message = "The App Store could not verify this purchase."
+                    return
+                }
+                await transaction.finish()
+                await refreshEntitlements()
+                message = hasPro ? "ClearFrame Pro is active on this Mac." : "Purchase is being processed."
+            case .pending: message = "Purchase is pending approval."
+            case .userCancelled: break
+            @unknown default: break
+            }
+        } catch { message = error.localizedDescription }
+    }
+
+    func restore() async {
+        busy = true
+        defer { busy = false }
+        do {
+            try await AppStore.sync()
+            await refreshEntitlements()
+            message = hasPro ? "ClearFrame Pro was restored." : "No active Pro purchase was found for this Apple Account."
+        } catch { message = error.localizedDescription }
     }
 }

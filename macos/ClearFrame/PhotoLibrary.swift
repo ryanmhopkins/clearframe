@@ -119,17 +119,32 @@ final class PhotoLibrary {
         }
     }
 
-    func save(_ item: PhotoItem) {
+    private var quotaKey: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        return "freeExports-\(formatter.string(from: Date()))"
+    }
+
+    func save(_ item: PhotoItem, isPro: Bool) {
         guard let data = item.cleaned else { return }
+        if !isPro && UserDefaults.standard.integer(forKey: quotaKey) >= 10 {
+            notice = "Today's 10 free exports are used. Pro removes the daily limit."
+            return
+        }
         let panel = NSSavePanel()
         panel.nameFieldStringValue = item.outputName
         panel.allowedContentTypes = item.report.format == "PNG" ? [.png] : [.jpeg]
         guard panel.runModal() == .OK, let url = panel.url else { return }
-        do { try data.write(to: url, options: .atomic); notice = "Saved \(url.lastPathComponent)" }
+        do {
+            try data.write(to: url, options: .atomic)
+            if !isPro { UserDefaults.standard.set(UserDefaults.standard.integer(forKey: quotaKey) + 1, forKey: quotaKey) }
+            notice = "Saved \(url.lastPathComponent)"
+        }
         catch { notice = error.localizedDescription }
     }
 
-    func saveAll() {
+    func saveAll(isPro: Bool) {
+        guard isPro else { notice = "Batch saving is a Pro feature."; return }
         let ready = items.filter { $0.cleaned != nil }
         guard !ready.isEmpty else { return }
         let panel = NSOpenPanel()

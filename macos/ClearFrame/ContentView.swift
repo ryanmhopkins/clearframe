@@ -10,7 +10,12 @@ private enum Palette {
 
 struct ContentView: View {
     @Bindable var library: PhotoLibrary
+    let account: AccountSession
+    let store: ProStore
     @State private var isDropTargeted = false
+    @State private var showingAccount = false
+    @State private var showingPro = false
+    private var hasPro: Bool { account.webPro || store.hasPro }
 
     var body: some View {
         HStack(spacing: 0) {
@@ -43,6 +48,14 @@ struct ContentView: View {
                 }
             }
             return !providers.isEmpty
+        }
+        .sheet(isPresented: $showingAccount) { AccountSheet(account: account, store: store) }
+        .sheet(isPresented: $showingPro) { ProSheet(account: account, store: store) }
+        .onChange(of: hasPro) { _, active in
+            if !active {
+                library.preset = .privateDetails
+                library.applyPreset()
+            }
         }
     }
 
@@ -120,6 +133,14 @@ struct ContentView: View {
                     .foregroundStyle(.secondary)
             }
             Spacer()
+            Button { showingAccount = true } label: {
+                Label(account.signedIn ? (hasPro ? "Pro account" : "Free account") : "Sign In", systemImage: "person.crop.circle")
+            }
+            .buttonStyle(.bordered)
+            if !hasPro {
+                Button("Get Pro") { showingPro = true }
+                    .buttonStyle(.bordered)
+            }
             Button { library.openPhotos() } label: {
                 Label("Add Photos", systemImage: "plus")
             }
@@ -170,7 +191,11 @@ struct ContentView: View {
             }
             .labelsHidden()
             .frame(width: 170)
+            .disabled(!hasPro)
             .onChange(of: library.preset) { _, _ in library.applyPreset() }
+            if !hasPro {
+                Button("Unlock presets") { showingPro = true }.buttonStyle(.link)
+            }
         }
         .padding(18)
         .background(Palette.panel, in: RoundedRectangle(cornerRadius: 16))
@@ -189,7 +214,7 @@ struct ContentView: View {
                     }
                     Spacer()
                     if item.cleaned != nil {
-                        Button("Save Photo…") { library.save(item) }.buttonStyle(.bordered)
+                        Button("Save Photo…") { library.save(item, isPro: hasPro) }.buttonStyle(.bordered)
                     }
                 }
                 if item.report.blocks.isEmpty {
@@ -260,7 +285,10 @@ struct ContentView: View {
             }
             Spacer()
             if library.completedCount > 0 {
-                Button("Save All…") { library.saveAll() }.buttonStyle(.bordered)
+                Button(hasPro ? "Save All…" : "Unlock Batch Save") {
+                    if hasPro { library.saveAll(isPro: true) }
+                    else { showingPro = true }
+                }.buttonStyle(.bordered)
             }
             Button("Clean Photos") { library.cleanAll() }
                 .buttonStyle(.borderedProminent)
