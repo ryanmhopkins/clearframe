@@ -37,11 +37,6 @@ struct OnboardingView: View {
                     .padding(.leading, -10)
             }
             Spacer(minLength: 24)
-            Text("PRIVATE BY DESIGN")
-                .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                .tracking(2.2)
-                .foregroundStyle(CFStyle.blue)
-                .padding(.bottom, 14)
             Text("The photo stays.\nThe details go.")
                 .font(.system(size: 42, weight: .semibold, design: .rounded))
                 .tracking(-1.7)
@@ -92,25 +87,10 @@ struct OnboardingView: View {
 
     private var signInCard: some View {
         VStack(alignment: .leading, spacing: 0) {
-            HStack {
-                Image(systemName: "person.crop.circle")
-                    .foregroundStyle(CFStyle.blue)
-                    .font(.system(size: 16))
-                Spacer()
-                Text("GET STARTED")
-                    .font(.system(size: 10, weight: .medium, design: .monospaced))
-                    .foregroundStyle(CFStyle.muted)
-            }
-            .padding(.bottom, 35)
             Text("Welcome to\nClearFrame.")
                 .font(.system(size: 29, weight: .semibold, design: .rounded))
                 .tracking(-0.8)
                 .fixedSize(horizontal: false, vertical: true)
-            Text("Sign in with a free or Pro account. We'll email a secure link—no password needed.")
-                .font(.system(size: 12))
-                .foregroundStyle(CFStyle.muted)
-                .lineSpacing(3)
-                .padding(.top, 10)
                 .padding(.bottom, 29)
             Text("EMAIL ADDRESS")
                 .font(.system(size: 10, weight: .semibold, design: .monospaced))
@@ -157,13 +137,22 @@ struct OnboardingView: View {
             .font(.system(size: 10))
             .padding(.top, 21)
             Rectangle().fill(CFStyle.line).frame(height: 1).padding(.vertical, 22)
-            Button("Continue free without signing in") { account.finishOnboarding() }
-                .buttonStyle(.link)
-                .font(.system(size: 12, weight: .medium))
-            Button("Explore ClearFrame Pro") { showingPro = true }
-                .buttonStyle(.link)
-                .font(.system(size: 12))
-                .padding(.top, 8)
+            VStack(spacing: 10) {
+                Button { account.finishOnboarding() } label: {
+                    Text("Continue with no account")
+                        .font(.system(size: 12, weight: .semibold))
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.bordered)
+                .controlSize(.large)
+                Button { showingPro = true } label: {
+                    Text("Explore ClearFrame Pro")
+                        .font(.system(size: 12, weight: .semibold))
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.bordered)
+                .controlSize(.large)
+            }
         }
         .padding(30)
         .clearFrameGlass(radius: 25)
