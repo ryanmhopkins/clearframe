@@ -22,7 +22,7 @@ test('upgrade dialog markup is present and the no-JS link still goes to checkout
   const index = fs.readFileSync('index.html', 'utf8');
   const account = fs.readFileSync('account.html', 'utf8');
   const signin = fs.readFileSync('signin.html', 'utf8');
-  for (const html of [index, account]) {
+  for (const html of [index, account, signin]) {
     assert.match(html, /id="proDialog"[^>]*role="dialog"/);
     assert.match(html, /aria-modal="true"/);
     assert.match(html, /aria-labelledby="proTitle"/);
@@ -34,12 +34,13 @@ test('upgrade dialog markup is present and the no-JS link still goes to checkout
     assert.doesNotMatch(html, /<style[\s>]/i);
   }
   const opener = links(index).find(tag => tag.includes('data-pro-dialog'));
+  assert.match(index, /class="upgrade-banner"/);
+  assert.doesNotMatch(index.match(/<nav class="top-links"[^>]*>[\s\S]*?<\/nav>/)[0], /upgrade-link|data-pro-dialog/);
   assert.match(opener, new RegExp(`href="${CHECKOUT.replace('?', '\\?')}"`));
   assert.match(opener, /rel="nofollow"/);
   assert.match(opener, /aria-haspopup="dialog"/);
   assert.doesNotMatch(opener, /\bonclick=/);
-  assert.equal(links(signin).some(tag => tag.includes('data-pro-dialog')), false);
-  assert.doesNotMatch(signin, /id="proDialog"/);
+  assert.equal(links(signin).some(tag => tag.includes('data-pro-dialog')), true);
   assert.equal(links(account).some(tag => tag.includes('upgrade-link')), false);
   assert.match(account, />Manage subscription</);
   assert.doesNotMatch(account, />Receipts</);
@@ -90,7 +91,7 @@ test('dialog traps focus, closes, and returns focus to the opener', () => {
     tab();
     assert.equal(w.document.activeElement.id, 'proClose');
     shiftTab();
-    assert.equal(w.document.activeElement, w.document.querySelector('.pro-alt a'));
+    assert.equal(w.document.activeElement, w.document.querySelector('.pro-foot a'));
     tab();
     assert.equal(w.document.activeElement.id, 'proClose');
 
@@ -112,6 +113,33 @@ test('dialog traps focus, closes, and returns focus to the opener', () => {
     assert.equal(w.document.activeElement, opener);
   } finally {
     dom.window.close();
+  }
+});
+
+test('quota prompt explains the reset and restores the normal Pro copy', () => {
+  const {dom, w} = page('index.html');
+  try {
+    w.eval(fs.readFileSync('pro-dialog.js', 'utf8'));
+    const original = w.document.querySelector('#proTitle').textContent;
+    w.ClearFrameProDialog.open({source: 'quota', message: 'Your allowance resets at local midnight.'});
+    assert.match(w.document.querySelector('#proTitle').textContent, /daily free allowance/);
+    assert.equal(w.document.querySelector('#proDesc').textContent, 'Your allowance resets at local midnight.');
+    w.document.querySelector('#proClose').click();
+    w.ClearFrameProDialog.open({source: 'header'});
+    assert.equal(w.document.querySelector('#proTitle').textContent, original);
+  } finally { dom.window.close(); }
+});
+
+test('Get Pro on both public pages opens features before checkout', () => {
+  for (const file of ['index.html', 'signin.html']) {
+    const {dom, w} = page(file);
+    try {
+      w.eval(fs.readFileSync('pro-dialog.js', 'utf8'));
+      w.document.querySelector('.upgrade-banner-action').click();
+      assert.equal(w.document.querySelector('#proBackdrop').hidden, false, file);
+      assert.equal(w.document.querySelectorAll('.pro-features li').length, 4, file);
+      assert.match(w.document.querySelector('#proCheckout').getAttribute('href'), /^\/checkout\?products=/);
+    } finally { dom.window.close(); }
   }
 });
 

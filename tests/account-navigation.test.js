@@ -12,6 +12,8 @@ test('Pro page shows membership navigation and the same FAQ as the public cleane
     assert.equal(doc.querySelector('.top-links a[href^="/checkout"]'), null);
     assert.ok(doc.querySelector('.top-links .member-badge'));
     assert.ok(doc.querySelector('#signOut'));
+    assert.equal(doc.querySelector('.member-card'), null);
+    assert.equal(doc.querySelectorAll('a[href="/api/auth/portal"]').length, 1);
     assert.deepEqual(
       [...doc.querySelectorAll('.faq summary')].map(item => item.textContent),
       [...publicPage.window.document.querySelectorAll('.faq summary')].map(item => item.textContent)
