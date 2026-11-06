@@ -43,6 +43,7 @@
 
   <main>
     <section class="hero account-hero" aria-labelledby="page-title">
+      <p class="hero-kicker">YOUR PRIVATE WORKSPACE <span class="kicker-line"></span> CLEARFRAME PRO</p>
       <h1 id="page-title">Make every photo<br><span>ready to share.</span></h1>
       <p>Review what your photos reveal. Clean individual files or whole folders, save your favorite settings, and work with RAW. Everything runs in your browser.</p>
       <p id="proStatus" class="account-alert" role="status" hidden></p>
@@ -97,7 +98,7 @@
     </section>
 
     <section class="proof-row" aria-label="Privacy and workflow"><span><svg class="icon"><use href="#icon-lock"/></svg> Your photos stay on your device</span><span><svg class="icon"><use href="#icon-check"/></svg> Original files stay untouched</span></section>
-    <section class="help-heading" aria-labelledby="help-title"><h2 id="help-title">FAQs</h2></section>
+    <section class="help-heading" aria-labelledby="help-title"><p class="hero-kicker">A LITTLE MORE DETAIL</p><h2 id="help-title">Good to know</h2><p>The same simple, private workflow—plus more room to work.</p></section>
     <section class="faq" aria-label="A few useful details">
       <details><summary>What is photo metadata?</summary><p>It’s extra information saved inside an image, like the camera used, when it was taken, editing software, or sometimes a GPS location. EXIF is one common type. These details can be useful in your library, but you may want to remove them before sharing a photo.</p></details>
       <details><summary>Which files and details can I clean?</summary><p>The free cleaner supports JPEG, PNG, WebP, GIF, HEIC, HEIF, AVIF, and TIFF. ClearFrame Pro adds RAW files in DNG, CR2, NEF, and ARW formats, plus folder cleaning and presets. Available cleaning options depend on the format. Documents and videos aren’t supported.</p></details>
@@ -105,7 +106,6 @@
       <details><summary>Can I choose what to keep?</summary><p>Yes. Select the blocks you want removed and leave the rest unchecked, or use the Select all switch. Your choices are saved separately for each photo. JPEG, PNG, WebP, and GIF cleaning works by block. The other formats offer selected metadata groups and individual standard fields.</p></details>
       <details><summary>Will my photo look the same?</summary><p>ClearFrame doesn’t resize or recompress your image, and your original stays untouched. Removing an orientation tag or color profile can change how the downloaded copy displays. Color and display blocks are kept by default; check the details before removing EXIF, which can include orientation.</p></details>
       <details><summary>Can I clean several photos at once?</summary><p>Yes. Add multiple photos, review the choices for each, then save them individually or together in a ZIP. Each photo can be up to 256 MB. Large batches can use a lot of browser memory. If things slow down, try fewer files at a time. ClearFrame Pro also lets you choose a folder and apply a saved preset to every photo.</p></details>
-      <details><summary>How does the free daily limit work?</summary><p>You can download up to 10 cleaned photos per day in the free cleaner. Each photo in a ZIP counts as one download. The count resets at midnight in your device’s local time. It is saved in this browser, so it may differ across browsers or devices. ClearFrame Pro has no daily download limit.</p></details>
       <details><summary>How does RAW cleaning work?</summary><p>RAW cleaning is part of ClearFrame Pro. RAW photos need camera settings and calibration data to display correctly. ClearFrame keeps those, along with maker notes and embedded previews, while letting you remove listed details such as GPS, captions, author names, and dates. Kept data may still contain identifying information. Select all selects the available cleaning options; it doesn’t strip every piece of data from a RAW file.</p></details>
       <details><summary>Why might a photo have no preview?</summary><p>Your browser may not display HEIC, TIFF, or RAW images. You can still review and clean a supported file without a preview. The downloaded copy keeps its original format, so open it in an app that supports that format.</p></details>
       <details><summary>Are my photos uploaded?</summary><p>No. Scanning and cleaning happen in your browser. Your photos aren’t uploaded or stored on a server. <a href="how-privacy-works.html">How your privacy works</a> explains what this site does download, what the host can still see, and how to check the network tab.</p></details>
@@ -121,20 +121,31 @@
       <button id="proClose" class="pro-close" type="button" aria-label="Close"><svg class="icon" aria-hidden="true"><use href="#icon-close"/></svg></button>
       <div class="pro-head">
         <span class="pro-eyebrow"><svg class="icon" aria-hidden="true"><use href="#icon-frame"/></svg>CLEARFRAME PRO</span>
-        <h2 id="proTitle">More room for every photo.</h2>
-        <p id="proDesc">Everything you like about ClearFrame, with fewer limits and a faster workflow. Your photos still stay on your device.</p>
+        <h2 id="proTitle">Unlock RAW, folders, and presets</h2>
+        <p id="proDesc">Pro adds RAW cleaning, folder cleaning, and presets to the free cleaner. Photos still stay on your device.</p>
       </div>
       <ul class="pro-features" aria-label="What Pro unlocks">
-        <li><span class="pro-tile" aria-hidden="true"><svg class="icon"><use href="#icon-download"/></svg></span><div><h3>Unlimited downloads</h3><p>Clean as many photos as you need, without the free daily limit.</p></div></li>
-        <li><span class="pro-tile" aria-hidden="true"><svg class="icon"><use href="#icon-image"/></svg></span><div><h3>RAW photo support</h3><p>Work with DNG, CR2, NEF, and ARW while keeping essential camera data.</p></div></li>
-        <li><span class="pro-tile" aria-hidden="true"><svg class="icon"><use href="#icon-folder"/></svg></span><div><h3>Whole-folder cleaning</h3><p>Bring in a folder at once and review your photos together.</p></div></li>
-        <li><span class="pro-tile" aria-hidden="true"><svg class="icon"><use href="#icon-sliders"/></svg></span><div><h3>Saved presets</h3><p>Reuse your preferred choices across every photo in a batch.</p></div></li>
+        <li><span class="pro-tile" aria-hidden="true"><svg class="icon"><use href="#icon-image"/></svg></span>
+          <div><h3>RAW cleaning</h3><p>Remove details such as GPS, captions, author names, and dates. Camera calibration is kept.</p>
+            <div class="chips" aria-label="RAW formats"><span class="chip">DNG</span><span class="chip">CR2</span><span class="chip">NEF</span><span class="chip">ARW</span></div></div></li>
+        <li><span class="pro-tile" aria-hidden="true"><svg class="icon"><use href="#icon-folder"/></svg></span>
+          <div><h3>Folder cleaning</h3><p>Choose a whole folder instead of picking photos one by one.</p></div></li>
+        <li><span class="pro-tile" aria-hidden="true"><svg class="icon"><use href="#icon-sliders"/></svg></span>
+          <div><h3>Presets</h3><p>Save your selections once, then apply a preset to every photo.</p></div></li>
       </ul>
-      <div class="pro-buy">
-        <div class="pro-price"><span class="pro-price-label">ONE SIMPLE PLAN</span><span class="amount" id="proPrice">$29<small>/year</small></span><span class="terms" id="proTerms">Renews yearly. Cancel anytime from Manage subscription.</span></div>
-        <div class="pro-buy-action"><a id="proCheckout" class="primary-button pro-cta" href="/checkout?products=be456dd9-4508-4b3a-a517-60fae3c9747b" rel="nofollow">Upgrade to Pro<svg class="icon" aria-hidden="true"><use href="#icon-arrow"/></svg></a><span>Secure checkout by Polar</span></div>
+      <div class="pro-compare" role="group" aria-label="Free and Pro compared">
+        <div><b>FREE · NO ACCOUNT</b><p>JPEG, PNG, WebP, GIF, HEIC/HEIF, AVIF, TIFF. Batches and ZIP export.</p></div>
+        <div><b>PRO</b><p><strong>Everything in Free</strong>, plus RAW, folders, and presets.</p></div>
       </div>
-      <div class="pro-foot"><span><svg class="icon" aria-hidden="true"><use href="#icon-shield"/></svg>Photos stay on your device</span><p>Already subscribed? <a href="signin.html">Sign in with your email</a></p></div>
+      <div class="pro-buy">
+        <div class="pro-price"><span class="amount" id="proPrice">$29<small>/year</small></span><span class="terms" id="proTerms">Renews yearly. Cancel anytime from Manage subscription.</span></div>
+        <a id="proCheckout" class="primary-button pro-cta" href="/checkout?products=be456dd9-4508-4b3a-a517-60fae3c9747b" rel="nofollow">Get ClearFrame Pro<svg class="icon" aria-hidden="true"><use href="#icon-arrow"/></svg></a>
+      </div>
+      <p class="pro-alt">Already subscribed? <a href="signin.html">Sign in with your email</a></p>
+      <div class="pro-foot">
+        <span><svg class="icon" aria-hidden="true"><use href="#icon-lock"/></svg>Secure checkout by Polar</span>
+        <span><svg class="icon" aria-hidden="true"><use href="#icon-shield"/></svg>Photos stay on your device</span>
+      </div>
     </div>
   </div>
   <script src="vendor/jszip/jszip-3.10.1.min.js"></script>
