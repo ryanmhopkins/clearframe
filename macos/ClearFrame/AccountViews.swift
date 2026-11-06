@@ -264,6 +264,7 @@ struct ProSheet: View {
                 }
                 Text("Purchases become available after these plans are configured in App Store Connect. Final prices are shown by Apple.")
                     .font(.system(size: 11)).foregroundStyle(CFStyle.muted)
+                    .fixedSize(horizontal: false, vertical: true)
             } else {
                 ForEach(store.products, id: \.id) { product in
                     HStack {
@@ -291,6 +292,7 @@ struct ProSheet: View {
             Spacer(minLength: 3)
             Text("Subscriptions renew automatically. Manage or cancel in your Apple Account settings. Web subscriptions are managed on the ClearFrame website.")
                 .font(.system(size: 10)).foregroundStyle(CFStyle.muted)
+                .fixedSize(horizontal: false, vertical: true)
             HStack(spacing: 18) {
                 Link("Terms", destination: URL(string: "https://getclearframe.app/terms")!)
                 Link("Privacy", destination: URL(string: "https://getclearframe.app/privacy")!)
@@ -298,7 +300,7 @@ struct ProSheet: View {
             .font(.system(size: 11))
         }
         .padding(27)
-        .frame(width: 520, height: 470)
+        .frame(width: 520, height: 560)
         .background(CFStyle.backdrop)
         .foregroundStyle(CFStyle.text)
         .tint(CFStyle.blue)
