@@ -7,54 +7,166 @@ struct OnboardingView: View {
     @State private var showingPro = false
 
     var body: some View {
-        VStack(spacing: 22) {
-            Image(systemName: "square.on.square.dashed")
-                .font(.system(size: 42, weight: .light))
-                .foregroundStyle(.blue)
-                .frame(width: 86, height: 86)
-                .background(.blue.opacity(0.08), in: RoundedRectangle(cornerRadius: 24))
-            VStack(spacing: 8) {
-                Text("Welcome to ClearFrame")
-                    .font(.system(size: 31, weight: .semibold, design: .rounded))
-                Text("Clean your photos. Keep them private.")
-                    .font(.system(size: 16))
-                    .foregroundStyle(.secondary)
+        GeometryReader { geometry in
+            HStack(spacing: 34) {
+                story
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                signInCard
+                    .frame(width: min(410, geometry.size.width * 0.46))
+                    .frame(maxHeight: .infinity)
             }
-            VStack(alignment: .leading, spacing: 11) {
-                Text("Sign in with your ClearFrame account")
-                    .font(.system(size: 14, weight: .semibold))
-                Text("Free and Pro accounts use the same email link. Existing web Pro members are recognized automatically.")
-                    .font(.system(size: 12))
-                    .foregroundStyle(.secondary)
-                TextField("Email address", text: $address)
-                    .textContentType(.emailAddress)
-                    .textFieldStyle(.roundedBorder)
-                    .onSubmit { Task { await account.requestLink(email: address) } }
-                Button(account.busy ? "Sending…" : "Email me a sign-in link") {
-                    Task { await account.requestLink(email: address) }
-                }
-                .buttonStyle(.borderedProminent)
-                .disabled(account.busy || address.isEmpty)
-                if let message = account.message {
-                    Text(message).font(.system(size: 12)).foregroundStyle(.secondary)
-                }
-            }
-            .padding(22)
-            .frame(width: 420)
-            .background(.white.opacity(0.8), in: RoundedRectangle(cornerRadius: 18))
-            HStack(spacing: 18) {
-                Button("Continue free without signing in") { account.finishOnboarding() }
-                    .buttonStyle(.link)
-                Button("See ClearFrame Pro") { showingPro = true }
-                    .buttonStyle(.link)
-            }
-            Text("Photos stay on this Mac. Signing in only checks your account status.")
-                .font(.system(size: 11)).foregroundStyle(.secondary)
+            .padding(.horizontal, 58)
+            .padding(.vertical, 42)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .frame(minWidth: 840, minHeight: 620)
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color(red: 0.976, green: 0.969, blue: 0.953))
+        .background(CFStyle.backdrop)
+        .foregroundStyle(CFStyle.text)
+        .tint(CFStyle.blue)
         .sheet(isPresented: $showingPro) { ProSheet(account: account, store: store) }
+    }
+
+    private var story: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            HStack(spacing: 11) {
+                BrandMark(size: 40)
+                Text("clearframe")
+                    .font(.system(size: 18, weight: .semibold, design: .rounded))
+                    .tracking(-0.6)
+                Text(".").foregroundStyle(CFStyle.blue).font(.system(size: 21, weight: .bold))
+                    .padding(.leading, -10)
+            }
+            Spacer(minLength: 24)
+            Text("PRIVATE BY DESIGN")
+                .font(.system(size: 10, weight: .semibold, design: .monospaced))
+                .tracking(2.2)
+                .foregroundStyle(CFStyle.blue)
+                .padding(.bottom, 14)
+            Text("The photo stays.\nThe details go.")
+                .font(.system(size: 42, weight: .semibold, design: .rounded))
+                .tracking(-1.7)
+                .lineSpacing(0)
+                .fixedSize(horizontal: false, vertical: true)
+            Text("A quieter way to share photos. Clean hidden metadata right here on your Mac.")
+                .font(.system(size: 13))
+                .foregroundStyle(CFStyle.muted)
+                .lineSpacing(4)
+                .padding(.top, 13)
+                .fixedSize(horizontal: false, vertical: true)
+            metadataIllustration
+                .padding(.top, 34)
+            Spacer(minLength: 20)
+            HStack(spacing: 8) {
+                Image(systemName: "lock.shield")
+                    .foregroundStyle(CFStyle.blue)
+                Text("Image files never leave this device")
+                    .foregroundStyle(CFStyle.muted)
+            }
+            .font(.system(size: 11))
+        }
+    }
+
+    private var metadataIllustration: some View {
+        HStack(spacing: 13) {
+            Image(systemName: "photo")
+                .font(.system(size: 23, weight: .ultraLight))
+                .foregroundStyle(CFStyle.blue)
+                .frame(width: 58, height: 58)
+                .background(CFStyle.blue.opacity(0.10), in: RoundedRectangle(cornerRadius: 14))
+            VStack(alignment: .leading, spacing: 6) {
+                Text("Your image, refined")
+                    .font(.system(size: 12, weight: .semibold))
+                Text("LOCATION  ·  CAMERA  ·  DATE")
+                    .font(.system(size: 9, weight: .medium, design: .monospaced))
+                    .tracking(0.5)
+                    .foregroundStyle(CFStyle.muted)
+            }
+            Spacer(minLength: 0)
+            Image(systemName: "checkmark.circle.fill")
+                .foregroundStyle(CFStyle.blue)
+                .font(.system(size: 17))
+        }
+        .padding(14)
+        .darkPanel(radius: 17)
+    }
+
+    private var signInCard: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            HStack {
+                Image(systemName: "person.crop.circle")
+                    .foregroundStyle(CFStyle.blue)
+                    .font(.system(size: 16))
+                Spacer()
+                Text("GET STARTED")
+                    .font(.system(size: 10, weight: .medium, design: .monospaced))
+                    .foregroundStyle(CFStyle.muted)
+            }
+            .padding(.bottom, 35)
+            Text("Welcome to\nClearFrame.")
+                .font(.system(size: 29, weight: .semibold, design: .rounded))
+                .tracking(-0.8)
+                .fixedSize(horizontal: false, vertical: true)
+            Text("Sign in with a free or Pro account. We'll email a secure link—no password needed.")
+                .font(.system(size: 12))
+                .foregroundStyle(CFStyle.muted)
+                .lineSpacing(3)
+                .padding(.top, 10)
+                .padding(.bottom, 29)
+            Text("EMAIL ADDRESS")
+                .font(.system(size: 10, weight: .semibold, design: .monospaced))
+                .tracking(1.5)
+                .foregroundStyle(CFStyle.muted)
+                .padding(.bottom, 8)
+            TextField("you@example.com", text: $address)
+                .textContentType(.emailAddress)
+                .textFieldStyle(.plain)
+                .font(.system(size: 13))
+                .padding(.horizontal, 14)
+                .frame(height: 44)
+                .background(CFStyle.background.opacity(0.75), in: RoundedRectangle(cornerRadius: 10))
+                .overlay(RoundedRectangle(cornerRadius: 10).strokeBorder(CFStyle.line))
+                .onSubmit { Task { await account.requestLink(email: address) } }
+            Button {
+                Task { await account.requestLink(email: address) }
+            } label: {
+                HStack {
+                    Spacer()
+                    Text(account.busy ? "Sending…" : "Email me a sign-in link")
+                    Image(systemName: "arrow.right")
+                    Spacer()
+                }
+                .font(.system(size: 13, weight: .semibold))
+                .frame(height: 42)
+            }
+            .buttonStyle(.borderedProminent)
+            .tint(CFStyle.blueStrong)
+            .disabled(account.busy || address.isEmpty)
+            .padding(.top, 13)
+            if let message = account.message {
+                Text(message)
+                    .font(.system(size: 11))
+                    .foregroundStyle(CFStyle.muted)
+                    .padding(.top, 11)
+            }
+            HStack(spacing: 5) {
+                Text("Already have Pro?")
+                    .foregroundStyle(CFStyle.muted)
+                Text("Use the email from your web purchase.")
+                    .foregroundStyle(CFStyle.text)
+            }
+            .font(.system(size: 10))
+            .padding(.top, 21)
+            Rectangle().fill(CFStyle.line).frame(height: 1).padding(.vertical, 22)
+            Button("Continue free without signing in") { account.finishOnboarding() }
+                .buttonStyle(.link)
+                .font(.system(size: 12, weight: .medium))
+            Button("Explore ClearFrame Pro") { showingPro = true }
+                .buttonStyle(.link)
+                .font(.system(size: 12))
+                .padding(.top, 8)
+        }
+        .padding(30)
+        .clearFrameGlass(radius: 25)
     }
 }
 
@@ -66,33 +178,47 @@ struct AccountSheet: View {
     @State private var showingPro = false
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        VStack(alignment: .leading, spacing: 17) {
             HStack {
-                Text("Your account").font(.system(size: 23, weight: .semibold, design: .rounded))
+                BrandMark(size: 34)
+                Text("Your account").font(.system(size: 22, weight: .semibold, design: .rounded))
                 Spacer()
-                Button("Done") { dismiss() }
+                Button("Done") { dismiss() }.buttonStyle(.bordered)
             }
+            Rectangle().fill(CFStyle.line).frame(height: 1)
             if account.signedIn {
                 Label(account.email, systemImage: "person.crop.circle")
-                Text(account.webPro || store.hasPro ? "ClearFrame Pro is active" : "Free account")
-                    .foregroundStyle(.secondary)
-                Button("Sign Out") { account.signOut() }
+                    .font(.system(size: 13))
+                Label(account.webPro || store.hasPro ? "ClearFrame Pro active" : "Free account", systemImage: "checkmark.seal")
+                    .foregroundStyle(CFStyle.blue)
+                    .font(.system(size: 12))
+                Button("Sign out") { account.signOut() }.buttonStyle(.link)
             } else {
-                Text("Sign in to your free or Pro account with an email link.")
-                    .foregroundStyle(.secondary)
-                TextField("Email address", text: $address).textFieldStyle(.roundedBorder)
+                Text("Sign in with your free or Pro account.")
+                    .font(.system(size: 12)).foregroundStyle(CFStyle.muted)
+                TextField("Email address", text: $address)
+                    .textContentType(.emailAddress)
+                    .textFieldStyle(.roundedBorder)
                 Button(account.busy ? "Sending…" : "Email me a sign-in link") {
                     Task { await account.requestLink(email: address) }
                 }
+                .buttonStyle(.borderedProminent)
                 .disabled(account.busy || address.isEmpty)
             }
-            if let message = account.message { Text(message).font(.caption).foregroundStyle(.secondary) }
-            Divider()
-            Button("View Pro plans and purchases") { showingPro = true }
+            if let message = account.message { Text(message).font(.caption).foregroundStyle(CFStyle.muted) }
             Spacer()
+            Button("View welcome screen") {
+                dismiss()
+                account.showOnboarding()
+            }
+            .buttonStyle(.link)
+            Button("View Pro plans and purchases") { showingPro = true }.buttonStyle(.link)
         }
-        .padding(25)
-        .frame(width: 440, height: 310)
+        .padding(27)
+        .frame(width: 450, height: 330)
+        .background(CFStyle.backdrop)
+        .foregroundStyle(CFStyle.text)
+        .tint(CFStyle.blue)
         .sheet(isPresented: $showingPro) { ProSheet(account: account, store: store) }
     }
 }
@@ -103,62 +229,96 @@ struct ProSheet: View {
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 18) {
+        VStack(alignment: .leading, spacing: 17) {
             HStack {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("ClearFrame Pro").font(.system(size: 25, weight: .semibold, design: .rounded))
-                    Text("More room to clean, with the same on-device privacy.")
-                        .font(.system(size: 13)).foregroundStyle(.secondary)
+                BrandMark(size: 38)
+                VStack(alignment: .leading, spacing: 3) {
+                    Text("ClearFrame Pro").font(.system(size: 23, weight: .semibold, design: .rounded))
+                    Text("More freedom. Same on-device privacy.")
+                        .font(.system(size: 12)).foregroundStyle(CFStyle.muted)
                 }
                 Spacer()
-                Button("Done") { dismiss() }
+                Button("Done") { dismiss() }.buttonStyle(.bordered)
             }
-            VStack(alignment: .leading, spacing: 8) {
+            VStack(alignment: .leading, spacing: 10) {
                 Label("Unlimited photo exports", systemImage: "checkmark.circle.fill")
                 Label("Save a cleaned batch at once", systemImage: "checkmark.circle.fill")
                 Label("Advanced cleaning presets", systemImage: "checkmark.circle.fill")
             }
-            .font(.system(size: 13))
-            .foregroundStyle(.blue)
-            .padding(.vertical, 8)
+            .font(.system(size: 12))
+            .foregroundStyle(CFStyle.blue)
+            .padding(17)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .darkPanel(radius: 15)
             if account.webPro || store.hasPro {
                 Label(account.webPro ? "Pro is active through your ClearFrame account." : "Pro is active through the App Store.", systemImage: "checkmark.seal.fill")
                     .foregroundStyle(.green)
             } else if store.products.isEmpty {
-                Text("In-app purchases will appear when the monthly and annual plans are configured in App Store Connect.")
-                    .font(.system(size: 12)).foregroundStyle(.secondary)
+                Text("PLANNED US PRICING")
+                    .font(.system(size: 10, weight: .semibold, design: .monospaced))
+                    .tracking(1.5)
+                    .foregroundStyle(CFStyle.muted)
+                HStack(spacing: 12) {
+                    previewPlan("Monthly", price: "$3", period: "month")
+                    previewPlan("Annual", price: "$29", period: "year")
+                }
+                Text("Purchases become available after these plans are configured in App Store Connect. Final prices are shown by Apple.")
+                    .font(.system(size: 11)).foregroundStyle(CFStyle.muted)
             } else {
                 ForEach(store.products, id: \.id) { product in
                     HStack {
                         VStack(alignment: .leading, spacing: 3) {
                             Text(store.isMonthly(product) ? "Monthly Pro" : "Annual Pro")
                                 .font(.system(size: 14, weight: .semibold))
-                            Text(product.description).font(.system(size: 11)).foregroundStyle(.secondary)
+                            Text(product.description).font(.system(size: 11)).foregroundStyle(CFStyle.muted)
                         }
                         Spacer()
                         Button("\(product.displayPrice) / \(store.isMonthly(product) ? "month" : "year")") {
                             Task { await store.purchase(product) }
                         }
-                            .buttonStyle(.borderedProminent)
-                            .disabled(store.busy)
+                        .buttonStyle(.borderedProminent)
+                        .tint(CFStyle.blueStrong)
+                        .disabled(store.busy)
                     }
-                    .padding(12)
-                    .background(.blue.opacity(0.05), in: RoundedRectangle(cornerRadius: 12))
+                    .padding(13)
+                    .darkPanel(radius: 13)
                 }
             }
-            Button("Restore Purchases") { Task { await store.restore() } }
+            Button("Restore purchases") { Task { await store.restore() } }
+                .buttonStyle(.bordered)
                 .disabled(store.busy)
-            if let message = store.message { Text(message).font(.caption).foregroundStyle(.secondary) }
-            Spacer()
+            if let message = store.message { Text(message).font(.caption).foregroundStyle(CFStyle.muted) }
+            Spacer(minLength: 3)
             Text("Subscriptions renew automatically. Manage or cancel in your Apple Account settings. Web subscriptions are managed on the ClearFrame website.")
-                .font(.system(size: 11)).foregroundStyle(.secondary)
-            HStack(spacing: 16) {
+                .font(.system(size: 10)).foregroundStyle(CFStyle.muted)
+            HStack(spacing: 18) {
                 Link("Terms", destination: URL(string: "https://getclearframe.app/terms")!)
                 Link("Privacy", destination: URL(string: "https://getclearframe.app/privacy")!)
             }
             .font(.system(size: 11))
         }
-        .padding(26)
-        .frame(width: 510, height: 440)
+        .padding(27)
+        .frame(width: 520, height: 470)
+        .background(CFStyle.backdrop)
+        .foregroundStyle(CFStyle.text)
+        .tint(CFStyle.blue)
+    }
+
+    private func previewPlan(_ name: String, price: String, period: String) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text(name.uppercased())
+                .font(.system(size: 10, weight: .semibold, design: .monospaced))
+                .tracking(1.2)
+                .foregroundStyle(CFStyle.muted)
+            HStack(alignment: .firstTextBaseline, spacing: 4) {
+                Text(price).font(.system(size: 25, weight: .semibold, design: .rounded))
+                Text("/ \(period)").font(.system(size: 11)).foregroundStyle(CFStyle.muted)
+            }
+            Text("Available at launch")
+                .font(.system(size: 10)).foregroundStyle(CFStyle.blue)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(17)
+        .darkPanel(radius: 14)
     }
 }

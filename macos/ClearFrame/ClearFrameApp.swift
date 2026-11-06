@@ -16,7 +16,7 @@ struct ClearFrameApp: App {
                 }
             }
                 .frame(minWidth: 840, minHeight: 620)
-                .preferredColorScheme(.light)
+                .preferredColorScheme(.dark)
                 .onOpenURL { url in Task { await account.handle(url) } }
                 .task {
                     await account.refresh()

@@ -43,6 +43,11 @@ final class AccountSession {
         UserDefaults.standard.set(true, forKey: "completedMacOnboarding")
     }
 
+    func showOnboarding() {
+        hasCompletedOnboarding = false
+        UserDefaults.standard.set(false, forKey: "completedMacOnboarding")
+    }
+
     func requestLink(email address: String) async {
         busy = true
         defer { busy = false }
