@@ -58,12 +58,36 @@ struct BrandMark: View {
             RoundedRectangle(cornerRadius: size * 0.28)
                 .fill(LinearGradient(colors: [CFStyle.blue.opacity(0.25), CFStyle.blueStrong.opacity(0.08)],
                                      startPoint: .topLeading, endPoint: .bottomTrailing))
-            Image(systemName: "square.on.square.dashed")
-                .font(.system(size: size * 0.43, weight: .medium))
-                .foregroundStyle(CFStyle.blue)
+            ClearFrameGlyph()
+                .stroke(CFStyle.blue, style: StrokeStyle(lineWidth: 1.7, lineCap: .round, lineJoin: .round))
+                .frame(width: size * 0.65, height: size * 0.65)
         }
         .frame(width: size, height: size)
         .overlay(RoundedRectangle(cornerRadius: size * 0.28).strokeBorder(CFStyle.blue.opacity(0.22)))
         .accessibilityLabel("ClearFrame")
+    }
+}
+
+// Matches the #icon-frame mark used by the ClearFrame web app.
+private struct ClearFrameGlyph: Shape {
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        let x = rect.width / 24
+        let y = rect.height / 24
+        path.move(to: CGPoint(x: 8 * x, y: 3 * y))
+        path.addLine(to: CGPoint(x: 3 * x, y: 3 * y))
+        path.addLine(to: CGPoint(x: 3 * x, y: 8 * y))
+        path.move(to: CGPoint(x: 16 * x, y: 3 * y))
+        path.addLine(to: CGPoint(x: 21 * x, y: 3 * y))
+        path.addLine(to: CGPoint(x: 21 * x, y: 8 * y))
+        path.move(to: CGPoint(x: 3 * x, y: 16 * y))
+        path.addLine(to: CGPoint(x: 3 * x, y: 21 * y))
+        path.addLine(to: CGPoint(x: 8 * x, y: 21 * y))
+        path.move(to: CGPoint(x: 16 * x, y: 21 * y))
+        path.addLine(to: CGPoint(x: 21 * x, y: 21 * y))
+        path.addLine(to: CGPoint(x: 21 * x, y: 16 * y))
+        path.addRoundedRect(in: CGRect(x: 8 * x, y: 8 * y, width: 8 * x, height: 8 * y),
+                            cornerSize: CGSize(width: 2 * x, height: 2 * y))
+        return path
     }
 }
