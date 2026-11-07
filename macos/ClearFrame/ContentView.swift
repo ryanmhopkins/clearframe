@@ -11,28 +11,25 @@ struct ContentView: View {
     private var hasPro: Bool { account.webPro || store.hasPro }
 
     var body: some View {
-        HStack(spacing: 0) {
-            sidebar
-            Rectangle().fill(CFStyle.line).frame(width: 1)
-            VStack(spacing: 0) {
-                header
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 22) {
-                        intro
-                        dropArea
-                        if !library.items.isEmpty {
-                            controls
-                            photoDetails
-                        }
+        VStack(spacing: 0) {
+            header
+            ScrollView {
+                VStack(alignment: .leading, spacing: 22) {
+                    intro
+                    dropArea
+                    if !library.items.isEmpty {
+                        photoStrip
+                        controls
+                        photoDetails
                     }
-                    .frame(maxWidth: 900)
-                    .padding(.horizontal, 38)
-                    .padding(.top, 30)
-                    .padding(.bottom, 32)
-                    .frame(maxWidth: .infinity)
                 }
-                footer
+                .frame(maxWidth: 900)
+                .padding(.horizontal, 38)
+                .padding(.top, 30)
+                .padding(.bottom, 32)
+                .frame(maxWidth: .infinity)
             }
+            footer
         }
         .background(CFStyle.backdrop)
         .foregroundStyle(CFStyle.text)
@@ -56,101 +53,59 @@ struct ContentView: View {
         }
     }
 
-    private var sidebar: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            HStack(spacing: 11) {
-                BrandMark(size: 36)
-                Text("clearframe")
-                    .font(.system(size: 17, weight: .semibold, design: .rounded))
-                    .tracking(-0.6)
-                Text(".").foregroundStyle(CFStyle.blue).font(.system(size: 21, weight: .bold))
-                    .padding(.leading, -10)
-            }
-            .padding(.horizontal, 22)
-            .padding(.top, 32)
-            HStack(spacing: 8) {
-                Circle().fill(CFStyle.blue).frame(width: 5, height: 5)
-                Text("LOCAL WORKSPACE")
-                    .tracking(1.7)
-                    .font(.system(size: 9, weight: .semibold, design: .monospaced))
-                    .foregroundStyle(CFStyle.muted)
-            }
-            .padding(.horizontal, 22)
-            .padding(.top, 45)
-            .padding(.bottom, 14)
-            ScrollView {
-                VStack(spacing: 5) {
-                    if library.items.isEmpty {
-                        Text("Your imported photos will appear here.")
-                            .font(.system(size: 12))
-                            .foregroundStyle(CFStyle.muted)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.horizontal, 14)
-                            .padding(.vertical, 12)
-                    }
+    private var photoStrip: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Photos · \(library.items.count)")
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(CFStyle.muted)
+            ScrollView(.horizontal) {
+                HStack(spacing: 9) {
                     ForEach(library.items) { item in
                         Button { library.selectedID = item.id } label: {
-                            HStack(spacing: 11) {
+                            HStack(spacing: 9) {
                                 Image(systemName: "photo")
-                                    .font(.system(size: 13, weight: .medium))
                                     .foregroundStyle(CFStyle.blue)
-                                    .frame(width: 24, height: 24)
-                                    .background(CFStyle.blue.opacity(0.10), in: RoundedRectangle(cornerRadius: 6))
                                 VStack(alignment: .leading, spacing: 2) {
-                                    Text(item.name).lineLimit(1).truncationMode(.middle)
+                                    Text(item.name)
+                                        .lineLimit(1)
+                                        .truncationMode(.middle)
                                         .font(.system(size: 12, weight: .medium))
                                     Text(item.cleaned != nil ? "Ready to save" : item.report.format)
                                         .font(.system(size: 10))
                                         .foregroundStyle(CFStyle.muted)
                                 }
-                                Spacer(minLength: 2)
-                                if item.cleaned != nil { Image(systemName: "checkmark.circle.fill").foregroundStyle(.green) }
-                                else if item.error != nil { Image(systemName: "exclamationmark.circle.fill").foregroundStyle(.orange) }
+                                if item.cleaned != nil {
+                                    Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
+                                } else if item.error != nil {
+                                    Image(systemName: "exclamationmark.circle.fill").foregroundStyle(.orange)
+                                }
                             }
-                            .padding(.horizontal, 10)
-                            .padding(.vertical, 8)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .background(library.selectedID == item.id ? CFStyle.blue.opacity(0.13) : .clear,
-                                        in: RoundedRectangle(cornerRadius: 10))
-                            .overlay(RoundedRectangle(cornerRadius: 10)
-                                .strokeBorder(library.selectedID == item.id ? CFStyle.blue.opacity(0.18) : .clear))
+                            .padding(.horizontal, 13)
+                            .padding(.vertical, 10)
+                            .frame(width: 205, alignment: .leading)
+                            .background(library.selectedID == item.id ? CFStyle.blue.opacity(0.15) : CFStyle.surface,
+                                        in: RoundedRectangle(cornerRadius: 12))
+                            .overlay(RoundedRectangle(cornerRadius: 12)
+                                .strokeBorder(library.selectedID == item.id ? CFStyle.blue.opacity(0.38) : CFStyle.line))
                         }
                         .buttonStyle(.plain)
                     }
                 }
-                .padding(.horizontal, 11)
             }
-            Spacer(minLength: 12)
-            VStack(alignment: .leading, spacing: 10) {
-                Image(systemName: "lock.shield")
-                    .foregroundStyle(CFStyle.blue)
-                    .font(.system(size: 17))
-                Text("Private by design")
-                    .font(.system(size: 12, weight: .semibold))
-                Text("Your image files never leave this Mac.")
-                    .font(.system(size: 11))
-                    .foregroundStyle(CFStyle.muted)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-            .padding(15)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .darkPanel(radius: 14)
-            .padding(14)
+            .scrollIndicators(.hidden)
         }
-        .frame(width: 236)
-        .background(CFStyle.background.opacity(0.76))
     }
 
     private var header: some View {
         HStack(spacing: 10) {
-            Text("Workspace")
-                .font(.system(size: 13, weight: .medium))
-                .foregroundStyle(CFStyle.muted)
-            Image(systemName: "chevron.right")
-                .font(.system(size: 9, weight: .bold))
-                .foregroundStyle(CFStyle.muted.opacity(0.6))
-            Text("Clean photos")
-                .font(.system(size: 13, weight: .semibold))
+            BrandMark(size: 36)
+            Text("clearframe")
+                .font(.system(size: 17, weight: .semibold, design: .rounded))
+                .tracking(-0.6)
+            Text(".")
+                .foregroundStyle(CFStyle.blue)
+                .font(.system(size: 21, weight: .bold))
+                .padding(.leading, -10)
             Spacer()
             Button { showingAccount = true } label: {
                 Label(account.signedIn ? (hasPro ? "Pro" : "Free") : "Sign in", systemImage: "person.crop.circle")
@@ -168,20 +123,12 @@ struct ContentView: View {
         }
         .controlSize(.regular)
         .padding(.horizontal, 38)
-        .padding(.vertical, 18)
-        .background(CFStyle.background.opacity(0.48))
-        .overlay(alignment: .bottom) { Rectangle().fill(CFStyle.line).frame(height: 1) }
+        .padding(.top, 26)
+        .padding(.bottom, 12)
     }
 
     private var intro: some View {
         VStack(alignment: .leading, spacing: 10) {
-            HStack(spacing: 8) {
-                Circle().fill(CFStyle.blue).frame(width: 5, height: 5)
-                Text("A QUIETER WAY TO SHARE")
-                    .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                    .tracking(2)
-                    .foregroundStyle(CFStyle.blue)
-            }
             Text("Your photos. Nothing else.")
                 .font(.system(size: 31, weight: .semibold, design: .rounded))
                 .tracking(-1.1)
