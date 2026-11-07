@@ -15,5 +15,4 @@
         <key>CFBundleURLSchemes</key><array><string>clearframe</string></array>
     </dict></array>
     <key>ClearFrameMonthlyProductID</key><string>app.getclearframe.mac.pro.monthly</string>
-    <key>ClearFrameAnnualProductID</key><string>app.getclearframe.mac.pro.annual</string>
 </dict></plist>

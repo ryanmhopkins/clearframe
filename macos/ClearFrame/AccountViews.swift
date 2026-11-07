@@ -247,10 +247,7 @@ struct ProSheet: View {
                     .font(.system(size: 10, weight: .semibold, design: .monospaced))
                     .tracking(1.5)
                     .foregroundStyle(CFStyle.muted)
-                HStack(spacing: 12) {
-                    previewPlan("Monthly", price: "$3", period: "month")
-                    previewPlan("Annual", price: "$29", period: "year")
-                }
+                previewPlan("Monthly", price: "$3", period: "month")
                 Text("Purchases become available after these plans are configured in App Store Connect. Final prices are shown by Apple.")
                     .font(.system(size: 11)).foregroundStyle(CFStyle.muted)
                     .fixedSize(horizontal: false, vertical: true)
@@ -258,12 +255,12 @@ struct ProSheet: View {
                 ForEach(store.products, id: \.id) { product in
                     HStack {
                         VStack(alignment: .leading, spacing: 3) {
-                            Text(store.isMonthly(product) ? "Monthly Pro" : "Annual Pro")
+                            Text("Monthly Pro")
                                 .font(.system(size: 14, weight: .semibold))
                             Text(product.description).font(.system(size: 11)).foregroundStyle(CFStyle.muted)
                         }
                         Spacer()
-                        Button("\(product.displayPrice) / \(store.isMonthly(product) ? "month" : "year")") {
+                        Button("\(product.displayPrice) / month") {
                             Task { await store.purchase(product) }
                         }
                         .buttonStyle(.borderedProminent)
