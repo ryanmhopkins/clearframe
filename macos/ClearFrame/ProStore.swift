@@ -5,15 +5,13 @@ import StoreKit
 @Observable @MainActor
 final class ProStore {
     private let monthlyID = Bundle.main.object(forInfoDictionaryKey: "ClearFrameMonthlyProductID") as? String ?? ""
-    private let annualID = Bundle.main.object(forInfoDictionaryKey: "ClearFrameAnnualProductID") as? String ?? ""
     var products: [Product] = []
     var hasPro = false
     var busy = false
     var message: String?
     @ObservationIgnored private var updateTask: Task<Void, Never>?
 
-    var configured: Bool { !monthlyID.isEmpty && !annualID.isEmpty }
-    func isMonthly(_ product: Product) -> Bool { product.id == monthlyID }
+    var configured: Bool { !monthlyID.isEmpty }
 
     func start() {
         updateTask?.cancel()
@@ -31,9 +29,7 @@ final class ProStore {
         busy = true
         defer { busy = false }
         do {
-            products = try await Product.products(for: [monthlyID, annualID]).sorted {
-                $0.id == monthlyID && $1.id != monthlyID
-            }
+            products = try await Product.products(for: [monthlyID])
             await refreshEntitlements()
         } catch { message = "App Store products are temporarily unavailable." }
     }
@@ -42,7 +38,7 @@ final class ProStore {
         var active = false
         for await result in Transaction.currentEntitlements {
             guard case .verified(let transaction) = result else { continue }
-            if [monthlyID, annualID].contains(transaction.productID) && transaction.revocationDate == nil {
+            if transaction.productID == monthlyID && transaction.revocationDate == nil {
                 active = true
             }
         }
