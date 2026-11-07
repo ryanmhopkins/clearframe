@@ -8,6 +8,7 @@ struct ContentView: View {
     @State private var isDropTargeted = false
     @State private var showingAccount = false
     @State private var showingPro = false
+    @State private var expandedBlockIDs: Set<Int> = []
     private var hasPro: Bool { account.webPro || store.hasPro }
 
     var body: some View {
@@ -51,6 +52,7 @@ struct ContentView: View {
                 library.applyPreset()
             }
         }
+        .onChange(of: library.selectedID) { _, _ in expandedBlockIDs.removeAll() }
     }
 
     private var photoStrip: some View {
@@ -209,15 +211,21 @@ struct ContentView: View {
                         .padding(.vertical, 12)
                 } else {
                     ForEach(item.report.blocks) { block in
-                        Toggle(isOn: Binding(
-                            get: { item.selectedBlocks.contains(block.id) },
-                            set: { selected in
-                                if selected { item.selectedBlocks.insert(block.id) }
-                                else { item.selectedBlocks.remove(block.id) }
-                                item.cleaned = nil
-                            }
-                        )) {
-                            HStack {
+                        HStack(spacing: 10) {
+                            Toggle("Remove \(block.label)", isOn: Binding(
+                                get: { item.selectedBlocks.contains(block.id) },
+                                set: { selected in
+                                    if selected { item.selectedBlocks.insert(block.id) }
+                                    else { item.selectedBlocks.remove(block.id) }
+                                    item.cleaned = nil
+                                }
+                            ))
+                            .labelsHidden()
+                            .disabled(!block.removable)
+                            Button {
+                                if !expandedBlockIDs.insert(block.id).inserted { expandedBlockIDs.remove(block.id) }
+                            } label: {
+                                HStack {
                                 VStack(alignment: .leading, spacing: 2) {
                                     Text(block.label).font(.system(size: 12, weight: .medium))
                                     Text(block.kind == .personal ? "Personal" : block.kind == .appearance ? "Display" : "Provenance")
@@ -226,9 +234,39 @@ struct ContentView: View {
                                 Spacer()
                                 Text(ByteCountFormatter.string(fromByteCount: Int64(block.byteCount), countStyle: .file))
                                     .font(.system(size: 10, design: .monospaced)).foregroundStyle(CFStyle.muted)
+                                Image(systemName: "chevron.down")
+                                    .font(.system(size: 10, weight: .semibold))
+                                    .foregroundStyle(CFStyle.muted)
+                                    .rotationEffect(.degrees(expandedBlockIDs.contains(block.id) ? 180 : 0))
+                                }
+                                .contentShape(Rectangle())
                             }
+                            .buttonStyle(.plain)
+                            .accessibilityLabel("Show details for \(block.label)")
                         }
-                        .disabled(!block.removable)
+                        if expandedBlockIDs.contains(block.id) {
+                            VStack(alignment: .leading, spacing: 9) {
+                                ForEach(MetadataEngine.details(for: block, in: item.original, format: item.report.format)) { detail in
+                                    HStack(alignment: .top, spacing: 12) {
+                                        Text(detail.name)
+                                            .foregroundStyle(CFStyle.muted)
+                                            .frame(width: 130, alignment: .leading)
+                                        Text(detail.value)
+                                            .textSelection(.enabled)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                    }
+                                    .font(.system(size: 11))
+                                }
+                                if !block.removable {
+                                    Text("This segment is required for the photo to display correctly.")
+                                        .font(.system(size: 10)).foregroundStyle(CFStyle.muted)
+                                }
+                            }
+                            .padding(13)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(CFStyle.raised, in: RoundedRectangle(cornerRadius: 10))
+                            .padding(.leading, 32)
+                        }
                         if block.id != item.report.blocks.last?.id { Rectangle().fill(CFStyle.line).frame(height: 1) }
                     }
                 }
