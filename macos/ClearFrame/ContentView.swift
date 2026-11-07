@@ -115,11 +115,6 @@ struct ContentView: View {
                 Button("Get Pro") { showingPro = true }
                     .buttonStyle(.bordered)
             }
-            Button { library.openPhotos() } label: {
-                Label("Add photos", systemImage: "plus")
-            }
-            .buttonStyle(.borderedProminent)
-            .tint(CFStyle.blueStrong)
         }
         .controlSize(.regular)
         .padding(.horizontal, 38)
