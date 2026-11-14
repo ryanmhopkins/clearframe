@@ -31,3 +31,7 @@ The existing anonymous analytics tracks allowlisted landing-page paths, scans, e
 ## Initial verification
 
 The public production upgrade link reached a Polar-hosted checkout displaying ClearFrame Pro at $29/year. This verifies checkout availability, not payment settlement, post-payment email delivery, or customer activation. No real purchase was made and no revenue baseline has been verified.
+
+## 2026-11-14 — Activation clarity
+
+Production home, pricing, sign-in, and batch guide returned HTTP 200; latest main CI passed. The post-checkout note incorrectly implied an email was already sent, although the request endpoint only sends after form submission. Corrected that instruction, documented the verified 15-minute single-use link behavior, and added recovery/support paths. No billing or authentication behavior changed. Revenue, refunds, fees, costs and conversion counts remain unknown; a limited Polar receipt search returned no matching messages, which is not proof of zero sales. Checkout was verified on November 13; do not create another session before November 20 unless diagnosing a reported failure. External channel access remains blocked as previously documented; no account checks or promotional submissions were repeated.
