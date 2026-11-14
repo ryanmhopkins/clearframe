@@ -1,7 +1,7 @@
 const form = document.querySelector('#signin');
 const status = document.querySelector('#signinStatus');
 const params = new URLSearchParams(location.search);
-if (params.get('error')) status.textContent = 'That sign-in link is invalid or expired.';
+if (params.get('error')) status.textContent = 'That sign-in link is invalid, expired, or already used. Enter your checkout email below to request a new link.';
 if (params.get('subscribed') === '1') document.querySelector('#subscribedNote')?.removeAttribute('hidden');
 form?.addEventListener('submit', async event => {
   event.preventDefault();

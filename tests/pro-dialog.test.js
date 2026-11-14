@@ -177,7 +177,7 @@ test('a RAW cleaning error keeps its message and opens the dialog', async () => 
 });
 
 test('the subscribed note is fixed text and stays hidden for any other query', () => {
-  const welcome = 'Welcome. Check your email for a sign-in link if the address you used at checkout has an active ClearFrame Pro subscription.';
+  const welcome = 'Next: enter the email address you used at checkout below, then choose “Email me a sign-in link.” Returning from checkout does not send a sign-in email automatically.';
   const shown = new JSDOM(fs.readFileSync('signin.html', 'utf8'), {
     runScripts: 'outside-only',
     url: 'https://getclearframe.app/signin?subscribed=1&email=%3Cscript%3Ealert(1)%3C/script%3E&next=https://evil.example'
