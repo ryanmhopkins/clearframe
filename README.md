@@ -1,5 +1,7 @@
 # ClearFrame
 
+[Use the free photo cleaner](https://getclearframe.app/?utm_source=github_readme&utm_medium=referral&utm_campaign=photographers) · [Batch workflow for photographers](https://getclearframe.app/batch-remove-photo-metadata) · [Free and Pro pricing](https://getclearframe.app/pricing)
+
 A local-first metadata scanner and selective cleaner for JPEG, PNG, WebP, GIF, HEIC, HEIF, AVIF, and TIFF photos. ClearFrame Pro adds RAW (DNG, CR2, NEF, and ARW), folder cleaning, and presets.
 
 ## Interface

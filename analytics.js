@@ -17,7 +17,7 @@
   // that host-only session cookie.
   const API_HOST = 'https://us.i.posthog.com';
 
-  const PAGE_PATHS = ['/', '/signin', '/how-privacy-works', '/privacy', '/terms', '/contact', 'other'];
+  const PAGE_PATHS = ['/', '/signin', '/how-privacy-works', '/privacy', '/terms', '/contact', '/pricing', '/remove-iphone-photo-location', '/batch-remove-photo-metadata', 'other'];
   const EVENTS = {
     $pageview: {path: PAGE_PATHS},
     clean_completed: {
@@ -326,7 +326,8 @@
       const props = {};
       const dialog = doc.getElementById('proDialog');
       const fromRaw = dialog && dialog.getAttribute('data-source') === 'raw_error' && target.closest('#proDialog');
-      if (fromRaw) props.placement = 'raw_gate';
+      if (root.location && /^\/(?:pricing|batch-remove-photo-metadata)(?:\.html)?$/.test(root.location.pathname)) props.placement = 'pricing';
+      else if (fromRaw) props.placement = 'raw_gate';
       else if (target.closest('header') || target.closest('.top-links') || target.closest('#proDialog')) props.placement = 'header';
       capture('checkout_started', props, {transport: 'sendBeacon', send_instantly: true});
     });
