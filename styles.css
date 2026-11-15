@@ -304,3 +304,7 @@ body.has-results .hero { padding: 27px 0 30px; }body.has-results .hero-kicker { 
 
 .marketing-page .primary-button { color: #22231f; text-decoration: none; }
 .marketing-page ol { padding-left: 22px; max-width: 680px; }
+
+.sample-entry { padding: 0 24px 24px; text-align: center; color: var(--quiet); font-size: 13px; line-height: 1.6; }
+.sample-entry button { display: inline; color: var(--accent); }
+.sample-entry span { display: block; }

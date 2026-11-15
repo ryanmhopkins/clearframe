@@ -111,3 +111,28 @@ test('extended decoder fields appear in readable photo properties',async()=>{
   w.renderPhotoData(entry);assert.match(query('#photoProperties').textContent,/Sony/);assert.match(query('#photoProperties').textContent,/40.71/);
  }finally{dom.window.close();}
 });
+
+test('fictional sample scans and cleans through the normal flow without opening the file picker',async()=>{
+ const {dom,w,query}=setup();
+ try{
+  w.File=class extends Blob {constructor(parts,name,options){super(parts,options);this.name=name;this.lastModified=options.lastModified;}};
+  let pickerOpened=false;query('#fileInput').click=()=>{pickerOpened=true};
+  const original=w.handleFiles;
+  let finish;const scanned=new Promise(resolve=>{finish=resolve});
+  w.handleFiles=async files=>{await original(files);finish(files[0])};
+  w.eval(fs.readFileSync('sample-photo.js','utf8'));
+  query('#sampleBtn').click();
+  const sample=await scanned;
+  assert.equal(pickerOpened,false);
+  assert.equal(query('#results').hidden,false);
+  assert.equal(sample.name,'clearframe-fictional-sample.jpg');
+  const before=new Uint8Array(await sample.arrayBuffer());
+  assert.ok(metadata.scan(before).found.some(x=>x.type==='APP1'));
+  const downloads=[];w.downloadBlob=(blob,name)=>downloads.push({blob,name});
+  await w.clean();
+  const after=new Uint8Array(await downloads[0].blob.arrayBuffer());
+  assert.equal(metadata.scan(after).found.some(x=>x.type==='APP1'),false);
+  assert.equal(metadata.scan(after).width,480);
+  assert.equal(metadata.scan(after).height,300);
+ }finally{dom.window.close()}
+});
