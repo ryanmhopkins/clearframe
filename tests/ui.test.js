@@ -136,3 +136,23 @@ test('fictional sample scans and cleans through the normal flow without opening 
   assert.equal(metadata.scan(after).height,300);
  }finally{dom.window.close()}
 });
+
+test('sample activity is excluded from scan and export counts, including mixed ZIPs',async()=>{
+ const {dom,w,query}=setup();
+ try{
+  const scans=[],cleans=[];
+  w.ClearFrameAnalytics={scanCompleted:info=>scans.push(info),cleanCompleted:info=>cleans.push(info)};
+  w.downloadBlob=()=>{};
+  w.JSZip=class {file(){} async generateAsync(){return new Blob(['zip']);}};
+  await w.handleSample(file('clearframe-fictional-sample.jpg'));
+  await w.clean();await w.cleanAll();
+  assert.equal(scans.length,0);assert.equal(cleans.length,0);
+  // A visitor file with the same name must still count; no filename heuristics.
+  await w.handleFiles([file('clearframe-fictional-sample.jpg')]);
+  assert.equal(scans.length,1);assert.equal(scans[0].count,1);
+  await w.cleanAll();
+  assert.equal(cleans.length,1);assert.equal(cleans[0].count,1);
+  assert.deepEqual(Array.from(cleans[0].formats),['JPEG']);
+  assert.equal(query('#batchCount').textContent,'2');
+ }finally{dom.window.close()}
+});
