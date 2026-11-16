@@ -8,7 +8,7 @@
     button.disabled = true;
     try {
       const bytes = Uint8Array.from(atob(encoded), char => char.charCodeAt(0));
-      await handleFiles([new File([bytes], 'clearframe-fictional-sample.jpg', {type: 'image/jpeg', lastModified: 0})]);
+      await handleSample(new File([bytes], 'clearframe-fictional-sample.jpg', {type: 'image/jpeg', lastModified: 0}));
     } catch {
       const error = document.querySelector('#fileErrors');
       error.textContent = 'The sample could not be opened. Choose a photo to try the cleaner.';
