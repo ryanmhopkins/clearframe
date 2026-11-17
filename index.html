@@ -157,6 +157,12 @@
       <details><summary>How can I check the cleaned photo?</summary><p>Add the downloaded copy to ClearFrame to scan it again and see which blocks remain. This checks what the scanner can detect; it isn’t a guarantee that every proprietary tag or hidden piece of information is gone. Your filename and file dates are separate from embedded metadata and may still appear on your device.</p></details>
     </section>
   </main>
+  <section class="share-prompt" aria-label="Share ClearFrame">
+    <p>Know someone who shares photos?</p>
+    <button id="shareClearFrame" class="text-button" type="button">Share ClearFrame</button>
+    <p id="shareStatus" role="status"></p>
+    <input id="shareLink" type="url" readonly hidden aria-label="Public ClearFrame link" />
+  </section>
   <footer><a class="brand footer-brand" href="#"><svg class="icon"><use href="#icon-frame"/></svg>clearframe.</a><nav class="footer-nav" aria-label="Site"><a href="/remove-iphone-photo-location">iPhone photo location</a><a href="/batch-remove-photo-metadata">Batch photo cleanup</a><a href="/pricing">Pricing</a><a href="how-privacy-works.html">How privacy works</a><a href="privacy.html">Privacy policy</a><a href="terms.html">Terms of use</a><a href="contact.html">Contact</a></nav></footer>
   <div id="toast" class="toast t-toast" role="status"></div>
   </div>
@@ -189,6 +195,7 @@
   <script src="daily-limit.js"></script>
   <script src="app.js"></script>
   <script src="sample-photo.js"></script>
+  <script src="share.js"></script>
   <script src="pro-dialog.js"></script>
   <script src="vendor/posthog/posthog-js-1.438.21.no-external.js"></script>
   <script src="analytics.js"></script>
