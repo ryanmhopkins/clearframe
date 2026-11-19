@@ -47,3 +47,11 @@ The synthetic sample initially emitted the same scan/export events as visitor-su
 ## 2026-11-17 — Visitor-initiated sharing
 
 Added a share control to the cleaner: a user gesture opens the device share sheet where supported, otherwise copies the fixed public homepage URL. If copying fails, a selected read-only link supports manual copying. Canceling the share sheet performs no fallback copy. No photo bytes, metadata, current query parameters, account data or new analytics events are included. This enables visitor referrals without access to the owner's social accounts; no referral results are claimed. Latest main CI passed; public entry pages checked. Recent Polar receipt lookup returned no matches, leaving revenue, refunds, fees, costs and profit unknown. No checkout session or blocked marketing account was retried.
+
+## 2026-11-18 — Owned-site walkthrough
+
+Published https://ryanmhopkins.com/clearframe-walkthrough.html and linked it from the maker homepage (portfolio PR #3). The article identifies the maker relationship and explains the fictional sample, cleaning, verification, limitations and current plans. Deployment and live links were verified. No external submission or conversion gain was claimed.
+
+## 2026-11-19 — Repeatable production checks
+
+Added `npm run check:live`: twelve bounded, read-only production page/asset checks with timeouts, content-type and content markers, plus sign-in noindex verification. Run it during future operating checks; it does not schedule work, create checkout sessions, submit forms, upload photos or ingest analytics. A failure is a diagnostic signal, not proof the site is down; retry a transient failure once and investigate. Latest main CI passed and entry pages returned 200. Recent Polar receipt lookup returned no matches; gross receipts, refunds, actual fees, attributable costs and net profit remain unknown. PostHog was discovered as an available but unconnected integration; access is still required before reading conversion results. External marketing-account checks were not repeated.
