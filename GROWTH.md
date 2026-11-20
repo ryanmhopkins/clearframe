@@ -55,3 +55,9 @@ Published https://ryanmhopkins.com/clearframe-walkthrough.html and linked it fro
 ## 2026-11-19 — Repeatable production checks
 
 Added `npm run check:live`: twelve bounded, read-only production page/asset checks with timeouts, content-type and content markers, plus sign-in noindex verification. Run it during future operating checks; it does not schedule work, create checkout sessions, submit forms, upload photos or ingest analytics. A failure is a diagnostic signal, not proof the site is down; retry a transient failure once and investigate. Latest main CI passed and entry pages returned 200. Recent Polar receipt lookup returned no matches; gross receipts, refunds, actual fees, attributable costs and net profit remain unknown. PostHog was discovered as an available but unconnected integration; access is still required before reading conversion results. External marketing-account checks were not repeated.
+
+## 2026-11-20 — Plan comparison clarity
+
+Replaced separate Free/Pro feature lists with a responsive semantic comparison table. Distinguish free multi-file/ZIP exports from Pro folder selection and saved presets; show common/extended formats, exact supported RAW formats, download limits and account requirements together. Preserve $29/year checkout, annual renewal and cancellation copy. This is a clarity experiment, not evidence of higher conversion. Production checks and latest main CI passed. Recent Polar receipt search found no matches; revenue, refunds, processor fees, attributable costs and profit remain unknown. No marketing-account retries or new costs.
+
+Weekly checkout check on November 20: configured product endpoint returned HTTP 302 to an approved Polar host. No payment was submitted. Next routine checkout check is November 27; checkout availability is not payment settlement or activation verification.
