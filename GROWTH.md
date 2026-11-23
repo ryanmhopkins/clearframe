@@ -65,3 +65,11 @@ Weekly checkout check on November 20: configured product endpoint returned HTTP 
 ## 2026-11-21 — Prevent repeated pending sign-in requests
 
 The sign-in form allowed multiple submissions while its prior request was pending, potentially sending duplicate links or consuming rate-limit allowance. Add an in-flight guard, disabled submit button and accessible busy state. Abort an unconfirmed request after 15 seconds and restore controls on completion or failure. Keep generic customer-enumeration protection, existing billing, $29/year price and auth API behavior unchanged. Regression checks cover repeated pending submissions, generic completion and retry after network failure. Latest main CI passed; receipt search had no matches, leaving gross sales, refunds, fees, costs and net profit unknown. No checkout or marketing-account checks were repeated.
+
+## 2026-11-22 — Maker-site discovery
+
+Published sitemap.xml and robots.txt on ryanmhopkins.com, listing the existing homepage and ClearFrame walkthrough. Added the homepage canonical URL. Portfolio PR #4 deployed successfully; both discovery files returned HTTP 200 and their contents were verified. No indexing or traffic gain was claimed.
+
+## 2026-11-23 — Persistent unsupported-file feedback
+
+Entirely unsupported selections previously produced only a transient toast. Show a persistent inline alert naming accepted formats and separating Pro RAW support. Preserve the current batch; canceling an empty picker does nothing. Existing mixed supported/unsupported handling is unchanged. Latest main CI passed and recent receipt search found no matches; gross sales, refunds, fees, attributable costs and net profit remain unknown. Checkout remains on the November 27 check cadence; blocked marketing accounts were not retried.

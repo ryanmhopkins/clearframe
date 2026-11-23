@@ -102,8 +102,9 @@ function allowDownload(count){
 function countDownload(count){const limit=freeLimit();if(limit)limit.record(count);updateLimitNote();}
 function handleFiles(files){const incoming=[...files],current=generation;fileQueue=fileQueue.then(()=>loadFiles(incoming,current)).catch(()=>toast('Could not load these photos. Please try again.'));return fileQueue;}
 async function loadFiles(files,current){
+ if(!files.length)return;
  const valid=files.filter(file=>Object.values(TYPES).includes(file.type)||/\.(jpe?g|png|webp|gif|heic|heif|avif|tiff?|dng|cr2|nef|arw)$/i.test(file.name));
- if(!valid.length){toast('Choose a supported photo format');return;}
+ if(!valid.length){$('#fileErrors').textContent='No photos were added. Choose JPEG, PNG, WebP, GIF, HEIC, HEIF, AVIF, or TIFF. Pro also supports DNG, CR2, NEF, and ARW. Documents and videos are not supported.';$('#fileErrors').hidden=false;return;}
  const fresh=[],errors=[];
  $('#scanStatus').hidden=false;
  try{for(const [index,file] of valid.entries()){

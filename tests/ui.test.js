@@ -156,3 +156,14 @@ test('sample activity is excluded from scan and export counts, including mixed Z
   assert.equal(query('#batchCount').textContent,'2');
  }finally{dom.window.close()}
 });
+
+test('unsupported-only selections show a persistent alert without replacing an existing batch; canceled picks do nothing',async()=>{
+ const {dom,w,query}=setup();try{
+  await w.handleFiles([]);assert.equal(query('#fileErrors').hidden,true);assert.equal(query('#results').hidden,true);
+  await w.handleFiles([file('keep.jpg')]);
+  await w.handleFiles([{...file('document.pdf'),type:'application/pdf'}]);
+  assert.equal(query('#fileErrors').hidden,false);assert.match(query('#fileErrors').textContent,/No photos were added/);assert.match(query('#fileErrors').textContent,/Pro also supports/);
+  assert.equal(query('#fileErrors').getAttribute('role'),'alert');assert.equal(query('#batchCount').textContent,'1');assert.equal(w.getActive().file.name,'keep.jpg');
+  await w.handleFiles([file('next.jpg')]);assert.equal(query('#fileErrors').hidden,true);assert.equal(query('#batchCount').textContent,'2');
+ }finally{dom.window.close()}
+});
