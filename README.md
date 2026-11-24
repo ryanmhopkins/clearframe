@@ -10,7 +10,7 @@ Review the details attached to your photos before you share them. ClearFrame sca
 2. Review the synthetic illustration and its fictional EXIF data. The sample contains no real personal photo or location.
 3. Choose **Download clean copy**, then add that downloaded copy to scan it again. Sample exports count toward the normal daily allowance.
 
-No installation or account is needed for Free. For a longer walkthrough, see the [maker’s sample guide](https://ryanmhopkins.com/clearframe-walkthrough.html).
+No installation or account is needed for Free.
 
 ## Choose the workflow you need
 
