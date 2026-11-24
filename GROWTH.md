@@ -73,3 +73,7 @@ Published sitemap.xml and robots.txt on ryanmhopkins.com, listing the existing h
 ## 2026-11-23 — Persistent unsupported-file feedback
 
 Entirely unsupported selections previously produced only a transient toast. Show a persistent inline alert naming accepted formats and separating Pro RAW support. Preserve the current batch; canceling an empty picker does nothing. Existing mixed supported/unsupported handling is unchanged. Latest main CI passed and recent receipt search found no matches; gross sales, refunds, fees, attributable costs and net profit remain unknown. Checkout remains on the November 27 check cadence; blocked marketing accounts were not retried.
+
+## 2026-11-24 — Public repository quick start
+
+Expanded the public README introduction with a fictional-sample walkthrough, a verified Free/Pro comparison, clear next actions and privacy/removal boundaries before the technical documentation. This uses an already accessible public channel and preserves the technical reference. Existing source-tagged product links remain; a separate sample_intro link identifies that entry point without personal data. Latest main CI passed; receipt lookup returned no matching recent Polar emails. The PR initially caught the existing README personal-branding guard; removed the maker-site link and kept the walkthrough self-contained. Sales, refunds, actual fees, attributable costs, conversion and profit remain unknown. No checkout or blocked-account retry; no new cost or product feature.

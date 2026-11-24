@@ -2,7 +2,37 @@
 
 [Use the free photo cleaner](https://getclearframe.app/?utm_source=github_readme&utm_medium=referral&utm_campaign=photographers) · [Batch workflow for photographers](https://getclearframe.app/batch-remove-photo-metadata) · [Free and Pro pricing](https://getclearframe.app/pricing)
 
-A local-first metadata scanner and selective cleaner for JPEG, PNG, WebP, GIF, HEIC, HEIF, AVIF, and TIFF photos. ClearFrame Pro adds RAW (DNG, CR2, NEF, and ARW), folder cleaning, and presets.
+Review the details attached to your photos before you share them. ClearFrame scans supported photo metadata and saves a cleaned copy using the removal choices you select. Scanning and cleaning run in your browser; your photo bytes are not uploaded.
+
+## Try it without a personal photo
+
+1. [Open the free cleaner](https://getclearframe.app/?utm_source=github_readme&utm_medium=referral&utm_campaign=sample_intro#scanner) and choose **Try a sample image** below the photo picker.
+2. Review the synthetic illustration and its fictional EXIF data. The sample contains no real personal photo or location.
+3. Choose **Download clean copy**, then add that downloaded copy to scan it again. Sample exports count toward the normal daily allowance.
+
+No installation or account is needed for Free.
+
+## Choose the workflow you need
+
+| | Free | ClearFrame Pro |
+| --- | --- | --- |
+| Price | $0 | $29/year, renews yearly |
+| Downloads | 10 photos per local day | Unlimited |
+| JPEG, PNG, WebP, GIF, HEIC, HEIF, AVIF, TIFF | Included | Included |
+| Select multiple photos and export a ZIP | Included within daily allowance | Included |
+| Whole-folder selection and saved presets | — | Included |
+| DNG, CR2, NEF, ARW | — | Included |
+| Account | Not needed | Email sign-in |
+
+Each photo in a ZIP counts as a download. Pro can be canceled through Manage subscription. [Compare plans and subscription terms](https://getclearframe.app/pricing).
+
+## Before sharing the result
+
+Keep your originals. Review the removal choices, open the downloaded copy in your usual viewer, and scan it again. Removing EXIF orientation or a color profile can affect how the copy displays even though the image is not resized or recompressed. RAW cleanup keeps maker notes, calibration, previews, and required rendering data, which may still contain identifying information.
+
+Cleaning does not hide visible faces, addresses, landmarks, watermarks, or information hidden in pixels, and it does not guarantee anonymity. The site still contacts its hosting service and, when enabled, separate anonymous analytics. Read [how privacy works](https://getclearframe.app/how-privacy-works) for those boundaries.
+
+The implementation and format details follow below.
 
 ## Interface
 
