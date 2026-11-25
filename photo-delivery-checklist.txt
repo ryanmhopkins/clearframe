@@ -1,0 +1,32 @@
+PHOTO DELIVERY CHECKLIST
+ClearFrame | https://getclearframe.app/batch-remove-photo-metadata#delivery-checklist
+
+Use on the downloaded delivery copies. Keep originals separate.
+For mixed batches, repeat for each camera, format, and export preset.
+
+[ ] Extract the delivery ZIP, if used, and open the cleaned copies.
+    Check rotation, colors, transparency, and animation where relevant.
+    If appearance changed, revisit orientation and color-profile choices.
+
+[ ] Re-scan a downloaded copy and review Photo details and listed blocks.
+    Check the location, capture dates, camera identifiers, author fields,
+    and editing notes you intended to remove.
+
+[ ] Confirm author, copyright, and captions you intended to keep.
+    JPEG, PNG, WebP, and GIF cleanup removes whole blocks, not individual
+    tags. GPS and copyright can share an EXIF block. Use a tag-level
+    editor if you must keep selected tags within the same removed block.
+
+[ ] Review filenames, folder names, ZIP names, and visible photo content.
+    Filesystem dates are separate from embedded capture dates.
+
+[ ] Review warnings and retained data before sending. Keep originals.
+    RAW and extended formats retain some rendering data. Missing fields
+    in a scan do not prove every proprietary or hidden identifier is gone.
+    Metadata cleanup does not guarantee anonymity.
+
+Full workflow and current format limits:
+https://getclearframe.app/batch-remove-photo-metadata
+
+This file is a reusable local reference, not an automated verification
+report. It does not upload photos or send your checklist responses.
